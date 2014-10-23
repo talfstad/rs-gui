@@ -1,0 +1,59 @@
+.welcome-banner > h3 {
+	margin-top: 5%;
+	text-align: center;
+	color: rgb(41, 255, 0);
+	/*font-family: "Courier";*/
+}
+
+.welcome-banner .welcome-message > h4 {
+	margin-top: 1%;
+	text-align: center;
+	color: rgb(41, 255, 0);
+	/*font-family: "Courier";*/
+}
+
+
+.index-page-button-container {
+	width: 50%;
+	margin-top: 50px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.domains-buttons-container {
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 5%;
+	width: 100%;
+}
+
+.show-all-domains-button {
+	width: 40%;
+	text-align: right;
+	float: left;
+	display: inline-block;
+}
+
+.show-my-domains-button {
+	width: 40%;
+	text-align: left;
+	float: right;
+	display: inline-block;
+}
+
+.code-panel {
+	display: inline-block;	
+	max-width: 100%;
+	margin-top: 70px;
+}
+
+.panel-success {
+	overflow-wrap: break-word;
+	width: 50%;
+	margin-left: auto;
+	margin-right: auto;	
+}
+
+.code-panel .panel-body-text {
+	margin-bottom: 20px;
+}

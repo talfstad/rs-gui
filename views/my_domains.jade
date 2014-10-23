@@ -1,0 +1,29 @@
+extends layout
+
+block content
+	.my-domains-header.h1 My Domains
+
+	.add-domain-form-container.well
+		form.form-horizontal(method="POST" , action="/my_domains")
+			fieldset
+				legend Add New Domains
+				.form-group
+					label.col-lg-2.control-label(for="addUrl") New Domain URL:
+					.col-lg-10
+						input#addUrl.form-control(type="text" , name="url")
+				.form-group
+					.col-lg-10.col-lg-offset-2	
+						button.btn.btn-success.add-domain-submit-btn(type="submit") Submit
+
+	.all-domains-table-container
+		table.table.tablesorter.table-bordered.table-striped.table-hover(id="myDomains")
+			thead
+				tr
+					th URL
+					th Delete
+			tbody
+				each domain in domains
+					tr(id=domain.id) 
+						td.url #{domain.url}
+						td
+							a.linkDeleteFromAll.btn.btn-danger.btn-sm.delete-column(href="/my_domains/delete/?id=" + domain.id, id="" + domain.id) X

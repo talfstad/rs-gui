@@ -1,0 +1,29 @@
+extends layout
+
+block content
+ .all-domains-header.h1 All Domains
+ #urlList
+  .all-domains-table-container
+    table.table.tablesorter.table-bordered.table-striped.table-hover(id="rippedDomains")
+     thead
+      tr
+       th URL
+       th Official/Ripped
+       th Number of Visits   
+       th Redirect Rate (i.e. 50 = %50)  
+       th Edit Links
+       th Delete
+     tbody
+      each domain in domains
+       tr(id=domain.id) 
+        td.url #{domain.url}
+        if domain.registered == "0"
+         td.unregistered Ripped
+        else
+         td.registered Official
+        td.count #{domain.count}
+        td.rate #{domain.rate}
+        td
+         a.btn.btn-success.btn-sm.btn-block.edit-column(href="/edit_form?domain=" + domain.url) Edit
+        td
+         a.linkDeleteFromAll.btn.btn-danger.btn-sm.delete-column(id=domain.id) X

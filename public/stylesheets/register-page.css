@@ -1,0 +1,44 @@
+.login-header {
+	text-align: center;	
+	margin-top: 50px;
+}
+
+.login-header h1 {
+	font-size: 150px;
+	color: rgb(41, 255, 0);
+}
+
+.form-container {
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 4%;
+	width: 218px;
+}
+
+.form-group-button {
+	text-align: center;
+}
+
+.registration-header {
+	text-align: center;
+	margin-top: 5%;
+	color: rgb(41, 255, 0);
+}
+
+.form-button-container {
+	text-align: center;
+	margin-left: -10px;
+}
+
+.status.alert-danger {
+	border-radius: 4px;
+	margin: 40px;
+	width: 300px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+button.btn.btn-default {
+	margin: 10px;
+}

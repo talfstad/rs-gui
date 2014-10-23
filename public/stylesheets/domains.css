@@ -1,0 +1,98 @@
+.all-domains-table-container th,
+.all-domains-table-container td {
+	text-align: center;
+}
+
+.all-domains-header,
+.my-domains-header,
+.edit-form-header {
+	color: rgb(41, 255, 0);
+	margin: 40px;
+	text-align: center;
+}
+
+#urlList {
+	width: 90%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.edit-column {
+	width:50px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.delete-column {
+	width:50px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.add-domain-form-container.well {
+	width: 50%;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.edit-form-container.well {	
+	text-align: center;
+	width: 12%;
+	margin-bottom: 7%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.change-rate-label {
+	margin-right: 10px;
+}
+
+.add-domain-submit-btn {
+	float: right;
+}
+
+.change-rate-textbox {
+	width: 40px;
+	display: inline-block;
+	margin-right: 10px;
+}
+
+.change-rate-submit-btn {
+	display: inline-block;
+}
+
+
+
+
+
+/* Table stylings */
+div.dataTables_length label {
+    width: 460px;
+    float: left;
+    text-align: left;
+}
+ 
+div.dataTables_length select {
+    width: 75px;
+    color: black;
+}
+ 
+div.dataTables_filter label {
+    float: right;
+    /*width: 460px;*/
+}
+ 
+div.dataTables_info {
+    padding-top: 8px;
+}
+ 
+div.dataTables_paginate {
+    float: right;
+    margin: 0;
+}
+ 
+table {
+    margin: 1em 0;
+    clear: both;
+}

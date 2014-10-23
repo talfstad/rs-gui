@@ -1,0 +1,36 @@
+extend layout
+
+block content
+  .edit-form-header.h1 Rate For: #{rows[0].domain}
+
+  .edit-form-container.well
+    form.form-horizontal(action='/all_domains/edit_rate', method='POST')
+      fieldset
+        label.control-label.change-rate-label(for="changeRate") Rate: 
+        input#changeRate.form-control.input-sm.change-rate-textbox(type="text" , name="rate", value="" + rows[0].rate)
+        input(type="hidden", name="url", value="" + rows[0].domain)
+        button.btn.btn-success.change-rate-submit-btn(type="submit") Apply       
+
+  .edit-form-header.h1 All Links For: #{rows[0].domain}
+
+  .edit-table-container
+    #linksList
+      table.table.tablesorter.table-bordered.table-striped.table-hover(id="editLinks")
+        thead
+          tr
+            th Link   
+            th Current Link
+            th Change Link
+            th 
+        tbody
+          - each row in rows
+            tr 
+              td #{row.link}
+              td #{row.user_link}
+              td
+                form(action='/links/edit', method='post')
+                  input.form-control(type="text" , name="user_link", value="http://")
+                  input(type="hidden", name="domain", value="" + row.domain)
+                  input(type="hidden", name="link", value="" + row.link)
+                  td
+                    button.btn.btn-success(type="submit") Save

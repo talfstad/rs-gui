@@ -1,0 +1,48 @@
+doctype html
+html
+ head
+  title= title
+  
+  //- Base CSS
+  link(rel='stylesheet', href='/stylesheets/style.css')
+  //link(rel='stylesheet', href='/lib/bootstrap/css/skins/Cyborg/bootstrap.min.css')
+  link(rel='stylesheet', href='/lib/bootstrap/css/skins/Slate/bootstrap.min.css')
+  //link(rel='stylesheet', href='/lib/bootstrap/css/bootstrap.min.css')
+  link(rel='stylesheet', href='/lib/bootstrap/css/bootstrap-responsive.min.css')
+
+  //-Custom CSS
+  link(rel='stylesheet', href='/stylesheets/index-page.css')
+  link(rel='stylesheet', href='/stylesheets/links-page.css')
+  link(rel='stylesheet', href='/stylesheets/domains.css')  
+  link(rel='stylesheet', href='/stylesheets/header-and-navbar.css')
+  link(rel='stylesheet', href='/stylesheets/style2.css')
+  
+  //- Base Scripts
+  script(src='/scripts/base/jquery.js')    
+  script(src='/scripts/base/jquery.dataTables.js')
+  script(src='/scripts/base/paging.js')
+  script(src='/lib/bootstrap/js/bootstrap.min.js')
+
+  //- Custom Scripts
+  script(src='/scripts/custom/global.js')
+  script(src='/scripts/custom/all_domains.js')
+  script(src='/scripts/custom/my_domains.js')
+  script(src='/scripts/custom/edit_links.js')
+  script(src='/scripts/custom/home.js')
+
+  body
+    nav.navbar.navbar-default(role="navigation")
+      .navbar-header
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-inverse-collapse')
+          a.navbar-brand.brand-logo(href="/") CLICK_JACKER
+         .collapse.navbar-collapse.navbar-ex1-collapse
+            ul.nav.navbar-nav.navbar-right
+              li
+                a(href='/') Home
+              li
+                a(href='/all_domains') All Domains
+              li
+                a(href='/my_domains') My Domains
+              li
+                a(href="/logout") Logout
+    block content

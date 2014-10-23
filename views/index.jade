@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  .welcome-banner
+    h3 Welcome to CLICK_JACKER! 
+    .welcome-message
+      h4 The following pages show what domains are being used for your pages.
+
+  .index-page-button-container
+    .show-all-domains-button
+      a.btn.btn-default.btn-lg.btn-block(href='/all_domains', class='btn-success btn-lg') Show All Domains
+
+    .show-my-domains-button
+      a.btn.btn-default.btn-lg.btn-block(href='/my_domains', class='btn-success btn-lg') Show My Domains
+  
+  .code-panel
+    iframe(style='padding: 5px; border: 1px solid #aaa; margin: 0 0 50px 650px;', width='560', height='315', src='//www.youtube.com/embed/QMvs25W_f7U', frameborder='0', allowfullscreen='allowfullscreen')
+
+    .panel.panel-success
+      .panel-heading
+          h3.panel-title Copy and paste this code to the end of your jquery file!
+      .panel-body
+        .panel-body-text
+          #click-jacker-code

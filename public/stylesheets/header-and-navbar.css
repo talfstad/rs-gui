@@ -1,0 +1,25 @@
+.header {
+	text-align: center;		
+}
+
+.header > h1 {
+	font-size: 50px;
+	color: rgb(41, 255, 0);
+	font-family: "Courier";	
+	margin-top: -30px;
+}
+
+.navbar-brand.brand-logo {
+	color: rgb(41, 255, 0) !important;
+}
+
+
+/* Uncomment these to make navbar only the right side and not expand accross */
+/*
+.navbar.navbar-inverse {
+	float: right;	
+}
+
+.navbar-nav.navbar-right:last-child {
+	margin-right: 0;
+}*/
