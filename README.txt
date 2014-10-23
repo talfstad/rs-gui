@@ -19,4 +19,9 @@ NOTE: These commands will install the appropriate libraries to run the code.
 #### Running the app
 
 Run Distribution version:
-  `grunt serve:dist`
+  `sudo grunt build`
+  `sudo grunt serve`
+
+
+  you will now have a server running on port 9000 that is connected to our db 
+  if it launches as a 404 just refresh the page
