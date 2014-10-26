@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "express": "3.2.5",
-    "jade":"0.31.1"
+    "jade": "0.31.1"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
@@ -42,7 +42,9 @@
     "uglify-js": "*",
     "node-fs": "*",
     "validator": "*",
-    "bcrypt-nodejs": "*"
+    "bcrypt-nodejs": "*",
+    "randomstring": "^1.0.3",
+    "yuicompressor": "^2.4.8"
   },
   "engines": {
     "node": "*"
