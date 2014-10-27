@@ -4,12 +4,12 @@ block content
   .edit-form-header.h1 Rate For: #{rows[0].domain}
 
   .edit-form-container.well
-    form.form-horizontal(action='/all_domains/edit_rate', method='POST')
+    form.form-horizontal(id="editRateForm", action='/all_domains/edit_rate', method='POST')
       fieldset
         label.control-label.change-rate-label(for="changeRate") Rate: 
-        input#changeRate.form-control.input-sm.change-rate-textbox(type="text" , name="rate", value="" + rows[0].rate)
+        input#changeRate.form-control.input-sm.change-rate-textbox(id="rate", type="text" , name="rate", value="" + rows[0].rate)
         input(type="hidden", name="url", value="" + rows[0].domain)
-        button.btn.btn-success.change-rate-submit-btn(type="submit") Apply       
+        button.btn.btn-success.change-rate-submit-btn(id="editRateFormSubmitButton", type="submit") Apply       
 
   .edit-form-header.h1 All Links For: #{rows[0].domain}
 
@@ -28,9 +28,9 @@ block content
               td #{row.link}
               td #{row.user_link}
               td
-                form(action='/links/edit', method='post')
-                  input.form-control(type="text" , name="user_link", value="http://")
+                form(id="editLinkForm", action='/links/edit', method='post')
+                  input.form-control(id="user_link", type="text", name="user_link", value="http://", required="true")
                   input(type="hidden", name="domain", value="" + row.domain)
                   input(type="hidden", name="link", value="" + row.link)
                   td
-                    button.btn.btn-success(type="submit") Save
+                    button.btn.btn-success(id="submitEditFormButton", type="submit") Save

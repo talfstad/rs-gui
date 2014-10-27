@@ -321,7 +321,7 @@ module.exports = function (grunt) {
         grunt.task.run([
             'clean:server',
             'jst',
-            'compass:server',
+            //'compass:server',
             'open:server',
             //'connect:livereload',
             'express:dist',
@@ -363,7 +363,7 @@ module.exports = function (grunt) {
     grunt.registerTask('build', [
         'clean:dist',
         'jst',
-        'compass:dist',
+        //'compass:dist',
         'useminPrepare',
         'imagemin',
         'htmlmin',

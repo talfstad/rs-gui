@@ -4,16 +4,16 @@ block content
 	.my-domains-header.h1 My Domains
 
 	.add-domain-form-container.well
-		form.form-horizontal(method="POST" , action="/my_domains")
+		form.form-horizontal(id="addNewDomainForm", method="POST" , action="/my_domains")
 			fieldset
 				legend Add New Domains
 				.form-group
 					label.col-lg-2.control-label(for="addUrl") New Domain URL:
 					.col-lg-10
-						input#addUrl.form-control(type="text" , name="url")
+						input#addUrl.form-control(id="url", type="text" , name="url")
 				.form-group
 					.col-lg-10.col-lg-offset-2	
-						button.btn.btn-success.add-domain-submit-btn(type="submit") Submit
+						button.btn.btn-success.add-domain-submit-btn(id="addNewDomainSubmitButton", type="submit") Submit
 
 	.all-domains-table-container
 		table.table.tablesorter.table-bordered.table-striped.table-hover(id="myDomains")

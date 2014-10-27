@@ -110,4 +110,106 @@ $(document).ready(function() {
 
     //Adds paginator class to paginator
     $('#editLinks_paginate ul').addClass("pagination");
+    
+
+    //Binds functions to save new rates
+    $('#editRateFormSubmitButton').click(function(e) {
+        //Prevents page refresh
+        e.preventDefault();
+
+        $('#editRateForm').validate({
+            rules: {
+                rate: {
+                    required: true,
+                    range: [0, 100]
+                }
+            }
+        });
+
+        //If valid, submit form
+        if($('#editRateForm').valid()) {            
+            submitChangeRateForm();
+        }
+    });
+
+    //Binds functions to save new links
+    $('#submitEditFormButton').click(function(e) {
+        //Prevents page refresh
+        e.preventDefault();
+
+        $('#editLinkForm').validate({
+            rules: {
+                user_link: {
+                    required: true,
+                    url: true
+                }
+            }
+        });
+
+        //If valid, submit form
+        if($('#editLinkForm').valid()) {            
+            submitChangeLinkForm();
+        }
+    });
+
+
+    /*
+     * Makes ajax call to submit the change rate form
+     */
+    function submitChangeRateForm() {
+        var newVal = $('input[id="rate"]').val();
+        var postData = { 
+            rate: newVal,
+            url: $('input[name="domain"]').val()
+        } 
+        $.ajax({
+            type: 'POST',
+            data: postData,
+            url: '/all_domains/edit_rate',
+            dataType: 'JSON',
+            success: function() {
+                $('input[name="domain"]').val(newVal);
+                $.growl('<strong>SAVING:</strong> New Rate Applied', {
+                    type: 'success'
+                });
+            },
+            error: function() {
+                //TODO - Use message from the backend
+                BootstrapDialog.show({
+                    title: 'Error', 
+                    message:'Could not apply rate'
+                });
+            }            
+        });
+    }
+
+    /*
+     * Makes ajax call to submit the change link form
+     */
+    function submitChangeLinkForm() {
+        var newVal = $('input[name="user_link"]').val();
+        var postData = { 
+            domain: $('input[name="domain"]').val(),
+            link: $('input[name="link"]').val(),
+            user_link: newVal
+        } 
+        $.ajax({
+            type: 'POST',
+            data: postData,
+            url: '/links/edit',
+            dataType: 'JSON',
+            success: function() {
+                $('input[name="domain"]').closest('tr').children()[1].textContent = newVal;
+            },
+            error: function() {
+                //TODO - Use message from the backend
+                BootstrapDialog.show({
+                    title: 'Error', 
+                    message:'Could not change link'
+                });
+            }
+        });
+    }
+
 } );
+

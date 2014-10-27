@@ -110,4 +110,57 @@ $(document).ready(function() {
 
     //Adds paginator class to paginator
     $('#myDomains_paginate ul').addClass("pagination");
+
+    //Binds functions to save new links
+    $('#addNewDomainSubmitButton').click(function(e) {
+        //Prevents page refresh
+        e.preventDefault();
+
+        $('#addNewDomainForm').validate({
+            rules: {
+                url: {
+                    required: true,
+                    url: true
+                }
+            }
+        });
+
+        //If valid, submit form
+        if($('#addNewDomainForm').valid()) {            
+            addNewDomain();
+        }
+    });
+
+
+    /*
+     * Makes ajax call to submit the change rate form
+     */
+    function addNewDomain() {
+        var newVal = $('input[id="changeRate"]').val();
+        var postData = { 
+            rate: newVal,
+            url: $('input[name="domain"]').val()
+        } 
+        $.ajax({
+            type: 'POST',
+            data: postData,
+            url: '',
+            dataType: 'JSON',
+            success: function() {
+                //TODO - Update table
+
+                $.growl('<strong>SAVING:</strong> New Domain Added', {
+                    type: 'success'
+                });
+            },
+            error: function() {
+                //TODO - Use message from the backend
+                BootstrapDialog.show({
+                    title: 'Error', 
+                    message:'Could not add new domain.'
+                });
+            }            
+        });
+    }
+
 } );
