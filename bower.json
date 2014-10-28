@@ -13,7 +13,9 @@
     "backbone-amd": "latest",
     "modernizr": "latest",
     "requirejs": "latest",
-    "requirejs-text": "latest"
+    "requirejs-text": "latest",
+    "bootstrap.growl": "latest",
+    "jquery-validation": "latest"
   },
   "devDependencies": {
     "qunit":"latest"
