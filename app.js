@@ -256,11 +256,18 @@ app.get('/my_domains/delete', checkAuth, function (req, res) {
     var id=req.query.id;
     
     connection.query('DELETE from my_domains where id = ?;', [id], function(err, docs) {
-        if (err) res.json(err);
-        else {
-            res.redirect('my_domains');
+        if (err) {
+            res.json(err);
+        } else {
+            var body = {
+              message: "success",
+              id: id 
+            };
+            
+            res.status(200);
+            res.send(body);
         }
-    })
+    });
 });
 
 app.get('/all_domains', checkAuth, function (req, res) {
@@ -407,26 +414,34 @@ app.get('/links_admin', checkAdmin, function (req, res) {
 });
 
 app.post('/links/edit', checkAuth, function (req, res) {
-   var domain=req.body.domain;
-   var link=req.body.link;
-   var user_link=req.body.user_link;
+    var domain=req.body.domain;
+    var link=req.body.link;
+    var user_link=req.body.user_link;
 
-   if (user_link.substring(0, 7) != "http://" && user_link.substring(0, 8) != "https://") {
-       user_link = "http://" + user_link;
-   }
+    if (user_link.substring(0, 7) != "http://" && user_link.substring(0, 8) != "https://") {
+        user_link = "http://" + user_link;
+    }
 
-   if (validator.isURL(user_link)) {
-       connection.query('CALL insert_user_link(?, ?, ?, ?);', [domain, link, user_link, req.session.user_id], function(err, docs) {
-           //connection.query('CALL get_links(?, ?)', [domain, req.session.user_id], function(err, docs2) {
-           //      res.render('edit_form', {rows: docs2[0]}); 
-           //});
-           res.redirect('edit_form?domain=' + domain);
-       });
-   }
-   else {
-       var msg = {status: 'Invalid URL.'}
-       res.send({data: msg});
-   }
+    if (validator.isURL(user_link)) {
+        connection.query('CALL insert_user_link(?, ?, ?, ?);', [domain, link, user_link, req.session.user_id], function(err, docs) {
+            if (err) {
+             res.json(err);
+            } else {
+              var body = {
+                 message: "success",
+                 domain: domain,
+                 link: link,
+                 user_link: user_link
+             };
+             res.status(200);
+             res.send(body);
+           }
+        });
+    }
+    else {
+        var msg = {status: 'Invalid URL.'}
+        res.send({data: msg});
+    }
 });
 
 //Get and load client js

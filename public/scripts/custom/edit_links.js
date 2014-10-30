@@ -220,7 +220,7 @@ $(document).ready(function() {
             data: postData,
             url: '/links/edit',
             dataType: 'JSON',
-            success: function() {
+            success: function(resp, mes, obj) {
                 if (!resp.errno) {
                     $('input[name="domain"]').closest('tr').children()[1].textContent = newVal;
                     $.growl({
@@ -249,7 +249,7 @@ $(document).ready(function() {
                     });
                 }                 
             },
-            error: function() {
+            error: function(resp, mes, obj) {
                 //TODO - Use message from the backend
                 BootstrapDialog.show({
                     title: 'Error', 
