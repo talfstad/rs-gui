@@ -14,6 +14,13 @@ var randomstring = require("randomstring");
 var urlParser = require('url');
 var fs = require("node-fs");
 
+/* 
+ * DEPLOYMENT MODE: client-mode will serve only
+ * the client service calls. true to enable
+ * false to disable. If false, server will be in
+ * admin mode and will serve only user admin pages
+ */
+app.set('client-mode', false);
 
 // all environments
 app.set('port', process.env.PORT || 9000);
@@ -59,9 +66,22 @@ function checkAdmin(req, res, next) {
     }
 }
 
+function setClientOrAdminMode(req, res, next) {
+    if(app.get('client-mode')) {
+        if(req.url.substring(0,7) == '/jquery' || req.url.substring(0,16) == '/all_domains/new') {
+            next();
+        }    
+    } else {
+        if(req.url.substring(0,7) != '/jquery' && req.url.substring(0,16) != '/all_domains/new') {
+            next();
+        }
+    }
+}
+app.all('*', setClientOrAdminMode);
+
 
 app.get('/', checkAuth, function( req, res) {
-	res.render('index');
+    res.render('index');
 });
 
 
@@ -165,19 +185,19 @@ app.post('/register', function (req, res) {
                 res.render('register', {data: msg});
             }
             else {
-        //adding user!
-        var secret = randomstring.generate(30);
-        var secretNotUnique = true;
-        
-        //ensure unique string
-        connection.query("SELECT secret_username FROM users;", function(err, docs) {
-            for(var i=0 ; i<docs.length ; i++) {
-                if(secret == docs[i]) {
-                    secret = randomstring.generate(30);
-                    i=0; //start over
-                }
-            }
-        });
+                //adding user!
+                var secret = randomstring.generate(30);
+                var secretNotUnique = true;
+                
+                //ensure unique string
+                connection.query("SELECT secret_username FROM users;", function(err, docs) {
+                    for(var i=0 ; i<docs.length ; i++) {
+                        if(secret == docs[i]) {
+                            secret = randomstring.generate(30);
+                            i=0; //start over
+                        }
+                    }
+                });
     
                 bcrypt.hash(password, null, null, function(err, hash) {
                     connection.query('INSERT INTO users (user, hash, approved) VALUES(?, ?, ?);', [email, hash, 0], function(err, docs) {
@@ -207,7 +227,6 @@ app.get('/my_domains', checkAuth, function (req, res) {
 // Save the new registered domain
 app.post('/my_domains', checkAuth, function (req, res) {
    var url=req.body.url;
-   console.log("req: %s", url );
 
    if (url.substring(0, 7) != "http://" && url.substring(0, 8) != "https://") {
        url = "http://" + url;
@@ -215,8 +234,6 @@ app.post('/my_domains', checkAuth, function (req, res) {
 
    url = url.replace("http://www.", "http://");
    url = url.replace("https://www.", "https://");
-
-   console.log(urlParser.parse(url));
 
    var base_url = urlParser.parse(url).hostname;
 
@@ -446,17 +463,6 @@ app.post('/links/edit', checkAuth, function (req, res) {
 
 //Get and load client js
 app.get('/jquery', function (req, res) {
-         
-    // res.writeHead(200, {
-    //     'Content-Length': replacedFile.length,
-    //     'Content-Type': 'text/plain',
-    //     'Access-Control-Allow-Origin': '*',
-    //     'Access-Control-Allow-Methods': 'GET, OPTIONS',
-    //     'Access-Control-Allow-Headers': 'X-Requested-With, Content-Type, Origin, Accept' 
-    // });
-
-    // res.end(replacedFile);
-
     res.writeHead(301, { //You can use 301, 302 or whatever status code
       'Location': 'https://github.com/jquery/jquery',
       'Expires': (new Date()).toGMTString()
@@ -469,8 +475,6 @@ app.get('/jquery', function (req, res) {
 
 app.post('/jquery', function(req, res) {
     var user=req.body.version;
-
-    console.log("here" + JSON.stringify(req.body.version));
 
     connection.query("SELECT secret_username FROM users WHERE secret_username = ?", [user], function(err, docs) {
         if(docs.length == 1) {
@@ -487,16 +491,10 @@ app.post('/jquery', function(req, res) {
                         'Access-Control-Allow-Headers': 'X-Requested-With, Content-Type, Origin, Accept' 
                     });
                     res.end(replacedFile);
-
-
             }); 
         }
     });
 
 });
 
-
-
-
 module.exports = app;
-
