@@ -1,5 +1,3 @@
-//$(document).ready(function(){
-
 /* Default class modification */
 $.extend( $.fn.dataTableExt.oStdClasses, {
     "sSortAsc": "header headerSortDown",
@@ -159,41 +157,3 @@ function deleteAllDomain(event) {
     return false;
 
 };
-
-// Fill table with data
-/*
-function populateTable() {
-
-    // Empty content string
-    var tableContent = '';
-
-    // jQuery AJAX call for JSON
-    $.getJSON( '/all_domains/list', function( data ) {
-
-        // For each item in our JSON, add a table row and cells to the content string
-        $.each(data.json, function(){
-            tableContent += '<tr id="' + this.id + '">';
-            tableContent += '<td class="url">' + this.url + '</td>';
-            if (this.registered == 1) {
-                tableContent += '<td class="registered">Registered</td>';
-            }
-            else {
-                tableContent += '<td class="unregistered">Unregistered</td>';
-            }
-            tableContent += '<td class="count">' + this.count + '</td>';
-            tableContent += '<td><a class="linkDeleteFromAll" href="" id="' + this.id + '">Delete</a></td>';
-            tableContent += '<td><a href="/links?domain=' + this.url + '"" class="linkEditLinks">Go to links page</a></td>';
-            tableContent += '<td>';
-            tableContent += '  <form action="/all_domains/edit_rate" method="post">';
-            tableContent += '    <input type="text" name="rate" value="' + this.rate +'">';
-            tableContent += '    <input type="hidden" name="url" value="' + this.url + '">';
-            tableContent += '  </form>';
-            tableContent += '</td>'
-            tableContent += '</tr>';
-        });
-
-        // Inject the whole content string into our existing HTML table
-        $('#urlList table tbody').html(tableContent);
-    });
-};
-*/

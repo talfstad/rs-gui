@@ -167,13 +167,31 @@ $(document).ready(function() {
             data: postData,
             url: '/all_domains/edit_rate',
             dataType: 'JSON',
-            success: function() {
-                $('input[name="domain"]').val(newVal);
-                $.growl('<strong>SAVING:</strong> New Rate Applied', {
-                    type: 'success'
-                });
+            success: function(resp, mes, obj) {
+                if (!resp.errno) {
+                    $.growl({                                
+                        message: 'New Rate of ' + resp.rate + 'Applied'
+                    }, {
+                        type: 'success',
+                        template:'<div data-growl="container" class="alert" role="alert">' +
+                                '<button type="button" class="close" data-growl="dismiss">' +
+                                    '<span aria-hidden="true">×</span>' +
+                                    '<span class="sr-only">Close</span>' +
+                                '/button>' +
+                                '<span data-growl="icon"></span>' +
+                                '<span data-growl="title"></span>' +
+                                '<span data-growl="message"></span>' +
+                                '<a href="#" data-growl="url"></a>' +
+                            '</div>'
+                    });
+                } else {
+                    BootstrapDialog.show({
+                        title: resp.code, 
+                        message: resp
+                    });
+                }                
             },
-            error: function() {
+            error: function(resp, mes, obj) {
                 //TODO - Use message from the backend
                 BootstrapDialog.show({
                     title: 'Error', 
@@ -199,7 +217,17 @@ $(document).ready(function() {
             url: '/links/edit',
             dataType: 'JSON',
             success: function() {
-                $('input[name="domain"]').closest('tr').children()[1].textContent = newVal;
+                if (!resp.errno) {
+                    $('input[name="domain"]').closest('tr').children()[1].textContent = newVal;
+                    $.growl('<br>Link Change Successful', {
+                        type: 'success'
+                    });
+                } else {
+                    BootstrapDialog.show({
+                        title: resp.code, 
+                        message: resp
+                    });
+                }                 
             },
             error: function() {
                 //TODO - Use message from the backend

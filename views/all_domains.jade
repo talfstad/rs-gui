@@ -1,6 +1,7 @@
 extends layout
 
 block content
+  script(src='/scripts/custom/all_domains.js')
  .all-domains-header.h1 All Domains
  #urlList
   .all-domains-table-container
@@ -26,4 +27,4 @@ block content
         td
          a.btn.btn-success.btn-sm.btn-block.edit-column(href="/edit_form?domain=" + domain.url) Edit
         td
-         a.linkDeleteFromAll.btn.btn-danger.btn-sm.delete-column(id=domain.id) X
+         a.btn.btn-danger.btn-sm.delete-column(id=domain.id) X

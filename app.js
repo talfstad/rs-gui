@@ -222,8 +222,31 @@ app.post('/my_domains', checkAuth, function (req, res) {
         if(validator.isURL(url)) {
             connection.query('CALL insert_my_domain(?, ?);', [base_url, req.session.user_id], function(err, docs) {
                 if (err) res.json(err);
-                res.redirect('my_domains');
-            })
+                if(url) {
+                    connection.query('CALL insert_my_domain(?, ?)', [url, req.session.user_id], function(err, docs) {
+                        if (err) {
+                            res.json(err);
+                        } else {
+                            connection.query('SELECT id FROM my_domains WHERE (user = ? AND url = ?)', [req.session.user_id, url], function(err, docs) {
+                                if (err) {
+                                    res.json(err);
+                                } else {
+                                    if(docs[0]) {
+                                        var id = docs[0].id;            
+                                        if (id) {
+                                            var body = {
+                                                message: "success",
+                                                id: id,
+                                                url: url
+                                            };
+                                            res.status(200)
+                                            res.send(body);
+                                        }
+                                    }
+                                }
+                            });
+                        }            
+
         }
         else {
             var msg = {status: 'Invalid URL.'}
@@ -345,7 +368,16 @@ app.post('/all_domains/edit_rate', checkAuth, function (req, res) {
     var url=req.body.url;
     var rate=req.body.rate;
     connection.query('UPDATE all_domains SET rate = ? WHERE all_domains.url = ? AND all_domains.user = ?;', [rate, url, req.session.user_id], function(err, rows) {
-         //res.redirect('edit_form?domain=' + url);
+        if (err) {
+            res.json(err)
+        } else {
+            var body = {
+                message: "success",
+                rate: rate
+            };
+            res.status(200);
+            res.send(body);
+        }
     });
 });
 
@@ -415,6 +447,18 @@ app.get('/jquery', function (req, res) {
     res.writeHead(301, { //You can use 301, 302 or whatever status code
       'Location': 'https://github.com/jquery/jquery',
       'Expires': (new Date()).toGMTString()
+        if (err) {
+            res.json(err)
+        } else {
+            var body = {
+                message: "success",
+                domain: domain,
+                link: link,
+                user_link: user_link
+            };
+            res.status(200);
+            res.send(body);
+        }
     });
 
     res.end();

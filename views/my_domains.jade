@@ -1,6 +1,7 @@
 extends layout
 
 block content
+	script(src='/scripts/custom/my_domains.js')
 	.my-domains-header.h1 My Domains
 
 	.add-domain-form-container.well
@@ -26,4 +27,4 @@ block content
 					tr(id=domain.id) 
 						td.url #{domain.url}
 						td
-							a.linkDeleteFromAll.btn.btn-danger.btn-sm.delete-column(href="/my_domains/delete/?id=" + domain.id, id="" + domain.id) X
+							a.linkDeleteFromAll.btn.btn-danger.btn-sm.delete-column(id="" + domain.id, name="deleteDomainButton") X

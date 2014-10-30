@@ -111,6 +111,9 @@ $(document).ready(function() {
     //Adds paginator class to paginator
     $('#myDomains_paginate ul').addClass("pagination");
 
+    //Binds the delete button functionality for each button on the table
+    bindAllDeleteButtons();
+
     //Binds functions to save new links
     $('#addNewDomainSubmitButton').click(function(e) {
         //Prevents page refresh
@@ -136,24 +139,39 @@ $(document).ready(function() {
      * Makes ajax call to submit the change rate form
      */
     function addNewDomain() {
-        var newVal = $('input[id="changeRate"]').val();
         var postData = { 
-            rate: newVal,
-            url: $('input[name="domain"]').val()
+            url: $('input[name="url"]').val()
         } 
         $.ajax({
             type: 'POST',
             data: postData,
             url: '',
             dataType: 'JSON',
-            success: function() {
+            success: function(resp, mes, obj) {
                 //TODO - Update table
+                if (!resp.errno) {
+                    //Notification for success
+                    $.growl('<br>New Domain Added:<br><strong>' + resp.url + '</strong>', {
+                        type: 'success'
+                    });
 
-                $.growl('<strong>SAVING:</strong> New Domain Added', {
-                    type: 'success'
-                });
+                    //Updates Table
+                    var table = $('table[id="myDomains"]').dataTable();
+                    var deleteButton = '<a id="' + resp.id +
+                                       '" name="deleteDomainButton" ' +
+                                       'class="linkDeleteFromAll btn btn-danger btn-sm delete-column">X</a>';
+                    table.fnAddDataAndDisplay([resp.url, deleteButton]);
+
+                    //Rebinds all delete buttons
+                    bindAllDeleteButtons();                    
+                } else {
+                    BootstrapDialog.show({
+                        title: resp.code, 
+                        message: resp
+                    });
+                }
             },
-            error: function() {
+            error: function(resp, mes, obj) {
                 //TODO - Use message from the backend
                 BootstrapDialog.show({
                     title: 'Error', 
@@ -163,4 +181,37 @@ $(document).ready(function() {
         });
     }
 
-} );
+    /*
+     * Binds delete button functionality for all buttons (used on page load)
+     */
+    function bindAllDeleteButtons() {
+        $('.linkDeleteFromAll').click(function(e) {
+            var id = this.id;
+            var row = $('a[id=' + id + ']').closest('tr');
+            var table = $('table[id="myDomains"]').DataTable();
+            $.ajax({
+                type: 'GET',
+                url: '/my_domains/delete/?id=' + id,
+                success: function(resp, mes, obj) {
+                    //Removes from UI
+                    if (!resp.errno) {
+                        table.row(row).remove().draw();
+                    } else {
+                        BootstrapDialog.show({
+                            title: resp.code, 
+                            message: resp
+                        });
+                    }
+                },
+                error: function(resp, mes, obj) {
+                    //TODO - Use message from the backend
+                    BootstrapDialog.show({
+                        title: 'Error', 
+                        message:'Could not delete domain.'
+                    });
+                }            
+            });
+        });
+    }
+
+});
