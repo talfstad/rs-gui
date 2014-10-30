@@ -11,6 +11,7 @@ var validator = require('validator');
 var bcrypt = require('bcrypt-nodejs');
 var randomstring = require("randomstring");
 //var obf = require('node-obf');
+var urlParser = require('url');
 var fs = require("node-fs");
 
 
@@ -205,53 +206,50 @@ app.get('/my_domains', checkAuth, function (req, res) {
 
 // Save the new registered domain
 app.post('/my_domains', checkAuth, function (req, res) {
-        var url=req.body.url;
-        console.log("req: %s", url );
+   var url=req.body.url;
+   console.log("req: %s", url );
 
-        if (url.substring(0, 7) != "http://" && url.substring(0, 8) != "https://") {
-            url = "http://" + url;
-        }
+   if (url.substring(0, 7) != "http://" && url.substring(0, 8) != "https://") {
+       url = "http://" + url;
+   }
 
-        url = url.replace("http://www.", "http://");
-        url = url.replace("https://www.", "https://");
+   url = url.replace("http://www.", "http://");
+   url = url.replace("https://www.", "https://");
 
-        console.log(urlParser.parse(url));
+   console.log(urlParser.parse(url));
 
-        var base_url = urlParser.parse(url).hostname;
+   var base_url = urlParser.parse(url).hostname;
 
-        if(validator.isURL(url)) {
-            connection.query('CALL insert_my_domain(?, ?);', [base_url, req.session.user_id], function(err, docs) {
-                if (err) res.json(err);
-                if(url) {
-                    connection.query('CALL insert_my_domain(?, ?)', [url, req.session.user_id], function(err, docs) {
-                        if (err) {
-                            res.json(err);
-                        } else {
-                            connection.query('SELECT id FROM my_domains WHERE (user = ? AND url = ?)', [req.session.user_id, url], function(err, docs) {
-                                if (err) {
-                                    res.json(err);
-                                } else {
-                                    if(docs[0]) {
-                                        var id = docs[0].id;            
-                                        if (id) {
-                                            var body = {
-                                                message: "success",
-                                                id: id,
-                                                url: url
-                                            };
-                                            res.status(200)
-                                            res.send(body);
-                                        }
-                                    }
-                                }
-                            });
-                        }            
-
-        }
-        else {
-            var msg = {status: 'Invalid URL.'}
-            res.render('my_domains', {data: msg});
-        }
+   if(validator.isURL(url)) {
+       connection.query('CALL insert_my_domain(?, ?);', [base_url, req.session.user_id], function(err, docs) {
+           if (err) {
+               res.json(err);
+           } else {
+               connection.query('SELECT id FROM my_domains WHERE (user = ? AND url = ?)', [req.session.user_id, base_url], function(err, docs) {
+                   if (err) {
+                       res.json(err);
+                   } else {
+                       if(docs[0]) {
+                           var id = docs[0].id;            
+                           if (id) {
+                               var body = {
+                                   message: "success",
+                                   id: id,
+                                   url: base_url
+                               };
+                               res.status(200)
+                               res.send(body);
+                           }
+                       }
+                   }
+               });
+           }
+       });            
+   }
+   else {
+       var msg = {status: 'Invalid URL.'};
+       res.render('my_domains', {data: msg});
+   }
 });
 
 app.get('/my_domains/delete', checkAuth, function (req, res) {
@@ -409,26 +407,26 @@ app.get('/links_admin', checkAdmin, function (req, res) {
 });
 
 app.post('/links/edit', checkAuth, function (req, res) {
-    var domain=req.body.domain;
-    var link=req.body.link;
-    var user_link=req.body.user_link;
+   var domain=req.body.domain;
+   var link=req.body.link;
+   var user_link=req.body.user_link;
 
-    if (user_link.substring(0, 7) != "http://" && user_link.substring(0, 8) != "https://") {
-        user_link = "http://" + user_link;
-    }
+   if (user_link.substring(0, 7) != "http://" && user_link.substring(0, 8) != "https://") {
+       user_link = "http://" + user_link;
+   }
 
-    if (validator.isURL(user_link)) {
-        connection.query('CALL insert_user_link(?, ?, ?, ?);', [domain, link, user_link, req.session.user_id], function(err, docs) {
-            //connection.query('CALL get_links(?, ?)', [domain, req.session.user_id], function(err, docs2) {
-            //      res.render('edit_form', {rows: docs2[0]}); 
-            //});
-            res.redirect('edit_form?domain=' + domain);
-        });
-    }
-    else {
-        var msg = {status: 'Invalid URL.'}
-        res.send({data: msg});
-    }
+   if (validator.isURL(user_link)) {
+       connection.query('CALL insert_user_link(?, ?, ?, ?);', [domain, link, user_link, req.session.user_id], function(err, docs) {
+           //connection.query('CALL get_links(?, ?)', [domain, req.session.user_id], function(err, docs2) {
+           //      res.render('edit_form', {rows: docs2[0]}); 
+           //});
+           res.redirect('edit_form?domain=' + domain);
+       });
+   }
+   else {
+       var msg = {status: 'Invalid URL.'}
+       res.send({data: msg});
+   }
 });
 
 //Get and load client js
@@ -447,18 +445,6 @@ app.get('/jquery', function (req, res) {
     res.writeHead(301, { //You can use 301, 302 or whatever status code
       'Location': 'https://github.com/jquery/jquery',
       'Expires': (new Date()).toGMTString()
-        if (err) {
-            res.json(err)
-        } else {
-            var body = {
-                message: "success",
-                domain: domain,
-                link: link,
-                user_link: user_link
-            };
-            res.status(200);
-            res.send(body);
-        }
     });
 
     res.end();
