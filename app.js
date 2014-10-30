@@ -37,7 +37,7 @@ var connection = mysql.createConnection({
     host : '54.187.151.91',
     user : 'root',
     password : 'derekisfat',
-    database : 'domains'
+    database : 'domains_dev'
 });
 connection.connect();
 
