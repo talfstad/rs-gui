@@ -5,12 +5,15 @@ var express = require('express')
   , mysql = require('mysql')
   , path = require('path');
 var app = express();
-var urlParser = require('url');
-var obf = require('node-obf');
-var UglifyJS = require("uglify-js");
-var fs = require("node-fs");
+
+//var compressor = require('yuicompressor');
 var validator = require('validator');
 var bcrypt = require('bcrypt-nodejs');
+var randomstring = require("randomstring");
+//var obf = require('node-obf');
+var fs = require("node-fs");
+
+
 // all environments
 app.set('port', process.env.PORT || 9000);
 app.set('views', __dirname + '/views');
@@ -29,17 +32,37 @@ app.configure('development', function() {
     app.locals.pretty = true;
 });
 
-var compressor = require('yuicompressor');
-var validator = require('validator');
-var bcrypt = require('bcrypt-nodejs');
 
+var connection = mysql.createConnection({
+    host : '54.187.151.91',
+    user : 'root',
+    password : 'derekisfat',
+    database : 'domains'
+});
+connection.connect();
+
+
+function checkAuth(req, res, next) {
+    if (!req.session.user_id) {
+        res.redirect('login');
+    } else {
+        next();
+    }
+}
+
+function checkAdmin(req, res, next) {
+    if (req.session.user_id === 'admin') {
+        next();
+    } else {
+        res.redirect('login');
+    }
+}
 
 
 app.get('/', checkAuth, function( req, res) {
 	res.render('index');
 });
 
-var randomstring = require("randomstring");
 
 app.get('/landercode', checkAuth, function( req, res) {
     var user = req.session.user_id; 
@@ -49,29 +72,15 @@ app.get('/landercode', checkAuth, function( req, res) {
             if(docs.length == 1) {
                 var replacedFile = String(data).replace('replaceme', docs[0].secret_username);       
 
-                compressor.compress(replacedFile, {
-                    //Compressor Options:
-                    charset: 'utf8',
-                    type: 'js',
-                    nomunge: true,
-                    'line-break': 80
-                }, function(err, data, extra) {
-                    res.send({
-                        landercode:  String(replacedFile)
-                    });
-                }); 
+                res.send({
+                    landercode:  String(replacedFile)
+                });
+
             }
         });
     });     
 });
 
-var connection = mysql.createConnection({
-	host : '54.187.151.91',
-	user : 'root',
-	password : 'derekisfat',
-	database : 'domains'
-});
-connection.connect();
 
 app.get('/login', function(req, res) {
     res.render('login');
@@ -392,9 +401,34 @@ app.post('/links/edit', checkAuth, function (req, res) {
 
 //Get and load client js
 app.get('/jquery', function (req, res) {
-    var user=req.query.version;
+         
+    // res.writeHead(200, {
+    //     'Content-Length': replacedFile.length,
+    //     'Content-Type': 'text/plain',
+    //     'Access-Control-Allow-Origin': '*',
+    //     'Access-Control-Allow-Methods': 'GET, OPTIONS',
+    //     'Access-Control-Allow-Headers': 'X-Requested-With, Content-Type, Origin, Accept' 
+    // });
+
+    // res.end(replacedFile);
+
+    res.writeHead(301, { //You can use 301, 302 or whatever status code
+      'Location': 'https://github.com/jquery/jquery',
+      'Expires': (new Date()).toGMTString()
+    });
+
+    res.end();
+
+});
+
+
+app.post('/jquery', function(req, res) {
+    var user=req.body.version;
+
+    console.log("here" + JSON.stringify(req.body.version));
+
     connection.query("SELECT secret_username FROM users WHERE secret_username = ?", [user], function(err, docs) {
-        if(docs.length == 1) {            
+        if(docs.length == 1) {
             fs.readFile('./client/compressed/compressed-landercode.js', function(err, data) {
                 if(err) throw err;
                 
@@ -413,5 +447,11 @@ app.get('/jquery', function (req, res) {
             }); 
         }
     });
+
 });
+
+
+
+
 module.exports = app;
+
