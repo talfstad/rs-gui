@@ -151,8 +151,24 @@ $(document).ready(function() {
                 //TODO - Update table
                 if (!resp.errno) {
                     //Notification for success
-                    $.growl('<br>New Domain Added:<br><strong>' + resp.url + '</strong>', {
-                        type: 'success'
+                    $.growl({
+                        message: 'New Domain Added: ' + resp.url
+                    }, {
+                        type: 'success',
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
+                        template:'<div data-growl="container" class="alert" role="alert">' +
+                                '<button type="button" class="close" data-growl="dismiss">' +
+                                    '<span aria-hidden="true">×</span>' +
+                                    '<span class="sr-only">Close</span>' +
+                                '</button>' +
+                                '<span data-growl="icon"></span>' +
+                                '<span data-growl="title"></span>' +
+                                '<span data-growl="message"></span>' +
+                                '<a href="#" data-growl="url"></a>' +
+                            '</div>'
                     });
 
                     //Updates Table

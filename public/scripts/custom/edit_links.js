@@ -169,15 +169,19 @@ $(document).ready(function() {
             dataType: 'JSON',
             success: function(resp, mes, obj) {
                 if (!resp.errno) {
-                    $.growl({                                
+                    $.growl({
                         message: 'New Rate of ' + resp.rate + 'Applied'
                     }, {
                         type: 'success',
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
                         template:'<div data-growl="container" class="alert" role="alert">' +
                                 '<button type="button" class="close" data-growl="dismiss">' +
                                     '<span aria-hidden="true">×</span>' +
                                     '<span class="sr-only">Close</span>' +
-                                '/button>' +
+                                '</button>' +
                                 '<span data-growl="icon"></span>' +
                                 '<span data-growl="title"></span>' +
                                 '<span data-growl="message"></span>' +
@@ -219,8 +223,24 @@ $(document).ready(function() {
             success: function() {
                 if (!resp.errno) {
                     $('input[name="domain"]').closest('tr').children()[1].textContent = newVal;
-                    $.growl('<br>Link Change Successful', {
-                        type: 'success'
+                    $.growl({
+                        message: 'Link Change Successful'
+                    }, {
+                        type: 'success',
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
+                        template:'<div data-growl="container" class="alert" role="alert">' +
+                                '<button type="button" class="close" data-growl="dismiss">' +
+                                    '<span aria-hidden="true">×</span>' +
+                                    '<span class="sr-only">Close</span>' +
+                                '</button>' +
+                                '<span data-growl="icon"></span>' +
+                                '<span data-growl="title"></span>' +
+                                '<span data-growl="message"></span>' +
+                                '<a href="#" data-growl="url"></a>' +
+                            '</div>'
                     });
                 } else {
                     BootstrapDialog.show({
