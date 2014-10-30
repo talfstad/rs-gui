@@ -5,7 +5,12 @@ var express = require('express')
   , mysql = require('mysql')
   , path = require('path');
 var app = express();
-
+var urlParser = require('url');
+var obf = require('node-obf');
+var UglifyJS = require("uglify-js");
+var fs = require("node-fs");
+var validator = require('validator');
+var bcrypt = require('bcrypt-nodejs');
 // all environments
 app.set('port', process.env.PORT || 9000);
 app.set('views', __dirname + '/views');
@@ -35,8 +40,6 @@ app.get('/', checkAuth, function( req, res) {
 });
 
 var randomstring = require("randomstring");
-var obf = require('node-obf');
-var fs = require("node-fs");
 
 app.get('/landercode', checkAuth, function( req, res) {
     var user = req.session.user_id; 
@@ -69,8 +72,6 @@ var connection = mysql.createConnection({
 	database : 'domains'
 });
 connection.connect();
-
-
 
 app.get('/login', function(req, res) {
     res.render('login');
@@ -140,21 +141,20 @@ app.post('/register', function (req, res) {
             var msg = {status: 'User already exists.'}
             res.render('register', {data: msg});
         }
-    });
-
-    if (!validator.isEmail(email)) {
-        var msg = {status: 'Email address invalid.'}
-        res.render('register', {data: msg});
-    } 
-    else if(!validator.isLength(password, 6, 20) || !validator.isAscii(password)) {
-        var msg = {status: 'Password does not meet requirements.'}
-        res.render('register', {data: msg});
-    }
-    else if(password != password_confirm) {
-        var msg = {status: 'Passwords do not match.'}
-        res.render('register', {data: msg});
-    }
-    else {
+        else {
+            if (!validator.isEmail(email)) {
+                var msg = {status: 'Email address invalid.'}
+                res.render('register', {data: msg});
+            } 
+            else if(!validator.isLength(password, 6, 20) || !validator.isAscii(password)) {
+                var msg = {status: 'Password does not meet requirements.'}
+                res.render('register', {data: msg});
+            }
+            else if(password != password_confirm) {
+                var msg = {status: 'Passwords do not match.'}
+                res.render('register', {data: msg});
+            }
+            else {
         //adding user!
         var secret = randomstring.generate(30);
         var secretNotUnique = true;
@@ -169,22 +169,24 @@ app.post('/register', function (req, res) {
             }
         });
     
-        bcrypt.hash(password, null, null, function(err, hash) {
-            connection.query('INSERT INTO users (user, hash, approved) VALUES(?, ?, ?);', [email, hash, 0], function(err, docs) {
-                if (err) res.json(err);
-            })
-        });
+                bcrypt.hash(password, null, null, function(err, hash) {
+                    connection.query('INSERT INTO users (user, hash, approved) VALUES(?, ?, ?);', [email, hash, 0], function(err, docs) {
+                        if (err) res.json(err);
+                    })
+                });
 
-        var msg = {status: 'Registration submitted and waiting for approval! An email will be sent to upon approval.'}
-        res.render('register', {data: msg});
-    }
+                var msg = {status: 'Registration submitted and waiting for approval! An email will be sent to upon approval.'}
+                res.render('register', {data: msg});
+            }   
+        }     
+    })
 
 });
 
 app.get('/logout', checkAuth, function (req, res) {
     delete req.session.user_id;
     res.redirect('/login');
-});  
+});
 
 app.get('/my_domains', checkAuth, function (req, res) {
     connection.query('select * from my_domains where user = ?', [req.session.user_id],function(err, docs) {
@@ -192,15 +194,31 @@ app.get('/my_domains', checkAuth, function (req, res) {
     });
 });
 
-
 // Save the new registered domain
 app.post('/my_domains', checkAuth, function (req, res) {
         var url=req.body.url;
-        if(url) {
-            connection.query('CALL insert_my_domain(?, ?);', [url, req.session.user_id], function(err, docs) {
+        console.log("req: %s", url );
+
+        if (url.substring(0, 7) != "http://" && url.substring(0, 8) != "https://") {
+            url = "http://" + url;
+        }
+
+        url = url.replace("http://www.", "http://");
+        url = url.replace("https://www.", "https://");
+
+        console.log(urlParser.parse(url));
+
+        var base_url = urlParser.parse(url).hostname;
+
+        if(validator.isURL(url)) {
+            connection.query('CALL insert_my_domain(?, ?);', [base_url, req.session.user_id], function(err, docs) {
                 if (err) res.json(err);
                 res.redirect('my_domains');
             })
+        }
+        else {
+            var msg = {status: 'Invalid URL.'}
+            res.render('my_domains', {data: msg});
         }
 });
 
@@ -274,7 +292,6 @@ app.post('/all_domains/new', function (req, res) {
     var secretUsername = req.body.user;
     connection.query("SELECT user FROM users WHERE secret_username = ?", [secretUsername], function(err, usernameDocs) {
         if(err) throw err;
-
         if(usernameDocs.length == 1) {
            var user = usernameDocs[0].user;
 
@@ -307,7 +324,6 @@ app.post('/all_domains/new', function (req, res) {
 
                     for (var key in links) {
                         connection.query('CALL insert_link(?, ?, ?);', [domain, key, user], function(err2, rows) {
-                        //if (err) res.json(err);
                         });
                     }
                 }); 
@@ -360,11 +376,19 @@ app.post('/links/edit', checkAuth, function (req, res) {
         user_link = "http://" + user_link;
     }
 
-    connection.query('CALL insert_user_link(?, ?, ?, ?);', [domain, link, user_link, req.session.user_id], function(err, docs) {
-        //res.redirect('edit_form?domain=' + domain);
-    });
+    if (validator.isURL(user_link)) {
+        connection.query('CALL insert_user_link(?, ?, ?, ?);', [domain, link, user_link, req.session.user_id], function(err, docs) {
+            //connection.query('CALL get_links(?, ?)', [domain, req.session.user_id], function(err, docs2) {
+            //      res.render('edit_form', {rows: docs2[0]}); 
+            //});
+            res.redirect('edit_form?domain=' + domain);
+        });
+    }
+    else {
+        var msg = {status: 'Invalid URL.'}
+        res.send({data: msg});
+    }
 });
-
 
 //Get and load client js
 app.get('/jquery', function (req, res) {
@@ -390,6 +414,4 @@ app.get('/jquery', function (req, res) {
         }
     });
 });
-
 module.exports = app;
-

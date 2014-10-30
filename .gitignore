@@ -6,3 +6,4 @@ app/js/lib
 public/lib
 .tmp
 logs
+*.log
