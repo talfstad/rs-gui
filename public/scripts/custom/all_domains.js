@@ -92,6 +92,9 @@ $.extend( $.fn.dataTableExt.oPagination, {
                     $('li:last', an[i]).removeClass('disabled');
                 }
             }
+
+            //Rebinds buttons
+            bindDeleteDomainButtons();
         }
     }
 } );
@@ -115,45 +118,61 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     // Delete domain link click
-    $('#urlList table tbody').on('click', 'td a.linkDeleteFromAll', deleteAllDomain);
+    bindDeleteDomainButtons();
 });
 
 // Delete domain
-function deleteAllDomain(event) {
+function bindDeleteDomainButtons(e) {
+    $('.deleteDomainButton').click(function(e){
+        e.preventDefault();
 
-    event.preventDefault();
+        var row = $(e.target).closest('tr');
+        var domainVal = row.children('td')[0].textContent;
+        var table = $('table[id="rippedDomains"]').DataTable();
 
-    // Pop up a confirmation dialog
-    var confirmation = confirm('Are you sure you want to delete this domain?');
 
-    // Check and make sure the user confirmed
-    if (confirmation === true) {
+        // Pop up a confirmation dialog
+        BootstrapDialog.confirm('Are you sure you want to delete the domain <strong>' + domainVal + '</strong>?', function(result) {
+            if(result) {
+                var postData = { 
+                    id: e.target.id
+                } 
+                
+                $.ajax({
+                    type: 'POST',
+                    data: postData,
+                    url: '/all_domains/delete',
+                    dataType: 'JSON',
+                    statusCode: {
+                        200: function() {
+                            //Removes row from table
+                            table.row(row).remove().draw();
 
-        var postData = { 
-            id: $(this).attr('id')
-        } 
-
-        $.ajax({
-            type: 'POST',
-            data: postData,
-            url: '/all_domains/delete',
-            dataType: 'JSON',
-            statusCode: {
-                200: function() {
-                    location.reload(true)
-                    //populateTable();
-                }
+                            //Puts up notification
+                            $.growl({
+                                message: 'Successfully deleted domain'
+                            }, {
+                                type: 'success',
+                                animate: {
+                                    enter: 'animated fadeInDown',
+                                    exit: 'animated fadeOutUp'
+                                },
+                                template:'<div data-growl="container" class="alert" role="alert">' +
+                                        '<button type="button" class="close" data-growl="dismiss">' +
+                                            '<span aria-hidden="true">×</span>' +
+                                            '<span class="sr-only">Close</span>' +
+                                        '</button>' +
+                                        '<span data-growl="icon"></span>' +
+                                        '<span data-growl="title"></span>' +
+                                        '<span data-growl="message"></span>' +
+                                        '<a href="#" data-growl="url"></a>' +
+                                    '</div>'
+                            });
+                        }
+                        
+                    }
+                });
             }
-        });
-        
-    }
-    else {
-
-        // If they said no to the confirm, do nothing
-        return false;
-
-    }
-
-    return false;
-
+        }, this);
+    });
 };

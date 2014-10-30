@@ -170,7 +170,7 @@ $(document).ready(function() {
             success: function(resp, mes, obj) {
                 if (!resp.errno) {
                     $.growl({
-                        message: 'New Rate of ' + resp.rate + 'Applied'
+                        message: 'New Rate of ' + resp.rate + ' Applied'
                     }, {
                         type: 'success',
                         animate: {

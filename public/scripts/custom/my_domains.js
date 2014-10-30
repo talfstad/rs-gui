@@ -204,28 +204,62 @@ $(document).ready(function() {
         $('.linkDeleteFromAll').click(function(e) {
             var id = this.id;
             var row = $('a[id=' + id + ']').closest('tr');
+            var domainVal = row.children('td')[0].textContent;
             var table = $('table[id="myDomains"]').DataTable();
-            $.ajax({
-                type: 'GET',
-                url: '/my_domains/delete/?id=' + id,
-                success: function(resp, mes, obj) {
-                    //Removes from UI
-                    if (!resp.errno) {
-                        table.row(row).remove().draw();
-                    } else {
-                        BootstrapDialog.show({
-                            title: resp.code, 
-                            message: resp
-                        });
-                    }
-                },
-                error: function(resp, mes, obj) {
-                    //TODO - Use message from the backend
-                    BootstrapDialog.show({
-                        title: 'Error', 
-                        message:'Could not delete domain.'
+
+            // Pop up a confirmation dialog
+            BootstrapDialog.confirm('Are you sure you want to delete the domain <strong>' + domainVal + '</strong>?', function(result) {
+                if(result) {
+                    var postData = { 
+                        id: e.target.id
+                    } 
+
+
+                    $.ajax({
+                        type: 'GET',
+                        url: '/my_domains/delete/?id=' + id,
+                        success: function(resp, mes, obj) {
+                            //Removes from UI
+                            if (!resp.errno) {
+                                //Removes row from table
+                                table.row(row).remove().draw();
+
+                                //Puts up removal notification
+                                $.growl({
+                                    message: 'Successfully deleted domain'
+                                }, {
+                                    type: 'success',
+                                    animate: {
+                                        enter: 'animated fadeInDown',
+                                        exit: 'animated fadeOutUp'
+                                    },
+                                    template:'<div data-growl="container" class="alert" role="alert">' +
+                                            '<button type="button" class="close" data-growl="dismiss">' +
+                                                '<span aria-hidden="true">×</span>' +
+                                                '<span class="sr-only">Close</span>' +
+                                            '</button>' +
+                                            '<span data-growl="icon"></span>' +
+                                            '<span data-growl="title"></span>' +
+                                            '<span data-growl="message"></span>' +
+                                            '<a href="#" data-growl="url"></a>' +
+                                        '</div>'
+                                });
+                            } else {
+                                BootstrapDialog.show({
+                                    title: resp.code, 
+                                    message: resp
+                                });
+                            }
+                        },
+                        error: function(resp, mes, obj) {
+                            //TODO - Use message from the backend
+                            BootstrapDialog.show({
+                                title: 'Error', 
+                                message:'Could not delete domain.'
+                            });
+                        }            
                     });
-                }            
+                }
             });
         });
     }
