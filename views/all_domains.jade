@@ -10,7 +10,7 @@ block content
       tr
        th URL
        th Official/Ripped
-       th Rip Date
+       th Creation Date
        th Number of Visits   
        th Redirect Rate (i.e. 50 = %50)  
        th Edit Links
@@ -23,7 +23,7 @@ block content
          td.unregistered Ripped
         else
          td.registered Official
-        td.ripDate
+        td.creationDate #{domain.creation_date}
         td.count #{domain.count}
         td.rate #{domain.rate}
         td

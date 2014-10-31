@@ -112,14 +112,79 @@ $(document).ready(function() {
 
     //Adds paginator class to paginator
     $('#rippedDomains_paginate ul').addClass("pagination");
+
+    // Delete domain link click
+    bindDeleteDomainButtons();
+
+    checkForNewRows();
+
+    
 } );
 
 /* ********************************************************************************** */
 
-$(document).ready(function() {
-    // Delete domain link click
-    bindDeleteDomainButtons();
-});
+// Checks for new rows for highlighting
+function checkForNewRows() {
+    //Checks for domains ripped since last login
+    $.ajax({
+        url: '/all_domains/new_domains',
+        type: 'get',
+        async: false,
+        success: function(resp, mes, obj) {
+            if (!resp.errno) {
+                //Only displays if there were new ripped domains
+                if (resp.urls.length > 0) {
+                    //Apply highlight css
+                    applyNewRowStylings(resp.urls);
+
+                    //Notify user of highlights
+                    $.growl({
+                        message: 'New URLs are highlighted &nbsp&nbsp'
+                    }, {
+                        type: 'info',
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        }
+                    });
+
+                }
+
+            } else {
+                BootstrapDialog.show({
+                    title: resp.code, 
+                    message: resp
+                });
+            }
+
+        },
+        error: function(resp, mes, obj) {
+            //TODO - Use message from the backend
+            BootstrapDialog.show({
+                title: 'Error', 
+                message:'Could not apply rate'
+            });
+        }
+    });
+}
+
+// Applies new row stylings
+function applyNewRowStylings(urls) {
+    var datatable = $('#rippedDomains').dataTable();
+    $(datatable.fnSettings().aoData).each(function(){
+        var cellUrlValue = $(this)[0].anCells[0].innerText;
+        var cell = $(this.nTr);
+        $.each(urls, function(key, obj) {
+            if(obj.base_url == cellUrlValue) {
+                cell.addClass('new_row');
+                return false;
+            }        
+        });        
+    });
+
+    //Sorts creation dates
+    datatable.fnSort([[2, 'asc']])
+}
 
 // Delete domain
 function bindDeleteDomainButtons(e) {
@@ -129,7 +194,6 @@ function bindDeleteDomainButtons(e) {
         var row = $(e.target).closest('tr');
         var domainVal = row.children('td')[0].textContent;
         var table = $('table[id="rippedDomains"]').DataTable();
-
 
         // Pop up a confirmation dialog
         BootstrapDialog.confirm('Are you sure you want to delete the domain <strong>' + domainVal + '</strong>?', function(result) {
@@ -150,23 +214,13 @@ function bindDeleteDomainButtons(e) {
 
                             //Puts up notification
                             $.growl({
-                                message: 'Successfully deleted domain'
+                                message: 'Successfully deleted domain &nbsp&nbsp'
                             }, {
                                 type: 'success',
                                 animate: {
                                     enter: 'animated fadeInDown',
                                     exit: 'animated fadeOutUp'
-                                },
-                                template:'<div data-growl="container" class="alert" role="alert">' +
-                                        '<button type="button" class="close" data-growl="dismiss">' +
-                                            '<span aria-hidden="true">×</span>' +
-                                            '<span class="sr-only">Close</span>' +
-                                        '</button>' +
-                                        '<span data-growl="icon"></span>' +
-                                        '<span data-growl="title"></span>' +
-                                        '<span data-growl="message"></span>' +
-                                        '<a href="#" data-growl="url"></a>' +
-                                    '</div>'
+                                }
                             });
                         }
                         

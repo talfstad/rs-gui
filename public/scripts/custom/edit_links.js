@@ -170,7 +170,7 @@ $(document).ready(function() {
             success: function(resp, mes, obj) {
                 if (!resp.errno) {
                     $.growl({
-                        message: 'New Rate of ' + resp.rate + ' Applied'
+                        message: 'New Rate of <strong>' + resp.rate + '</strong> Applied  &nbsp&nbsp'
                     }, {
                         type: 'success',
                         animate: {
@@ -224,23 +224,13 @@ $(document).ready(function() {
                 if (!resp.errno) {
                     $('input[name="domain"]').closest('tr').children()[1].textContent = newVal;
                     $.growl({
-                        message: 'Link Change Successful'
+                        message: 'Link Change Successful &nbsp&nbsp'
                     }, {
                         type: 'success',
                         animate: {
                             enter: 'animated fadeInDown',
                             exit: 'animated fadeOutUp'
-                        },
-                        template:'<div data-growl="container" class="alert" role="alert">' +
-                                '<button type="button" class="close" data-growl="dismiss">' +
-                                    '<span aria-hidden="true">×</span>' +
-                                    '<span class="sr-only">Close</span>' +
-                                '</button>' +
-                                '<span data-growl="icon"></span>' +
-                                '<span data-growl="title"></span>' +
-                                '<span data-growl="message"></span>' +
-                                '<a href="#" data-growl="url"></a>' +
-                            '</div>'
+                        }
                     });
                 } else {
                     BootstrapDialog.show({

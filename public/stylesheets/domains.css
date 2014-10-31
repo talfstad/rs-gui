@@ -96,3 +96,9 @@ table {
     margin: 1em 0;
     clear: both;
 }
+
+/* Stylings for new rows */
+tr.even.new_row td,
+tr.odd.new_row td {
+    color: gold;
+}

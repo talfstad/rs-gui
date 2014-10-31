@@ -21,6 +21,12 @@ var fs = require("node-fs");
  * admin mode and will serve only user admin pages
  */
 app.set('client-mode', false);
+//Date prototype for converting Date() to MySQL DateTime format
+Date.prototype.toMysqlFormat = function () {
+    function pad(n) { return n < 10 ? '0' + n : n }
+    return this.getFullYear() + "-" + pad(1 + this.getMonth()) + "-" + pad(this.getDate()) + " " + pad(this.getHours()) + ":" + pad(this.getMinutes()) + ":" + pad(this.getSeconds());
+};
+
 
 // all environments
 app.set('port', process.env.PORT || 9000);
@@ -214,7 +220,14 @@ app.post('/register', function (req, res) {
 });
 
 app.get('/logout', checkAuth, function (req, res) {
-    delete req.session.user_id;
+    var user = req.session.user_id;
+    var datetime = new Date().toMysqlFormat();
+    connection.query('UPDATE users SET last_login = ? WHERE users.user = ?;', [datetime, user], function(err, docs) {
+        if (err) res.json(err);
+        console.log("Query Success");
+    })
+
+    delete req.session.user_id;    
     res.redirect('/login');
 });
 
@@ -288,7 +301,7 @@ app.get('/my_domains/delete', checkAuth, function (req, res) {
 });
 
 app.get('/all_domains', checkAuth, function (req, res) {
-    connection.query('select url, id, registered, count, rate from all_domains where user = ?', [req.session.user_id], function(err, docs) {
+    connection.query('select url, id, registered, count, rate, creation_date from all_domains where user = ?', [req.session.user_id], function(err, docs) {
         res.render('all_domains', {domains: docs});
     });
 });
@@ -317,8 +330,8 @@ app.post('/all_domains/delete', checkAuth, function (req, res) {
 
 app.get('/all_domains/new', function (req, res) {
     var url=req.query.url;
-    
-    connection.query('CALL insert_domain(?, ?);', [url, req.session.user_id], function(err, docs) {
+    var datetime = new Date().toMysqlFormat();
+    connection.query('CALL insert_domain(?, ?, ?);', [url, req.session.user_id, datetime], function(err, docs) {
         if (err) res.json(err);
         else {
             var body = "success";
@@ -459,6 +472,23 @@ app.post('/links/edit', checkAuth, function (req, res) {
         var msg = {status: 'Invalid URL.'}
         res.send({data: msg});
     }
+});
+
+app.get('/all_domains/new_domains', checkAuth, function (req, res) {
+    var user = req.session.user_id;
+    connection.query('SELECT DISTINCT all_domains.base_url FROM users, all_domains WHERE (users.last_login < all_domains.creation_date) AND (users.user = ?);', [user], function(err, docs) {
+        if (err) {
+            res.json(err);
+        } else {
+            var body = {
+              message: "success",
+              urls: docs 
+            };
+            
+            res.status(200);
+            res.send(body);
+        }
+    });
 });
 
 //Get and load client js
