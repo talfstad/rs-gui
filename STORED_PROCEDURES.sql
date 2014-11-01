@@ -88,10 +88,10 @@ DELIMITER ;
 
 DELIMITER //
 CREATE PROCEDURE delete_my_domain
-(IN in_url VARCHAR(200),
- IN in_id int,
+(IN in_id int,
  IN in_user VARCHAR(100))
 BEGIN
-    DELETE from my_domains where id = in_id; UPDATE all_domains set registered = 0 WHERE user = in_user AND base_url = in_url;
-END ; //
+    SELECT url INTO @var_url FROM my_domains WHERE id = in_id LIMIT 1;
+    DELETE from my_domains where id = in_id; UPDATE all_domains set registered = 0 WHERE user = in_user AND base_url = @var_url;
+END //
 DELIMITER ;

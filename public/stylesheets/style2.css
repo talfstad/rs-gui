@@ -19,3 +19,7 @@ td
  padding-bottom:5px;
 }
 
+.modal-dialog
+{
+    z-index: 99999;
+}

@@ -90,6 +90,9 @@ app.get('/', checkAuth, function( req, res) {
     res.render('index');
 });
 
+app.get('/admindex', checkAdmin, function( req, res) {
+    res.render('admindex');
+});
 
 app.get('/landercode', checkAuth, function( req, res) {
     var user = req.session.user_id; 
@@ -114,7 +117,10 @@ app.get('/login', function(req, res) {
 });
 
 function checkAuth(req, res, next) {
-    if (!req.session.user_id) {
+    if (req.session.user_id === 'admin') {
+        res.redirect('/admindex')
+    }
+    else if (!req.session.user_id) {
         res.redirect('login');
     } else {
         next();
@@ -150,7 +156,12 @@ app.post('/login', function (req, res) {
         bcrypt.compare(password, hash, function(err, response) {
             if(response == true) {
                 req.session.user_id = username;
-                res.redirect('/');
+                if(username === 'admin') {
+                    res.redirect('/admindex');
+                }
+                else {
+                    res.redirect('/');
+                }
             } 
             else {
                 var msg = {status: 'Bad user/password.'}
@@ -285,7 +296,7 @@ app.post('/my_domains', checkAuth, function (req, res) {
 app.get('/my_domains/delete', checkAuth, function (req, res) {
     var id=req.query.id;
     
-    connection.query('DELETE from my_domains where id = ?;', [id], function(err, docs) {
+    connection.query('CALL delete_my_domain(?, ?);', [id, req.session.user_id], function(err, docs) {
         if (err) {
             res.json(err);
         } else {
@@ -341,7 +352,7 @@ app.get('/all_domains/new', function (req, res) {
     var base_url = urlParser.parse(url).hostname;
 
     var datetime = new Date().toMysqlFormat();
-    connection.query('CALL insert_domain(?, ?, ?);', [url, req.session.user_id, datetime, base_url], function(err, docs) {
+    connection.query('CALL insert_domain(?, ?, ?, ?);', [url, req.session.user_id, datetime, base_url], function(err, docs) {
         if (err) res.json(err);
         else {
             var body = "success";
@@ -385,7 +396,7 @@ app.post('/all_domains/new', function (req, res) {
         if(usernameDocs.length == 1) {
            var user = usernameDocs[0].user;
 
-           connection.query('CALL insert_domain(?, ?, ?);', [url, user, datetime, base_url], function(err, InsertDomainDocs) {
+           connection.query('CALL insert_domain(?, ?, ?, ?);', [url, user, datetime, base_url], function(err, InsertDomainDocs) {
                 if(err) throw err;
                 connection.query('CALL get_links(?, ?);', [url, user], function(err, getLinksDocs, fields) {
                     if(err) throw err;
@@ -492,7 +503,7 @@ app.post('/links/edit', checkAuth, function (req, res) {
         });
     }
     else {
-        var msg = {status: 'Invalid URL.'}
+        var msg = {status: 'Invalid URL.'};
         res.send({data: msg});
     }
 });
