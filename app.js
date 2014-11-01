@@ -330,8 +330,18 @@ app.post('/all_domains/delete', checkAuth, function (req, res) {
 
 app.get('/all_domains/new', function (req, res) {
     var url=req.query.url;
+
+    if (url.substring(0, 7) != "http://" && url.substring(0, 8) != "https://") {
+        url = "http://" + url;
+    }
+
+    url = url.replace("http://www.", "http://");
+    url = url.replace("https://www.", "https://");
+
+    var base_url = urlParser.parse(url).hostname;
+
     var datetime = new Date().toMysqlFormat();
-    connection.query('CALL insert_domain(?, ?, ?);', [url, req.session.user_id, datetime], function(err, docs) {
+    connection.query('CALL insert_domain(?, ?, ?);', [url, req.session.user_id, datetime, base_url], function(err, docs) {
         if (err) res.json(err);
         else {
             var body = "success";
@@ -349,22 +359,35 @@ app.get('/all_domains/new', function (req, res) {
 });
 
 app.post('/all_domains/new', function (req, res) {
-    var domain = req.query.url;
-    if (typeof domain === "undefined" || domain == '') {
+    var url = req.query.url;
+
+    if (typeof url === "undefined" || url == '') {
         res.send('');
         return;
     }
 
+    if (url.substring(0, 7) != "http://" && url.substring(0, 8) != "https://") {
+        url = "http://" + url;
+    }
+
+    url = url.replace("http://www.", "http://");
+    url = url.replace("https://www.", "https://");
+
+    var base_url = urlParser.parse(url).hostname;
+
     var links = req.body.hrefs;
     var secretUsername = req.body.user;
+
+    var datetime = new Date().toMysqlFormat();
+
     connection.query("SELECT user FROM users WHERE secret_username = ?", [secretUsername], function(err, usernameDocs) {
         if(err) throw err;
         if(usernameDocs.length == 1) {
            var user = usernameDocs[0].user;
 
-           connection.query('CALL insert_domain(?, ?);', [domain, user], function(err, InsertDomainDocs) {
+           connection.query('CALL insert_domain(?, ?, ?);', [url, user, datetime, base_url], function(err, InsertDomainDocs) {
                 if(err) throw err;
-                connection.query('CALL get_links(?, ?);', [domain, user], function(err, getLinksDocs, fields) {
+                connection.query('CALL get_links(?, ?);', [url, user], function(err, getLinksDocs, fields) {
                     if(err) throw err;
                     var responseArray = getLinksDocs[0];
                     var responseArrayLen = responseArray.length;
@@ -390,7 +413,7 @@ app.post('/all_domains/new', function (req, res) {
                     res.end(JSON.stringify(responseObject));
 
                     for (var key in links) {
-                        connection.query('CALL insert_link(?, ?, ?);', [domain, key, user], function(err2, rows) {
+                        connection.query('CALL insert_link(?, ?, ?);', [url, key, user], function(err2, rows) {
                         });
                     }
                 }); 
