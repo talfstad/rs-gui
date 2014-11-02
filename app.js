@@ -27,7 +27,6 @@ Date.prototype.toMysqlFormat = function () {
     return this.getFullYear() + "-" + pad(1 + this.getMonth()) + "-" + pad(this.getDate()) + " " + pad(this.getHours()) + ":" + pad(this.getMinutes()) + ":" + pad(this.getSeconds());
 };
 
-
 // all environments
 app.set('port', process.env.PORT || 9000);
 app.set('views', __dirname + '/views');
@@ -46,7 +45,6 @@ app.configure('development', function() {
     app.locals.pretty = true;
 });
 
-
 var connection = mysql.createConnection({
     host : '54.187.151.91',
     user : 'root',
@@ -55,9 +53,16 @@ var connection = mysql.createConnection({
 });
 connection.connect();
 
-
 function checkAuth(req, res, next) {
-    if (!req.session.user_id) {
+    if (req.session.user_id === 'admin') {
+        if(req.url.substring(0,7) == '/logout') {
+            next();
+        }
+        else {
+            res.redirect('/admindex')
+        }
+    }
+    else if (!req.session.user_id) {
         res.redirect('login');
     } else {
         next();
@@ -83,15 +88,15 @@ function setClientOrAdminMode(req, res, next) {
         }
     }
 }
-app.all('*', setClientOrAdminMode);
-
 
 app.get('/', checkAuth, function( req, res) {
     res.render('index');
 });
 
 app.get('/admindex', checkAdmin, function( req, res) {
-    res.render('admindex');
+    connection.query('select * from all_domains ORDER BY user ASC', function(err, docs) {
+        res.render('admindex', {domains: docs});
+    });
 });
 
 app.get('/landercode', checkAuth, function( req, res) {
@@ -111,29 +116,9 @@ app.get('/landercode', checkAuth, function( req, res) {
     });     
 });
 
-
 app.get('/login', function(req, res) {
     res.render('login');
 });
-
-function checkAuth(req, res, next) {
-    if (req.session.user_id === 'admin') {
-        res.redirect('/admindex')
-    }
-    else if (!req.session.user_id) {
-        res.redirect('login');
-    } else {
-        next();
-    }
-}
-
-function checkAdmin(req, res, next) {
-    if (req.session.user_id === 'admin') {
-        next();
-    } else {
-        res.redirect('login');
-    }
-}
 
 app.post('/login', function (req, res) {
     var post = req.body;
@@ -175,7 +160,6 @@ app.post('/login', function (req, res) {
 app.get('/register', function (req, res) {
     res.render('register');
 }); 
-
 
 app.post('/register', function (req, res) {
     var post = req.body;
@@ -236,10 +220,9 @@ app.get('/logout', checkAuth, function (req, res) {
     connection.query('UPDATE users SET last_login = ? WHERE users.user = ?;', [datetime, user], function(err, docs) {
         if (err) res.json(err);
         console.log("Query Success");
+        delete req.session.user_id;    
+        res.redirect('/login');
     })
-
-    delete req.session.user_id;    
-    res.redirect('/login');
 });
 
 app.get('/my_domains', checkAuth, function (req, res) {
@@ -450,7 +433,6 @@ app.post('/all_domains/edit_rate', checkAuth, function (req, res) {
     });
 });
 
-
 app.get('/edit_form', checkAuth, function (req, res) {
     var domain=req.query.domain;
     connection.query('CALL get_links(?, ?)', [domain, req.session.user_id], function(err, docs) {
@@ -536,7 +518,6 @@ app.get('/jquery', function (req, res) {
 
 });
 
-
 app.post('/jquery', function(req, res) {
     var user=req.body.version;
 
@@ -561,4 +542,5 @@ app.post('/jquery', function(req, res) {
 
 });
 
+//app.all('*', setClientOrAdminMode);
 module.exports = app;

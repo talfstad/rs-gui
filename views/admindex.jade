@@ -1,23 +1,23 @@
-extend layout
+extend admin_layout
 
 block content
- script(src='/scripts/custom/all_domains.js')
- .all-domains-header.h1 All Domains
+ script(src='/scripts/custom/admindex.js')
+ .all-domains-header.h1 Admin Page
  #urlList
   .all-domains-table-container
     table.table.tablesorter.table-bordered.table-striped.table-hover(id="rippedDomains")
      thead
       tr
+       th User
        th URL
        th Official/Ripped
        th Creation Date
-       th Number of Visits   
+       th Number of Visits
        th Redirect Rate
-       th Edit Links
-       th Delete
      tbody
       each domain in domains
-       tr(id=domain.id) 
+       tr(id=domain.id)
+        td.user #{domain.user}
         td.url #{domain.url}
         if domain.registered == "0"
          td.unregistered Ripped
@@ -26,7 +26,3 @@ block content
         td.creationDate #{domain.creation_date}
         td.count #{domain.count}
         td.rate #{domain.rate}%
-        td
-         a.btn.btn-success.btn-sm.btn-block.edit-column(href="/edit_form?domain=" + domain.url) Edit
-        td
-         a.deleteDomainButton.btn.btn-danger.btn-sm.delete-column(id=domain.id) X
