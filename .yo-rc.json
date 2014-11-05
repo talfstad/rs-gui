@@ -1,7 +1,7 @@
 {
   "generator-backbone": {
     "appPath": "app",
-    "appName": "RentMeThat",
+    "appName": "Clickjacker",
     "coffee": false,
     "testFramework": "mocha",
     "templateFramework": "lodash",
