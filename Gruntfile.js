@@ -16,7 +16,7 @@ module.exports = function (grunt) {
 
     // configurable paths
     var yeomanConfig = {
-        app: 'app',
+        app: 'public',
         dist: 'dist',
         test: 'tests'
       };
@@ -63,8 +63,14 @@ module.exports = function (grunt) {
         express: {
             dist: {
                 options: {
-                    server: './dist/app',
-                    port: grunt.option('port') || SERVER_PORT,
+                    server: './dist/server/',
+                    port: grunt.option('port') || SERVER_PORT
+                }
+            },
+            dev: {
+                options: {
+                    server: 'server/server',
+                    port: grunt.option('port') || SERVER_PORT
                 }
             }
         },
@@ -264,7 +270,7 @@ module.exports = function (grunt) {
                     cwd: './',
                     dest: '<%= yeoman.dist %>',
                     src: [
-                        // 'app/**',
+                        'app/**',
                         'bin/**',
                         'routes/**',
                         'app.js',
@@ -324,8 +330,9 @@ module.exports = function (grunt) {
             //'compass:server',
             'open:server',
             //'connect:livereload',
-            'express:dist',
-            'express-keepalive'
+            'express:dev',
+            // 'express-keepalive',
+            'watch:livereload'
         ]);
     });
 

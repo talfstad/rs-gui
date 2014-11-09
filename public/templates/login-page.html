@@ -1,0 +1,62 @@
+ <div class="login-header">
+    <h1>CLICK_JACKER</h1>
+  </div><br>
+
+  <div id="login-template" class="container">
+  <div class="row clearfix" id="login-form-container">
+        <div class="col-md-5 well well-lg text-center">
+            <h1>Login</h1>
+            
+            <form id="login-form" class="form" style="max-width: 300px;" data-parsley-validate>
+                <fieldset>
+                    <div class="form-group">
+                        <div class="controls">
+                            <input class="form-control" type="text" id="login-username-input" name="username" placeholder="Email" value="<%= user.user || '' %>"
+                                required data-parsley-type="email">
+                        </div>
+                    </div>
+                    <div class="form-group mb20">
+                        <div class="controls">
+                            <input class="form-control" type="password" id="login-password-input" placeholder="Password" name="user_password" 
+                                value="" required="true" data-parsley-range="[5,25]">
+                        </div>
+                    </div>
+                    <a href="#" id="login-btn" class="btn btn-default btn btn-success">Login</a>
+                </fieldset>
+            </form>
+        </div>
+
+        <div class="col-md-2"></div>
+
+        <div class="col-md-5 well well-lg text-center">
+            <h1>Signup</h1>
+
+            <form id="signup-form" class="form" style="max-width: 300px;" data-parsley-validate>
+                <fieldset>
+                    <div class="form-group">
+                        <div class="controls">
+                            <input class="form-control" type="text" id="signup-username-input" name="username" placeholder="Email" value="<%= user.user || '' %>"
+                                required required data-parsley-type="email" >
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="controls">
+                            <input class="form-control" type="password" id="signup-password-input" placeholder="Password" name="user_password" 
+                                value="" required data-parsley-range="[5,25]">
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+                    <div class="form-group mb20">
+                        <div class="controls">
+                            <input class="form-control" type="password" id="signup-password-confirm-input" placeholder="Confirm Password" name="user_password" 
+                                value="" required data-parsley-range="[5,25]" data-parsley-equalto="#signup-password-input">
+                        </div>
+                    </div>
+                    <a href="#" id="signup-btn" class="btn btn-default btn btn-success">Signup</a>
+                </fieldset>
+            </form>
+        </div>
+
+  </div>
+</div>

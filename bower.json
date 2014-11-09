@@ -5,19 +5,21 @@
     "Troy Jaeger",
     "Trevor Alfstad"
   ],
-  "homepage":"www.rentmethat.com",
+  "homepage": "www.rentmethat.com",
   "dependencies": {
     "sass-bootstrap": "latest",
     "jquery": "latest",
-    "underscore-amd": "latest",
+    "underscore-amd": "1.4.4",
     "backbone-amd": "latest",
     "modernizr": "latest",
     "requirejs": "latest",
     "requirejs-text": "latest",
+    "bootstrap": "latest",
     "bootstrap.growl": "latest",
-    "jquery-validation": "latest"
+    "jquery-validation": "latest",
+    "parsleyjs": "~2.0.5"
   },
   "devDependencies": {
-    "qunit":"latest"
+    "qunit": "latest"
   }
 }

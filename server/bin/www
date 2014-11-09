@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+var app = require('../server');
+http = require('http');
+var config = require('../config');
+
+http.createServer(app).listen(config.port, function(){
+    console.log('Express server listening on port ' + config.port);
+});
