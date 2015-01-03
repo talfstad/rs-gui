@@ -59,7 +59,7 @@ app.get("/login", function(req, res) {
 
 // GET /api/auth
 // @desc: checks a user's auth status based on cookie
-app.get("/api/auth", function(req, res) {
+app.get("admin/api/auth", function(req, res) {
     db.query("SELECT * FROM users WHERE user = ? AND auth_token = ?", [ req.signedCookies.user_id, req.signedCookies.auth_token ], function(err, rows){
         if(rows.length == 1){
             var row = rows[0];
@@ -72,7 +72,7 @@ app.get("/api/auth", function(req, res) {
 
 // POST /api/auth/login
 // @desc: logs in a user
-app.post("/api/auth/login", function(req, res) {
+app.post("admin/api/auth/login", function(req, res) {
 
     db.query("SELECT * FROM users WHERE user = ?", [ req.body.username ], function(err, rows) {
         if(rows.length == 1) {
@@ -105,7 +105,7 @@ app.post("/api/auth/login", function(req, res) {
 
 // POST /api/auth/signup
 // @desc: creates a user
-app.post("/api/auth/signup", function(req, res) {
+app.post("admin/api/auth/signup", function(req, res) {
     
     var secretUsername = randomstring.generate(30);
     var secretNotUnique = true;
@@ -145,7 +145,7 @@ app.post("/api/auth/signup", function(req, res) {
 
 // POST /api/auth/logout
 // @desc: logs out a user, clearing the signed cookies
-app.post("/api/auth/logout", function(req, res) {
+app.post("admin/api/auth/logout", function(req, res) {
     
     var user = req.signedCookies.user_id;
     var datetime = utils.toMysqlFormat(new Date());
