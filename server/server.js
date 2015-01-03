@@ -518,6 +518,4 @@ app.post('/jquery', function(req, res) {
 
 });
 
-app.all('*', setClientOrAdminMode);
-
 module.exports = app;
