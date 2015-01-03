@@ -46,19 +46,6 @@ app.use(app.router);
 var db = mysql.createConnection(config.dbConnectionInfo);
 db.connect();
 
-function setClientOrAdminMode(req, res, next) {
-    if(config.clientMode) {
-        if(req.url.substring(0,7) == '/jquery' || req.url.substring(0,16) == '/all_domains/new') {
-            next();
-        }    
-    } else {
-        if(req.url.substring(0,7) != '/jquery' && req.url.substring(0,16) != '/all_domains/new') {
-            next();
-        }
-    }
-}
-
-
 app.get("/", function(req, res) {
     //console.log(req);
     res.render('index', { csrfToken: req.csrfToken() });

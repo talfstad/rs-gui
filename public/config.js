@@ -9,12 +9,12 @@ require.config({
     baseUrl: '/',
 
     paths: {
-      jquery: '/lib/jquery/dist/jquery',
-      underscore: '/lib/underscore-amd/underscore',
-      backbone: '/lib/backbone-amd/backbone',
-      bootstrap: '/lib/bootstrap/dist/js/bootstrap',
-      parsley: '/lib/parsleyjs/dist/parsley',
-      text: '/lib/requirejs-text/text'
+      jquery: 'http://localhost:3000/lib/jquery/dist/jquery',
+      underscore: 'http://localhost:3000/lib/underscore-amd/underscore',
+      backbone: 'http://localhost:3000/lib/backbone-amd/backbone',
+      bootstrap: 'http://localhost:3000/lib/bootstrap/dist/js/bootstrap',
+      parsley: 'http://localhost:3000/lib/parsleyjs/dist/parsley',
+      text: 'http://localhost:3000/lib/requirejs-text/text'
     },
 
     // non-AMD lib

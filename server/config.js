@@ -1,6 +1,6 @@
 module.exports = {
   
-  port: 9000,
+  port: 3000,
   
   sessionSecret: 'bb-login-secret',
   
@@ -10,7 +10,8 @@ module.exports = {
 
   //DB Connection information
   dbConnectionInfo: {
-    host : '54.187.151.91',
+    // host : '54.187.184.91',
+    host : 'localhost',
     user : 'root',
     password : 'derekisfat',
     database : 'domains_dev'
@@ -18,18 +19,5 @@ module.exports = {
 
   //DB userdata to omit from client
   userDataOmit: ['hash', 'auth_token', 'secret_username', 'id', 'approved'],
-
-
-
-  /* 
-   * DEPLOYMENT MODE: client-mode will serve only
-   * the client service calls. true to enable
-   * false to disable. If false, server will be in
-   * admin mode and will serve only user admin pages
-   */
-  clientMode: false
-
-
-
 
 };
