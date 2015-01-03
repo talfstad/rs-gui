@@ -6,7 +6,7 @@ if (typeof DEBUG === 'undefined') DEBUG = true;
 
 require.config({
 
-    baseUrl: '/',
+    baseUrl: '/clickjacker/admin/',
 
     paths: {
       jquery: 'http://localhost:3000/lib/jquery/dist/jquery',
