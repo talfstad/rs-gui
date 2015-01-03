@@ -9,12 +9,12 @@ require.config({
     baseUrl: '/clickjacker/admin/',
 
     paths: {
-      jquery: 'admin/lib/jquery/dist/jquery',
-      underscore: 'admin/lib/underscore-amd/underscore',
-      backbone: 'admin/lib/backbone-amd/backbone',
-      bootstrap: 'admin/lib/bootstrap/dist/js/bootstrap',
-      parsley: 'admin/lib/parsleyjs/dist/parsley',
-      text: 'admin/lib/requirejs-text/text'
+      jquery: 'lib/jquery/dist/jquery',
+      underscore: 'lib/underscore-amd/underscore',
+      backbone: 'lib/backbone-amd/backbone',
+      bootstrap: 'lib/bootstrap/dist/js/bootstrap',
+      parsley: 'lib/parsleyjs/dist/parsley',
+      text: 'lib/requirejs-text/text'
     },
 
     // non-AMD lib
