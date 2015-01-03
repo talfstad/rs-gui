@@ -9,9 +9,9 @@ define([
 function($, _, Backbone) {
 
     var app = {
-        root : "/",                     // The root path to run the application through.
-        URL : "/",                      // Base application URL
-        API : "/api",                   // Base API URL (used by models & collections)
+        root : "/clickjacker/admin",                     // The root path to run the application through.
+        URL : "http://buildcave.com/clickjacker/admin",                      // Base application URL
+        API : "/admin/api",                   // Base API URL (used by models & collections)
  // Show alert classes and hide after specified timeout
         showAlert: function(title, text, klass) {
             $("#header-alert").removeClass("alert-danger alert-warning alert-success alert-info");
