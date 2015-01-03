@@ -60,8 +60,8 @@ app.get("/login", function(req, res) {
 // GET /api/auth
 // @desc: checks a user's auth status based on cookie
 app.get("/api/auth", function(req, res) {
-    db.query("SELECT * FROM users WHERE user = ? AND auth_token = ?", [ req.signedCookies.user_id, req.signedCookies.auth_token ], function(err, rows){
-        if(rows.length == 1){
+    db.query("SELECT * FROM users WHERE user = ? AND auth_token = ?", [ req.signedCookies.user_id, req.signedCookies.auth_token ], function(err, rows) {
+        if(rows.length == 1) {
             var row = rows[0];
             res.json({ user: _.omit(row, config.userDataOmit) });   
         } else {  

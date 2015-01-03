@@ -10,7 +10,7 @@ module.exports = {
 
   //DB Connection information
   dbConnectionInfo: {
-    // host : '54.187.184.91',
+    //host : '54.187.184.91',
     host : 'localhost',
     user : 'root',
     password : 'derekisfat',
