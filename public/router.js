@@ -31,11 +31,11 @@ define([
             // so we can create it if it doesn't yet exist
             if(!this.headerView) {
                 this.headerView = new HeaderView({});
-                this.headerView.setElement($(".header")).render();
+                this.headerView.render();
             }
 
             // Close and unbind any existing page view
-            if(this.currentView) this.currentView.remove();
+            //if(this.currentView) this.currentView.remove();
 
             // Establish the requested view into scope
             this.currentView = view;
@@ -47,14 +47,14 @@ define([
                 app.session.checkAuth({
                     success: function(res) {
                         // If auth successful, render inside the page wrapper
-                        $('#content').html( me.currentView.render().$el);
+                        me.currentView.render();
                     }, error: function(res) {
                         me.navigate("login", { trigger: true, replace: true });
                     }
                 });
             } else {
                 // Render inside the page wrapper
-                $('#content').html(this.currentView.render().$el);
+                this.currentView.render();
                 //this.currentView.delegateEvents(this.currentView.events);        // Re-delegate events (unbound when closed)
             }
 
@@ -68,10 +68,14 @@ define([
         },
 
         login: function() {
-            // Fix for non-pushState routing (IE9 and below)
-            var hasPushState = !!(window.history && history.pushState);
-            if(!hasPushState) this.navigate(window.location.pathname.substring(1), {trigger: true, replace: true});
-            else this.show(new LoginPageView({}));
+            if(app.session.get('logged_in')) {
+                app.router.navigate("/", true);
+            } else {
+                // Fix for non-pushState routing (IE9 and below)
+                var hasPushState = !!(window.history && history.pushState);
+                if(!hasPushState) this.navigate(window.location.pathname.substring(1), {trigger: true, replace: true});
+                else this.show(new LoginPageView({}));
+            }
         }
 
     });

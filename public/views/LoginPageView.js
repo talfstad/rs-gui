@@ -1,11 +1,11 @@
 define([
     "app",
-
     "text!templates/logged-in-page.html",
     "text!templates/login-page.html",
-
+    "jquery",
+    "jqueryEasing",
     "parsley"
-], function(app, LoggedInPageTpl, LoginPageTpl){
+], function(app, LoggedInPageTpl, LoginPageTpl, $){
 
     var LoginView = Backbone.View.extend({
 
@@ -13,7 +13,7 @@ define([
             _.bindAll(this);
 
             // Listen for session logged_in state changes and re-render
-            app.session.on("change:logged_in", this.render);
+            app.session.on("change:logged_in", this.ifLoggedInRedirectToHome);
         },
 
         events: {
@@ -22,6 +22,8 @@ define([
             'keyup #login-password-input'           : 'onPasswordKeyup',
             'keyup #signup-password-confirm-input'  : 'onConfirmPasswordKeyup'
         },
+
+        el: $("body"),
 
         // Allow enter press to trigger login
         onPasswordKeyup: function(evt){
@@ -34,6 +36,10 @@ define([
                 this.onLoginAttempt();
                 return false;
             }
+        },
+
+        ifLoggedInRedirectToHome: function(evt) {
+            if(app.session.get('logged_in')) app.router.navigate("/", true);
         },
 
         // Allow enter press to trigger signup
@@ -60,7 +66,6 @@ define([
                 }, {
                     success: function(mod, res) {
                         if(DEBUG) console.log("SUCCESS", mod, res);
-
                     },
                     error: function(err) {
                         if(DEBUG) console.log("ERROR", err);
@@ -101,10 +106,53 @@ define([
         },
 
         render:function () {
-            if(app.session.get('logged_in')) this.template = _.template(LoggedInPageTpl);
-            else this.template = _.template(LoginPageTpl); 
+            this.template = _.template(LoginPageTpl); 
 
-            this.$el.html(this.template({ user: app.session.user.toJSON() }));
+            this.$el.append(this.template({ user: app.session.user.toJSON() }));
+
+            
+            $(".word-rotate").each(function() {
+
+                var $this = $(this),
+                    itemsWrapper = $(this).find(".word-rotate-items"),
+                    items = itemsWrapper.find("> span"),
+                    firstItem = items.eq(0),
+                    firstItemClone = firstItem.clone(),
+                    itemHeight = 0,
+                    currentItem = 1,
+                    currentTop = 0;
+
+                itemHeight = firstItem.height();
+
+                itemsWrapper.append(firstItemClone);
+
+                $this
+                    .height(itemHeight)
+                    .addClass("active");
+
+                setInterval(function() {
+
+                    currentTop = (currentItem * itemHeight);
+
+                    itemsWrapper.animate({
+                        top: -(currentTop) + "px"
+                    }, 300, "easeOutQuad", function() {
+
+                        currentItem++;
+
+                        if(currentItem > items.length) {
+
+                            itemsWrapper.css("top", 0);
+                            currentItem = 1;
+
+                        }
+
+                    });
+
+                }, 2000);
+
+            });
+
             return this;
         }
 

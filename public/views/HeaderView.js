@@ -1,8 +1,9 @@
 define([
     "app",
     "text!templates/header.html",
+    "jquery",
     "bootstrap"
-], function(app, HeaderTpl){
+], function(app, HeaderTpl, $) {
 
     var HeaderView = Backbone.View.extend({
 
@@ -14,6 +15,8 @@ define([
             // Listen for session logged_in state changes and re-render
             app.session.on("change:logged_in", this.onLoginStatusChange);
         },
+
+        el: $("body"),
         
         events: {
             "click #logout-link"         : "onLogoutClick",
@@ -41,9 +44,10 @@ define([
         },
 
         render: function () {
+            this.$el.children().remove();
             if(DEBUG) console.log("RENDER::", app.session.user.toJSON(), app.session.toJSON());
 
-            this.$el.html(this.template({ 
+            this.$el.append(this.template({ 
                 logged_in: app.session.get("logged_in"),
                 user: app.session.user.toJSON() 
             }));
