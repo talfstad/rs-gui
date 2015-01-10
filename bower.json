@@ -1,5 +1,5 @@
 {
-  "name": "rmt",
+  "name": "Clickjacker",
   "version": "1.0.0",
   "authors": [
     "Troy Jaeger",
@@ -7,17 +7,25 @@
   ],
   "homepage": "www.rentmethat.com",
   "dependencies": {
+    "bootstrap": "latest",
+    "bootstrap.growl": "latest",
     "sass-bootstrap": "latest",
     "jquery": "latest",
-    "underscore-amd": "1.4.4",
-    "backbone-amd": "latest",
+    "jquery-ui": "latest",
+    "jquery-validation": "latest",
+    "spin": "latest",
+    "underscore": "latest",
+    "backbone": "latest",
+    "backbone.marionette": "latest",
+    "backbone.picky": "latest",
+    "backbone.syphon": "latest",
     "modernizr": "latest",
     "requirejs": "latest",
     "requirejs-text": "latest",
-    "bootstrap": "latest",
-    "bootstrap.growl": "latest",
-    "jquery-validation": "latest",
-    "parsleyjs": "~2.0.5"
+    "requirejs-underscore-tpl": "latest",
+    "parsleyjs": "~2.0.5",
+    "almond": "latest",
+    "json2": "latest"
   },
   "devDependencies": {
     "qunit": "latest"

@@ -35,27 +35,31 @@ app.use( express.cookieSession( config.sessionSecret ) );         // populates r
 // We need serverside view templating to initially set the CSRF token in the <head> metadata
 // Otherwise, the html could just be served statically from the public directory
 app.set('view engine', 'html');
-app.set('views', __dirname + '/views' );
+app.set('views', __dirname + '/' );
 app.engine('html', require('hbs').__express);
 
 app.use(express.static(__dirname + '/../public'));
 app.use(express.csrf());
 
-app.use(app.router);
+// app.use(app.router);
 
 var db = mysql.createConnection(config.dbConnectionInfo);
 db.connect();
 
 app.get("/", function(req, res) {
-    //console.log(req);
     res.render('index', { csrfToken: req.csrfToken() });
 });
 
-app.get("/login", function(req, res) {
-    res.render('index', { csrfToken: req.csrfToken() });
+app.get("/api/rips", function(req, res) {
+  db.query("select ripped.id, ripped.hits, ripped.url, ripped.links_list, ripped.replacement_links, pulse.period_start, pulse.rate from ripped, pulse where pulse.url = ripped.url ORDER BY rate DESC, period_start DESC", [] , function(err, rows) {
+        if(rows.length >= 1) {
+            res.json(rows);
+        } else { 
+            res.json({ error: "There are no rips yet!"  });   
+        }
+    });
+
 });
-
-
 
 // GET /api/auth
 // @desc: checks a user's auth status based on cookie
@@ -64,7 +68,7 @@ app.get("/api/auth", function(req, res) {
         if(rows.length == 1) {
             var row = rows[0];
             res.json({ user: _.omit(row, config.userDataOmit) });   
-        } else {  
+        } else { 
             res.json({ error: "Client has no valid login cookies."  });   
         }
     });
@@ -73,8 +77,10 @@ app.get("/api/auth", function(req, res) {
 // POST /api/auth/login
 // @desc: logs in a user
 app.post("/api/auth/login", function(req, res) {
+  
 
     db.query("SELECT * FROM users WHERE user = ?", [ req.body.username ], function(err, rows) {
+      console.log(req.body.username);
         if(rows.length == 1) {
             var row = rows[0];
             
