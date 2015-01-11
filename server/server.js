@@ -15,6 +15,7 @@ var express = require("express")
   , methodOverride = require("method-override")
   , bodyParser = require("body-parser")
   , fs = require("node-fs")
+  , $ = require("jquery-deferred")
   , mustache = require("mustache");
 
 app.use(function logErrors(err, req, res, next) {
@@ -46,19 +47,28 @@ app.use(express.csrf());
 var db = mysql.createConnection(config.dbConnectionInfo);
 db.connect();
 
+function checkAuth(req, res, next){
+  db.query("SELECT * FROM users WHERE user = ? AND auth_token = ?", [ req.signedCookies.user_id, req.signedCookies.auth_token ], function(err, rows) {
+    if(rows.length == 1) {
+        next();
+    } else {
+        res.json({error: "You are not authenticated"});
+    }
+  });
+};
+
 app.get("/", function(req, res) {
     res.render('index', { csrfToken: req.csrfToken() });
 });
 
-app.get("/api/rips", function(req, res) {
-  db.query("select ripped.id, ripped.hits, ripped.url, ripped.links_list, ripped.replacement_links, pulse.period_start, pulse.rate from ripped, pulse where pulse.url = ripped.url ORDER BY rate DESC, period_start DESC", [] , function(err, rows) {
+app.get("/api/rips", checkAuth, function(req, res, next) {
+    db.query("select ripped.id, ripped.hits, ripped.url, ripped.links_list, ripped.replacement_links, pulse.period_start, pulse.rate from ripped, pulse where pulse.url = ripped.url ORDER BY rate DESC, period_start DESC", [] , function(err, rows) {
         if(rows.length >= 1) {
             res.json(rows);
         } else { 
             res.json({ error: "There are no rips yet!"  });   
         }
     });
-
 });
 
 // GET /api/auth
