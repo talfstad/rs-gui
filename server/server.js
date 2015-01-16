@@ -15,7 +15,6 @@ var express = require("express")
   , methodOverride = require("method-override")
   , bodyParser = require("body-parser")
   , fs = require("node-fs")
-  , $ = require("jquery-deferred")
   , mustache = require("mustache");
 
 app.use(function logErrors(err, req, res, next) {
