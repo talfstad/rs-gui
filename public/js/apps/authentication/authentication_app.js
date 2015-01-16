@@ -46,6 +46,14 @@ define(["app"], function(RipManager){
       }
     };
 
+    var CALLOUTS = {
+      home: function() {
+        require(["apps/rips/rips_app"], function() {
+          RipManager.trigger("rips:list");
+        });
+      }
+    };
+
     RipManager.on("authentication:login", function(callback){
       RipManager.navigate("login");
       API.login();
@@ -68,7 +76,7 @@ define(["app"], function(RipManager){
 
     var authEnabledAPI = {
       login: function(criterion){
-        checkAuth(API.login);
+        checkAuth(CALLOUTS.home);
       },
 
       logout: function(id){

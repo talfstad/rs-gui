@@ -6,9 +6,9 @@ define(["app", "apps/header/list/list_controller"], function(ContactManager, Lis
       }
     };
 
-    ContactManager.commands.setHandler("set:active:header", function(name){
-      ListController.setActiveHeader(name);
-    });
+    // ContactManager.commands.setHandler("set:active:header", function(name){
+    //   ListController.setActiveHeader(name);
+    // });
 
     Header.on("start", function(){
       API.listHeader();
