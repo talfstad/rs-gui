@@ -39,7 +39,7 @@ define(["app"], function(RipManager){
         });
       },
 
-      logout: function(id){
+      logout: function(criterion){
         require(["apps/authentication/logout/logout_controller"], function(LogoutController){
           executeAction(LogoutController.logout, criterion);
         });

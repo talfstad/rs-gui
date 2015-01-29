@@ -22,6 +22,15 @@ define(["app"], function(RipManager){
       }
     });
 
+    Entities.Logout = Backbone.Model.extend({
+      urlRoot: "/API/auth",
+
+      defaults: {
+        success: "",
+        error: ""
+      }
+    });
+
     Entities.CheckCollection = Backbone.Collection.extend({
       url: "/api/auth",
       model: Entities.Authentication,
@@ -33,6 +42,12 @@ define(["app"], function(RipManager){
       model: Entities.Authentication,
       comparator: "user"
     });
+
+    Entities.LogoutCollection = Backbone.Collection.extend({
+      url: "/api/auth/logout",
+      model: Entities.Logout
+    });
+
 
     var API = {
       checkAuthEntity: function(){
@@ -61,8 +76,27 @@ define(["app"], function(RipManager){
         var promise = defer.promise();
         
         return promise;
+      },
+
+      authenticationLogoutEntity: function(args) {
+        var login = new Entities.LogoutCollection();
+        var defer = $.Deferred();
+        login.fetch({
+          success: function(data){
+            defer.resolve(data);
+          }, 
+          type: 'POST',
+          data: ""
+        });
+        var promise = defer.promise();
+        
+        return promise;
       }
     };
+
+    RipManager.reqres.setHandler("authentication:logout:entity", function(args){
+      return API.authenticationLogoutEntity(args);
+    });
 
     RipManager.reqres.setHandler("authentication:login:entity", function(args){
       return API.authenticationEntity(args);

@@ -1,4 +1,4 @@
-define(["app", "apps/authentication/login/login_view"], function(RipManager, View){
+define(["app", "apps/authentication/login/login_view", "apps/authentication/session/user_model"], function(RipManager, View, UserModel){
   RipManager.module("LoginApp.Login", function(Login, RipManager, Backbone, Marionette, $, _){
     Login.Controller = {
       
@@ -10,9 +10,10 @@ define(["app", "apps/authentication/login/login_view"], function(RipManager, Vie
             
             var attemptingLogin = RipManager.request("authentication:login:entity", args);
             $.when(attemptingLogin).done(function(status){
-              if(status.error){
+              if(status.models[0].attributes.error){
                 loginView.trigger("login:invalid");
               } else {
+                RipManager.session.set({logged_in: true});
                 RipManager.trigger("rips:list");
               }
             });

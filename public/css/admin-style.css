@@ -13,12 +13,16 @@
 }
 
 .btn.btn-default {
-  background-color: #08c;
-  border: #444 1px solid;
   color: #fff;
 }
 
-.btn.btn-default:hover {
+#login-btn {
+  background-color: #08c;
+  border: #444 1px solid;
+}
+
+
+#login-btn:hover {
   background-color: #3af !important;
 }
 

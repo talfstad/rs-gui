@@ -1,4 +1,4 @@
-define(["marionette", "apps/config/marionette/regions/dialog"], function(Marionette){
+define(["marionette", "apps/authentication/session/user_model","apps/config/marionette/regions/dialog"], function(Marionette, UserModel){
   var RipManager = new Marionette.Application();
 
   RipManager.addRegions({
@@ -18,6 +18,8 @@ define(["marionette", "apps/config/marionette/regions/dialog"], function(Marione
     return Backbone.history.fragment
   };
 
+  RipManager.session = new UserModel({});
+
   RipManager.startSubApp = function(appName, args){
     var currentApp = appName ? RipManager.module(appName) : null;
     if (RipManager.currentApp === currentApp){ return; }
@@ -31,6 +33,8 @@ define(["marionette", "apps/config/marionette/regions/dialog"], function(Marione
       currentApp.start(args);
     }
   };
+
+  
 
   RipManager.on("start", function(){
     if(Backbone.history){

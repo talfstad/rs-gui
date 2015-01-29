@@ -1,17 +1,30 @@
 define(["app",
-        "tpl!apps/header/list/templates/list.tpl"],
-        function(ContactManager, listTpl, listItemTpl){
+        "tpl!apps/header/list/templates/list.tpl", "adminLTEapp"],
+        function(RipManager, listTpl, listItemTpl){
 
-  ContactManager.module("HeaderApp.List.View", function(View, ContactManager, Backbone, Marionette, $, _){
+  RipManager.module("HeaderApp.List.View", function(View, RipManager, Backbone, Marionette, $, _){
 
     View.Header = Marionette.ItemView.extend({
       template: listTpl,
       tagName: "header",
       className: "header",
-      templateHelpers: {logged_in: true},
+
+      // initialize: function() {
+      //   RipManager.session.on("change:logged_in", this.render());
+      // },
+
+      modelEvents: {
+        'change': 'render'
+      },
 
       events: {
-        "click a": "navigate"
+        "click a": "navigate",
+        "click #logout-link": "logout"
+      },
+
+      logout: function(e){
+        e.preventDefault();
+        this.trigger("logout:clicked");
       },
 
       navigate: function(e){
@@ -44,5 +57,5 @@ define(["app",
     // });
   });
 
-  return ContactManager.HeaderApp.List.View;
+  return RipManager.HeaderApp.List.View;
 });

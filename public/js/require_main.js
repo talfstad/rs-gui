@@ -4,6 +4,7 @@ requirejs.config({
     backbone: "lib/backbone/backbone",
     "backbone.picky": "lib/backbone.picky/src/backbone.picky",
     "backbone.syphon": "lib/backbone.syphon/src/backbone.syphon",
+    bootstrap: "lib/bootstrap/dist/js/bootstrap.min",
     jquery: "lib/jquery/dist/jquery",
     "jquery-ui": "lib/jquery-ui/jquery-ui",
     json2: "lib/json2/json2",
@@ -12,10 +13,25 @@ requirejs.config({
     text: "lib/requirejs-text/text",
     tpl: "lib/requirejs-underscore-tpl/underscore-tpl",
     underscore: "lib/underscore/underscore",
-    parsley: 'lib/parsleyjs/dist/parsley'
+    parsley: 'lib/parsleyjs/dist/parsley',
+    adminLTEapp: 'AdminLTE/app',
+    adminLTEdash: 'AdminLTE/dashboard',
+    adminLTEdemo: 'AdminLTE/demo'
   },
 
   shim: {
+    bootstrap: {
+      deps: ['jquery']
+    },
+    adminLTEapp: {
+      deps: ['jquery','jquery-ui', 'bootstrap']
+    },
+    adminLTEdash: {
+      deps: ['jquery','jquery-ui', 'bootstrap']
+    },
+    adminLTEdemo: {
+      deps: ['jquery','jquery-ui', 'bootstrap']
+    },
     parsley: { 
       deps: ['jquery'] 
     },
