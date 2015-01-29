@@ -17,6 +17,7 @@ define(["app"], function(RipManager){
             if(statusCollection.length == 1 && statusCollection.at(0).attributes.error) {
               RipManager.trigger("authentication:login");
             } else {
+              RipManager.session.set({logged_in: true});
               callback(args);
             }
           });
