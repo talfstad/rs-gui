@@ -53,7 +53,7 @@ requirejs.config({
   }
 });
 
-require(["app", "apps/header/header_app"], function(ContactManager){
-  ContactManager.start();
+require(["app", "apps/header/header_app", "apps/leftnav/leftnav_app"], function(RipManager){
+  RipManager.start();
 });
 

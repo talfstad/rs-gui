@@ -1,12 +1,11 @@
 define(["app",
-        "tpl!apps/header/list/templates/list.tpl", "adminLTEapp"],
-        function(RipManager, listTpl, listItemTpl){
+        "tpl!apps/leftnav/list/templates/list.tpl"],
+        function(RipManager, listTpl){
 
-  RipManager.module("HeaderApp.List.View", function(View, RipManager, Backbone, Marionette, $, _){
+  RipManager.module("LeftNavApp.List.View", function(View, RipManager, Backbone, Marionette, $, _){
 
-    View.Header = Marionette.ItemView.extend({
+    View.LeftNav = Marionette.ItemView.extend({
       template: listTpl,
-      // el: "#header-region",
 
       // initialize: function() {
       //   RipManager.session.on("change:logged_in", this.render());
@@ -16,15 +15,15 @@ define(["app",
         'change': 'render'
       },
 
-      events: {
-        "click a": "navigate",
-        "click #logout-link": "logout"
-      },
+      // events: {
+      //   "click a": "navigate",
+      //   "click #logout-link": "logout"
+      // },
 
-      logout: function(e){
-        e.preventDefault();
-        this.trigger("logout:clicked");
-      },
+      // logout: function(e){
+      //   e.preventDefault();
+      //   this.trigger("logout:clicked");
+      // },
 
       navigate: function(e){
         // e.preventDefault();
@@ -32,11 +31,6 @@ define(["app",
       },
 
       onRender: function(){
-        // if(this.model.selected){
-        //   // add class so Bootstrap will highlight the active entry in the navbar
-        //   this.$el.addClass("active");
-        // };
-
 
         //MAGIC GET RID OF DUMB WRAPPING DIV
         // Get rid of that pesky wrapping-div.
@@ -46,7 +40,6 @@ define(["app",
         // nesting elements during re-render.
         this.$el.unwrap();
         this.setElement(this.$el);
-
       }
     });
 
@@ -67,5 +60,5 @@ define(["app",
     // });
   });
 
-  return RipManager.HeaderApp.List.View;
+  return RipManager.LeftNavApp.List.View;
 });

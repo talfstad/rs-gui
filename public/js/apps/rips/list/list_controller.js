@@ -5,6 +5,7 @@ define(["app", "apps/rips/list/list_view"], function(RipManager, View){
         require(["entities/rip"], function(){
           //var loadingView = new CommonViews.Loading();
           //RipManager.mainRegion.show(loadingView);
+          RipManager.trigger("leftnav:list");
 
           var fetchingRips = RipManager.request("rip:entities");
 

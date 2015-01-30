@@ -4,6 +4,7 @@ define(["marionette", "apps/authentication/session/user_model","apps/config/mari
   RipManager.addRegions({
     headerRegion: "#header-region",
     mainRegion: "#main-region",
+    leftNavRegion: "#left-nav-region",
     dialogRegion: Marionette.Region.Dialog.extend({
       el: "#dialog-region"
     })

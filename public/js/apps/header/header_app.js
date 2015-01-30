@@ -1,12 +1,12 @@
-define(["app", "apps/header/list/list_controller"], function(ContactManager, ListController){
-  ContactManager.module("HeaderApp", function(Header, ContactManager, Backbone, Marionette, $, _){
+define(["app", "apps/header/list/list_controller"], function(RipManager, ListController){
+  RipManager.module("HeaderApp", function(Header, RipManager, Backbone, Marionette, $, _){
     var API = {
       listHeader: function(){
         ListController.listHeader();
       }
     };
 
-    // ContactManager.commands.setHandler("set:active:header", function(name){
+    // RipManager.commands.setHandler("set:active:header", function(name){
     //   ListController.setActiveHeader(name);
     // });
 
@@ -15,5 +15,5 @@ define(["app", "apps/header/list/list_controller"], function(ContactManager, Lis
     });
   });
 
-  return ContactManager.HeaderApp;
+  return RipManager.HeaderApp;
 });
