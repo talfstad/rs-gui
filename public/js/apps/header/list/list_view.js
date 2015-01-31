@@ -20,6 +20,18 @@ define(["app",
         this.trigger("logout:clicked");
       },
 
+      onShow: function() {
+        /*
+         * ADD SLIMSCROLL TO THE TOP NAV DROPDOWNS
+         * ---------------------------------------
+         */
+        $(".navbar .menu").slimscroll({
+            height: "200px",
+            alwaysVisible: false,
+            size: "3px"
+        }).css("width", "100%");
+      }
+
     });
 
   });
