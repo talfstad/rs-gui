@@ -2,7 +2,7 @@ define(["app", "apps/header/list/list_view"], function(RipManager, View){
   RipManager.module("HeaderApp.List", function(List, RipManager, Backbone, Marionette, $, _){
     List.Controller = {
       listHeader: function(){
-        require(["entities/authentication", "entities/header", "apps/authentication/authentication_app"], function(Entities){
+        require(["entities/authentication", "entities/header", "authentication/authentication_app"], function(Entities){
           // var links = RipManager.request("header:entities");
           var header = new View.Header({
             model: RipManager.session

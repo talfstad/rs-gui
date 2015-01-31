@@ -1,13 +1,9 @@
-define(["marionette", "apps/authentication/session/user_model","apps/config/marionette/regions/dialog"], function(Marionette, UserModel){
+define(["marionette", "authentication/session/user_model"], function(Marionette, UserModel){
   var RipManager = new Marionette.Application();
 
   RipManager.addRegions({
     headerRegion: "#header-region",
     mainRegion: "#main-region",
-    leftNavRegion: "#left-nav-region",
-    dialogRegion: Marionette.Region.Dialog.extend({
-      el: "#dialog-region"
-    })
   });
 
   RipManager.navigate = function(route,  options){
@@ -40,9 +36,8 @@ define(["marionette", "apps/authentication/session/user_model","apps/config/mari
   RipManager.on("start", function(){
     if(Backbone.history){
       require([
-        "apps/rips/rips_app", 
-        "apps/about/about_app", 
-        "apps/authentication/authentication_app"], function () {
+        "apps/main/rips/rips_app",
+        "authentication/authentication_app"], function () {
         
         Backbone.history.start();
 

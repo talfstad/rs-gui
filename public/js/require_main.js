@@ -14,9 +14,9 @@ requirejs.config({
     tpl: "lib/requirejs-underscore-tpl/underscore-tpl",
     underscore: "lib/underscore/underscore",
     parsley: 'lib/parsleyjs/dist/parsley',
-    adminLTEapp: 'AdminLTE/app',
-    adminLTEdash: 'AdminLTE/dashboard',
-    adminLTEdemo: 'AdminLTE/demo'
+    adminLTEapp: 'vendor/AdminLTE/app',
+    adminLTEdash: 'vendor/AdminLTE/dashboard',
+    adminLTEdemo: 'vendor/AdminLTE/demo'
   },
 
   shim: {
@@ -53,7 +53,7 @@ requirejs.config({
   }
 });
 
-require(["app", "apps/header/header_app", "apps/leftnav/leftnav_app"], function(RipManager){
+require(["app", "apps/header/header_app"], function(RipManager){
   RipManager.start();
 });
 
