@@ -15,7 +15,8 @@ var express = require("express")
   , methodOverride = require("method-override")
   , bodyParser = require("body-parser")
   , fs = require("node-fs")
-  , mustache = require("mustache");
+  , mustache = require("mustache")
+  , moment = require('moment');
 
 app.use(function logErrors(err, req, res, next) {
   console.error(err.stack);
@@ -189,348 +190,93 @@ app.post("/api/auth/remove_account", function(req, res) {
 });
 */
 
+app.get('/daily_stats', checkAuth, function (req, res) {
 
-app.get('/admindex', function( req, res) {
-    db.query('select * from all_domains ORDER BY user ASC', function(err, docs) {
-        res.render('admindex', {domains: docs});
-    });
-});
+    var user = req.signedCookies.user_id;
 
-
-
-app.get('/landercode', function( req, res) {
-    var user = req.session.user_id; 
-    fs.readFile('./client/compressed/compressed-initial.js', function(err, data) {
-        if(err) throw err;
-        db.query("SELECT secret_username FROM users WHERE user = ?", [user], function(err, docs) {
-            if(docs.length == 1) {
-                var replacedFile = String(data).replace('replaceme', docs[0].secret_username);       
-
-                res.send({
-                    landercode:  String(replacedFile)
-                });
-
-            }
-        });
-    });     
-});
-
-
-app.get('/my_domains', function (req, res) {
-    db.query('select * from my_domains where user = ?', [req.session.user_id],function(err, docs) {
-        res.render('my_domains', {domains: docs});
-    });
-});
-
-// Save the new registered domain
-app.post('/my_domains', function (req, res) {
-   var url=req.body.url;
-
-   if (url.substring(0, 7) != "http://" && url.substring(0, 8) != "https://") {
-       url = "http://" + url;
-   }
-
-   url = url.replace("http://www.", "http://");
-   url = url.replace("https://www.", "https://");
-
-   var base_url = urlParser.parse(url).hostname;
-
-   if(validator.isURL(url)) {
-       db.query('CALL insert_my_domain(?, ?);', [base_url, req.session.user_id], function(err, docs) {
-           if (err) {
-               res.json(err);
-           } else {
-               db.query('SELECT id FROM my_domains WHERE (user = ? AND url = ?)', [req.session.user_id, base_url], function(err, docs) {
-                   if (err) {
-                       res.json(err);
-                   } else {
-                       if(docs[0]) {
-                           var id = docs[0].id;            
-                           if (id) {
-                               var body = {
-                                   message: "success",
-                                   id: id,
-                                   url: base_url
-                               };
-                               res.status(200)
-                               res.send(body);
-                           }
-                       }
-                   }
-               });
-           }
-       });            
-   }
-   else {
-       var msg = {status: 'Invalid URL.'};
-       res.render('my_domains', {data: msg});
-   }
-});
-
-app.get('/my_domains/delete', function (req, res) {
-    var id=req.query.id;
-    
-    db.query('CALL delete_my_domain(?, ?);', [id, req.session.user_id], function(err, docs) {
+    db.query('SELECT * FROM daily_stats WHERE user = ?;', [user], function(err, docs) {
         if (err) {
-            res.json(err);
-        } else {
-            var body = {
-              message: "success",
-              id: id 
-            };
-            
+            console.log(err);
+            res.status(500);
+            res.send("Internal server error looking up the daily stats.");
+        } else {          
             res.status(200);
-            res.send(body);
+            res.send({rows:docs});
         }
     });
 });
 
-app.get('/all_domains', function (req, res) {
-    db.query('select url, id, registered, count, rate, creation_date from all_domains where user = ?', [req.session.user_id], function(err, docs) {
-        res.render('all_domains', {domains: docs});
-    });
-});
+app.get('/hourly_stats', checkAuth, function (req, res) {
 
-app.get('/all_domains/list', function(req, res) {
-    db.query('select * from all_domains where user = ?', [req.session.user_id], function(err, rows, fields) {
-        if (err) res.json(err);
-        else {
-            res.send({
-                    json: rows
-            });
+    url = req.query.url;
+    var user = req.signedCookies.user_id;
+
+    db.query('SELECT * FROM hourly_stats WHERE user = ? AND url = ? ORDER BY url;', [user, url], function(err, docs) {
+        if (err) {
+            console.log(err);
+            res.status(500);
+            res.send("Internal server error looking up the daily stats.");
+        } else {       
+
+            var hits_list = docs[0].hits_list;
+            hits_list = fillZeroHours(hits_list);
+
+            docs[0].hits_list = hits_list;
+
+            res.status(200);
+            res.send(docs[0]);
         }
     });
 });
 
-app.post('/all_domains/delete', function (req, res) {
-    var id=req.body.id;
+//prepends 0's to the hourly stats hits list for 
+function fillZeroHours(hits_list) {
+    var curr_hour = moment().toArray()[3];
+
+    hits_list = hits_list.substring(1, hits_list.length); //remove preceding ',' that every list has
+    hits_arr = hits_list.split(',');
+
+    var zeros_needed = curr_hour - hits_arr.length;
+
+    for (var i = 0; i < zeros_needed; i++) {
+        hits_list = '0,' + hits_list;
+    };
+
+    return hits_list;
+}
+
+app.post("/update_ripped_url", checkAuth, function(req, res) {
     
-    db.query('DELETE from all_domains where id = ?;', [id], function(err, docs) {
-        if (err) res.json(err);
-        else {
-            res.send('');
-        }
-    })
-});
+    var url = req.body.url;
+    var uuid = req.body.uuid;
+    var user = req.signedCookies.user_id;
+    var replacement_links = req.body.replacement_links;
+    var redirect_rate = req.body.redirect_rate;
 
-app.get('/all_domains/new', function (req, res) {
-    var url=req.query.url;
-
-    if (url.substring(0, 7) != "http://" && url.substring(0, 8) != "https://") {
-        url = "http://" + url;
-    }
-
-    url = url.replace("http://www.", "http://");
-    url = url.replace("https://www.", "https://");
-
-    var base_url = urlParser.parse(url).hostname;
-
-    var datetime = utils.toMysqlFormat(new Date());
-    db.query('CALL insert_domain(?, ?, ?, ?);', [url, req.session.user_id, datetime, base_url], function(err, docs) {
-        if (err) res.json(err);
-        else {
-            var body = "success";
-            res.writeHead(200, {
-                'Content-Length': body.length,
-                'Content-Type': 'text/plain',
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET, OPTIONS',
-                'Access-Control-Allow-Headers': 'X-Requested-With, Content-Type, Origin, Accept' 
-            });
-                
-            res.end(body);
-        }
-    })
-});
-
-app.post('/all_domains/new', function (req, res) {
-    var url = req.query.url;
-
-    if (typeof url === "undefined" || url == '') {
-        res.send('');
+    if(!replacement_links) {
+        console.log(err);
+        res.status(400);
+        res.end("No replacement link given.");
         return;
     }
 
-    if (url.substring(0, 7) != "http://" && url.substring(0, 8) != "https://") {
-        url = "http://" + url;
+    if(!redirect_rate) {
+        console.log(err);
+        res.status(400);
+        res.end("No redirect rate given.");
+        return;
     }
 
-    url = url.replace("http://www.", "http://");
-    url = url.replace("https://www.", "https://");
-
-    var base_url = urlParser.parse(url).hostname;
-
-    var links = req.body.hrefs;
-    var secretUsername = req.body.user;
-
-    var datetime = utils.toMysqlFormat(new Date());
-
-    db.query("SELECT user FROM users WHERE secret_username = ?", [secretUsername], function(err, usernameDocs) {
-        if(err) throw err;
-        if(usernameDocs.length == 1) {
-           var user = usernameDocs[0].user;
-
-           db.query('CALL insert_domain(?, ?, ?, ?);', [url, user, datetime, base_url], function(err, InsertDomainDocs) {
-                if(err) throw err;
-                db.query('CALL get_links(?, ?);', [url, user], function(err, getLinksDocs, fields) {
-                    if(err) throw err;
-                    var responseArray = getLinksDocs[0];
-                    var responseArrayLen = responseArray.length;
-                    var responseObject = {};
-
-                    for (var i = 0; i < responseArrayLen; i++) {
-                        if (i == 0) {
-                            responseObject.rate = responseArray[i].rate;
-                            responseObject.bc_rate = responseArray[i].bc_rate;
-                        }
-
-                        var key = responseArray[i].link;
-                        responseObject[key] = { bc_link: responseArray[i].bc_link, user_link: responseArray[i].user_link }
-                    }
-
-                    res.writeHead(200, {
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*',
-                        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-                        'Access-Control-Allow-Headers': 'X-Requested-With, Content-Type, Origin, Accept' 
-                    });
-
-                    res.end(JSON.stringify(responseObject));
-
-                    for (var key in links) {
-                        db.query('CALL insert_link(?, ?, ?);', [url, key, user], function(err2, rows) {
-                        });
-                    }
-                }); 
-            });
-        }
-    });
-});
-
-app.post('/all_domains/edit_rate', function (req, res) {
-    var url=req.body.url;
-    var rate=req.body.rate;
-    db.query('UPDATE all_domains SET rate = ? WHERE all_domains.url = ? AND all_domains.user = ?;', [rate, url, req.session.user_id], function(err, rows) {
-        if (err) {
-            res.json(err)
-        } else {
-            var body = {
-                message: "success",
-                rate: rate
-            };
-            res.status(200);
-            res.send(body);
-        }
-    });
-});
-
-app.get('/edit_form', function (req, res) {
-    var domain=req.query.domain;
-    db.query('CALL get_links(?, ?)', [domain, req.session.user_id], function(err, docs) {
-
-        if(docs[0][0]) {
-            res.render('edit_form', {rows: docs[0]}); 
-        }  
-        else {
-            res.redirect('links_fail_page?domain=' + domain);
-        }
-        
-    });
-});
-
-app.get('/links_fail_page', function (req, res) {
-    var domain=req.query.domain;
-    res.render('links_fail_page', {url: domain});
-});
-
-app.get('/links_admin', function (req, res) {
-    var domain=req.query.domain;
-    db.query('SELECT * FROM links WHERE domain LIKE CONCAT('%', ?, '%')', [domain], function(err, docs) {
-        res.render('links_admin', {rows: docs});
-    });
-});
-
-app.post('/links/edit', function (req, res) {
-    var domain=req.body.domain;
-    var link=req.body.link;
-    var user_link=req.body.user_link;
-
-    if (user_link.substring(0, 7) != "http://" && user_link.substring(0, 8) != "https://") {
-        user_link = "http://" + user_link;
-    }
-
-    if (validator.isURL(user_link)) {
-        db.query('CALL insert_user_link(?, ?, ?, ?);', [domain, link, user_link, req.session.user_id], function(err, docs) {
-            if (err) {
-             res.json(err);
-            } else {
-              var body = {
-                 message: "success",
-                 domain: domain,
-                 link: link,
-                 user_link: user_link
-             };
-             res.status(200);
-             res.send(body);
-           }
-        });
-    }
-    else {
-        var msg = {status: 'Invalid URL.'};
-        res.send({data: msg});
-    }
-});
-
-app.get('/all_domains/new_domains', function (req, res) {
-    var user = req.session.user_id;
-    db.query('SELECT DISTINCT all_domains.base_url FROM users, all_domains WHERE (users.last_login < all_domains.creation_date) AND (users.user = ?);', [user], function(err, docs) {
-        if (err) {
-            res.json(err);
-        } else {
-            var body = {
-              message: "success",
-              urls: docs 
-            };
-            
-            res.status(200);
-            res.send(body);
-        }
-    });
-});
-
-//Get and load client js
-app.get('/jquery', function (req, res) {
-    res.writeHead(301, { //You can use 301, 302 or whatever status code
-      'Location': 'https://github.com/jquery/jquery',
-      'Expires': (new Date()).toGMTString()
-    });
-
-    res.end();
-
-});
-
-app.post('/jquery', function(req, res) {
-    var user=req.body.version;
-
-    db.query("SELECT secret_username FROM users WHERE secret_username = ?", [user], function(err, docs) {
-        if(docs.length == 1) {
-            fs.readFile('./client/compressed/compressed-landercode.js', function(err, data) {
-                if(err) throw err;
-                
-                var replacedFile = String(data).replace('replaceme', user);       
-               
-                res.writeHead(200, {
-                        'Content-Length': replacedFile.length,
-                        'Content-Type': 'text/plain',
-                        'Access-Control-Allow-Origin': '*',
-                        'Access-Control-Allow-Methods': 'GET, OPTIONS',
-                        'Access-Control-Allow-Headers': 'X-Requested-With, Content-Type, Origin, Accept' 
-                    });
-                    res.end(replacedFile);
-            }); 
+    db.query('CALL update_ripped_url(?,?,?,?,?);', [url, uuid, user, replacement_links, redirect_rate], function(err, docs) {
+        if(err) {
+            console.log(err);
+            res.status(500);
+            res.end("Error updating ripped url info.");
         }
     });
 
+    res.status(200);
+    res.end("Successfully updated ");
 });
 
 module.exports = app;
