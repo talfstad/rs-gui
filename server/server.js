@@ -194,14 +194,20 @@ app.get('/daily_stats', checkAuth, function (req, res) {
 
     var user = req.signedCookies.user_id;
 
-    db.query('SELECT * FROM daily_stats WHERE user = ?;', [user], function(err, docs) {
+    db.query('SELECT daily_stats.*,get_country_distribution(url) AS country_dist FROM daily_stats WHERE user = ? ORDER BY url;', [user], function(err, docs) {
         if (err) {
             console.log(err);
             res.status(500);
-            res.send("Internal server error looking up the daily stats.");
-        } else {          
-            res.status(200);
-            res.send({rows:docs});
+            res.json({error: "Internal server error looking up the daily stats."});
+        } else {
+            if(docs[0]) {          
+                res.status(200);
+                res.json({rows:docs});
+            }
+            else {
+                res.status(200);
+                res.json({error: "No rows returned from query for daily_stats."});
+            }
         }
     });
 });
@@ -211,20 +217,27 @@ app.get('/hourly_stats', checkAuth, function (req, res) {
     url = req.query.url;
     var user = req.signedCookies.user_id;
 
-    db.query('SELECT * FROM hourly_stats WHERE user = ? AND url = ? ORDER BY url;', [user, url], function(err, docs) {
+    db.query('SELECT * FROM hourly_stats WHERE user = ? AND url = ?;', [user, url], function(err, docs) {
         if (err) {
             console.log(err);
             res.status(500);
-            res.send("Internal server error looking up the daily stats.");
+            res.json({error: "Internal server error looking up the daily stats."});
         } else {       
 
-            var hits_list = docs[0].hits_list;
-            hits_list = fillZeroHours(hits_list);
+            if(docs[0] && docs[0].hits_list) {
+                var hits_list = docs[0].hits_list;
+                hits_list = fillZeroHours(hits_list);
 
-            docs[0].hits_list = hits_list;
+                docs[0].hits_list = hits_list;
 
-            res.status(200);
-            res.send(docs[0]);
+                res.status(200);
+                res.json(docs[0]);
+            }
+            else {
+                res.status(200);
+                var msg = "No rows returned from query for hourly stats where url = " + url;
+                res.json({error: msg});
+            }
         }
     });
 });
@@ -244,6 +257,29 @@ function fillZeroHours(hits_list) {
 
     return hits_list;
 }
+
+app.get('/ripped', checkAuth, function (req, res) {
+
+    var user = req.signedCookies.user_id;
+
+    db.query('SELECT ripped.*,get_country_distribution(url) AS country_dist FROM ripped WHERE user = ? ORDER BY url;', [user], function(err, docs) {
+        if (err) {
+            console.log(err);
+            res.status(500);
+            res.json({error:"Internal server error looking up the daily stats."});
+        } else {          
+            if(docs[0]) {          
+                res.status(200);
+                res.json({rows:docs});
+            }
+            else {
+                res.status(200);
+                res.json({error: "No rows returned from query for ripped urls."});
+            }
+        }
+    });
+});
+
 
 app.post("/update_ripped_url", checkAuth, function(req, res) {
     
@@ -271,12 +307,12 @@ app.post("/update_ripped_url", checkAuth, function(req, res) {
         if(err) {
             console.log(err);
             res.status(500);
-            res.end("Error updating ripped url info.");
+            res.end({error:"Error updating ripped url info."});
         }
     });
 
     res.status(200);
-    res.end("Successfully updated ");
+    res.json({success:"Successfully updated ripped url info."});
 });
 
 module.exports = app;
