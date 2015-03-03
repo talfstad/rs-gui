@@ -42,7 +42,7 @@ app.engine('html', require('hbs').__express);
 app.use(express.static(__dirname + '/../public'));
 app.use(express.csrf());
 
-// app.use(app.router);
+//app.use(app.router);
 
 var db = mysql.createConnection(config.dbConnectionInfo);
 db.connect();
@@ -208,7 +208,7 @@ app.get('/daily_stats', checkAuth, function (req, res) {
 
 app.get('/hourly_stats', checkAuth, function (req, res) {
 
-    url = req.query.url;
+    var url = req.query.url;
     var user = req.signedCookies.user_id;
 
     db.query('SELECT * FROM hourly_stats WHERE user = ? AND url = ?;', [user, url], function(err, docs) {
@@ -233,6 +233,83 @@ app.get('/hourly_stats', checkAuth, function (req, res) {
             }
         }
     });
+});
+
+app.get('/all_archive_stats', checkAuth, function (req, res) {
+
+    var user = req.signedCookies.user_id;
+
+    db.query('SELECT * FROM daily_stats_archive WHERE user = ? ORDER BY url;', [user], function(err, docs) {
+        if (err) {
+            console.log(err);
+            res.status(500);
+            res.json({error: "Internal server error looking up the daily stats."});
+        } else {
+            res.status(200);
+            res.json({rows:docs});
+        }
+    });
+});
+
+app.get('/archive_stats', checkAuth, function (req, res) {
+
+    var url = req.query.url;
+    var user = req.signedCookies.user_id;
+
+    db.query('SELECT * FROM daily_stats_archive WHERE user = ? AND url = ?;', [user, url], function(err, docs) {
+        if (err) {
+            console.log(err);
+            res.status(500);
+            res.json({error: "Internal server error looking up the archive stats."});
+        } else {       
+            res.status(200);
+            res.json(docs[0]);
+        }
+    });
+});
+
+app.get('/ripped_hits_for_n_days', checkAuth, function (req, res) {
+
+    var url = req.query.url;
+    var days = req.query.days;
+    var user = req.signedCookies.user_id;
+
+    var ret_arr = [];
+    var ret_obj = [];
+
+    if(days > 0) {
+        db.query('SELECT * FROM daily_stats_archive WHERE user = ? AND registered = 0;', [user, url], function(err, docs) {
+            if (err) {
+                console.log(err);
+                res.status(500);
+                res.json({error: "Internal server error looking up the archive stats."});
+            } else {       
+
+                for (var i = 0; i < docs.length; i++) {
+                    var hits_list = docs[i].hits_list;
+                    var hits_arr = hits_list.split(',');
+                    for (var j = 0; j < days; j++) {
+                        if(!ret_arr[j]) {
+                            ret_arr[j] = 0;
+                        }
+                        if(hits_arr[hits_arr.length - 1 - j]) {
+                            ret_arr[j] += Number(hits_arr[hits_arr.length - 1 - j]);
+                        }
+                    };
+                };
+                res.status(200);
+                ret_arr = ret_arr.reverse();
+                for (var i = 0; i < ret_arr.length; i++) {
+                    var d = moment().subtract(i + 1, 'days').format('L');
+                    ret_obj[i] = {day:d, hits:ret_arr[i]};
+                };
+                res.json(ret_obj);
+            }
+        });
+    } else {
+        res.status(400);
+        res.json({error: "Days must be greater than 0."});
+    }
 });
 
 //prepends 0's to the hourly stats hits list for 
