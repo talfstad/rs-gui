@@ -268,7 +268,7 @@ app.get('/archive_stats', checkAuth, function (req, res) {
     });
 });
 
-app.get('/ripped_hits_for_n_days', checkAuth, function (req, res) {
+app.get('/ripped_hits_for_n_days', chechAuth, function (req, res) {
 
     var url = req.query.url;
     var days = req.query.n;
@@ -288,21 +288,21 @@ app.get('/ripped_hits_for_n_days', checkAuth, function (req, res) {
                 for (var i = 0; i < docs.length; i++) {
                     var hits_list = docs[i].hits_list;
                     var hits_arr = hits_list.split(',');
+                    hits_arr = hits_arr.reverse();
                     for (var j = 0; j < days; j++) {
                         if(!ret_arr[j]) {
                             ret_arr[j] = 0;
                         }
-                        if(hits_arr[hits_arr.length - 1 - j]) {
-                            ret_arr[j] += Number(hits_arr[hits_arr.length - 1 - j]);
+                        if(hits_arr[j]) {
+                            ret_arr[j] += Number(hits_arr[j]);
                         }
                     };
                 };
-                res.status(200);
-                ret_arr = ret_arr.reverse();
                 for (var i = 0; i < ret_arr.length; i++) {
                     var d = moment().subtract(i + 1, 'days').format('YYYY-MM-DD');
                     ret_obj[i] = {day:d, hits:ret_arr[i]};
                 };
+                res.status(200);
                 res.json(ret_obj);
             }
         });
