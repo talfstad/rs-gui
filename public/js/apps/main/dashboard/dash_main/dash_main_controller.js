@@ -13,7 +13,7 @@ define(["app", "apps/main/dashboard/dash_main/dash_view"], function(RipManager, 
             $.when(fetchingOverviewStats).done(function(model){
               
               var dashListView = new DashView.Dash({
-                overViewStatsModel: model
+                overViewStatsModel: model.models[0].attributes
               });
 
               RipManager.mainLayout.mainRegion.show(dashListView);

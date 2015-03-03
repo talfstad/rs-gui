@@ -45,7 +45,7 @@
                                    <i class="ion ion-person-add"></i>
                                 </div>
                                 <a href="#" class="small-box-footer">
-                                    <%= overViewStatsModel.total_rips %> Total Rips
+                                    <%= overViewStatsModel.total_rips_100 %> Total Rips
                                 </a>
                             </div>
                         </div><!-- ./col -->
