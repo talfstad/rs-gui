@@ -200,14 +200,8 @@ app.get('/daily_stats', checkAuth, function (req, res) {
             res.status(500);
             res.json({error: "Internal server error looking up the daily stats."});
         } else {
-            if(docs[0]) {          
-                res.status(200);
-                res.json({rows:docs});
-            }
-            else {
-                res.status(200);
-                res.json({error: "No rows returned from query for daily_stats."});
-            }
+            res.status(200);
+            res.json({rows:docs});
         }
     });
 });
@@ -235,8 +229,7 @@ app.get('/hourly_stats', checkAuth, function (req, res) {
             }
             else {
                 res.status(200);
-                var msg = "No rows returned from query for hourly stats where url = " + url;
-                res.json({error: msg});
+                res.json(docs[0]);
             }
         }
     });
@@ -266,20 +259,49 @@ app.get('/ripped', checkAuth, function (req, res) {
         if (err) {
             console.log(err);
             res.status(500);
-            res.json({error:"Internal server error looking up the daily stats."});
+            res.json({error:"Internal server error looking up the ripped stats."});
         } else {          
-            if(docs[0]) {          
-                res.status(200);
-                res.json({rows:docs});
-            }
-            else {
-                res.status(200);
-                res.json({error: "No rows returned from query for ripped urls."});
-            }
+            res.status(200);
+            res.json({rows:docs});
         }
     });
 });
 
+app.get('/lander_info', checkAuth, function (req, res) {
+
+    var user = req.signedCookies.user_id;
+
+    db.query('SELECT * FROM lander_info WHERE user = ? ORDER BY url;', [user], function(err, docs) {
+        if (err) {
+            console.log(err);
+            res.status(500);
+            res.json({error:"Internal server error looking up the registered lander stats."});
+        } else {          
+            res.status(200);
+            res.json({rows:docs});
+        }
+    });
+});
+
+app.get('/stats_overview', checkAuth, function (req, res) {
+
+    db.query('CALL get_stats_overview();', function(err, docs) {
+        if (err) {
+            console.log(err);
+            res.status(500);
+            res.json({error:"Internal server error looking up the stat overview."});
+        } else {          
+            if(docs[0][0]) {
+                res.status(200);
+                res.json(docs[0][0]);
+            }
+            else {
+                res.status(500);
+                res.json({error:"Internal server error looking up the stat overview."});
+            }
+        }
+    });
+});
 
 app.post("/update_ripped_url", checkAuth, function(req, res) {
     
