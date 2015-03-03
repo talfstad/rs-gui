@@ -19,22 +19,21 @@ define(["app"], function(RipManager){
 
     var API = {
       getOverviewStats: function(args){
-          var overviewStats = new OverviewStats.collection();
-          var defer = $.Deferred();
-          overviewStats.fetch({
-            success: function(data){
-              defer.resolve(data);
-            }
-          });
-          var promise = defer.promise();
-          return promise;
-        }
+        var overviewStats = new OverviewStats.collection();
+        var defer = $.Deferred();
+        overviewStats.fetch({
+          success: function(data){
+            defer.resolve(data);
+          }
+        });
+        var promise = defer.promise();
+        return promise;
+      }
     }
 
     RipManager.reqres.setHandler("dashboard:overviewStats", function(args){
       return API.getOverviewStats(args);
     });
-
 
   });
 });

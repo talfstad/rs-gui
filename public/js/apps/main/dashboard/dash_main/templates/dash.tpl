@@ -4,7 +4,7 @@
                         <small> &mdash; Daily Stats</small>
                     </h1>
                     <ol class="breadcrumb">
-                        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Overview</a></li>
                     </ol>
                 </section>
 
@@ -81,7 +81,7 @@
                                     </p>
                                 </div>
                                 <div class="icon">
-                                    <i class="ion ion-earth"></i>
+                                    <i class="ion ion-social-usd"></i>
                                 </div>
                                 <a href="#" class="small-box-footer">
                                     <span style="color: rgba(255, 255, 255, 0.0)">.</span>
