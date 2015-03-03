@@ -268,7 +268,7 @@ app.get('/archive_stats', checkAuth, function (req, res) {
     });
 });
 
-app.get('/ripped_hits_for_n_days', chechAuth, function (req, res) {
+app.get('/ripped_hits_for_n_days', checkAuth, function (req, res) {
 
     var url = req.query.url;
     var days = req.query.n;
