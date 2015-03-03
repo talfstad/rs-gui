@@ -12,9 +12,7 @@ define(["app",
       template: listItemTpl,
 
       triggers: {
-        "click td a.js-show": "rip:show",
-        "click td a.js-edit": "rip:edit",
-        "click button.js-delete": "rip:delete"
+        "click td a.js-edit": "rip:edit"
       },
 
       events: {
@@ -50,7 +48,7 @@ define(["app",
 
     View.Rips = Marionette.CompositeView.extend({
       tagName: "table",
-      className: "table table-hover",
+      className: "table table-hover right-side",
       template: listTpl,
       emptyView: NoRipsView,
       childView: View.Rip,

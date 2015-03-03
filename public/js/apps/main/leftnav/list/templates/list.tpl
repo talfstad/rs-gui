@@ -31,10 +31,10 @@
                         </li>
                         <li>
                             <a href="#rips">
-                                <i class="fa fa-diamond"></i> <span>Rips</span> <small class="badge pull-right bg-green">new</small>
+                                <i class="fa fa-diamond"></i> <span>Rips</span>
                             </a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="#">
                                 <i class="fa fa-bar-chart-o"></i> <span>Reports</span>
                             </a>
@@ -49,7 +49,7 @@
                                 <li><a href="pages/UI/general.html"><i class="fa fa-angle-double-right"></i> General</a></li>
                                 <li><a href="pages/UI/icons.html"><i class="fa fa-angle-double-right"></i> Add New</a></li>
                             </ul>
-                        </li>
+                        </li> -->
                         
                         
                     </ul>

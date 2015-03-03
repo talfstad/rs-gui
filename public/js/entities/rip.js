@@ -6,9 +6,9 @@ define(["app"], function(RipManager){
       defaults: {
         hits: "0",
         rate: "0",
-        replacement_links: "",
+        replacement_link: "",
         url: "",
-        period_start: ""
+        redirect_rate: ""
       },
 
       // validate: function(attrs, options) {

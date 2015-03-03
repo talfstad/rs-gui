@@ -3,13 +3,9 @@ define(["app", "apps/main/rips/edit/edit_view"], function(RipManager, View){
     Edit.Controller = {
       editRip: function(id){
         require(["common/views", "entities/rip"], function(CommonViews){
-          var loadingView = new CommonViews.Loading({
-            title: "Artificial Loading Delay",
-            message: "Data loading is delayed to demonstrate using a loading view."
-          });
-          RipManager.mainRegion.show(loadingView);
-
+          
           var fetchingRip = RipManager.request("rip:entity", id);
+          
           $.when(fetchingRip).done(function(rip){
             var view;
             if(rip !== undefined){

@@ -16,12 +16,6 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
             //it sets up some main things for the main app including left nav
             //the main layout, etc.
             
-            
-
-            RipManager.mainLayout.on("show", function(){
-              RipManager.mainLayout.mainRegion.show(ripsListView);
-            });
-
             RipManager.mainLayout.mainRegion.show(ripsListView);
 
 

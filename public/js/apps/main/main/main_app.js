@@ -49,8 +49,9 @@ define(["app"], function(RipManager){
     var API = {
       
       rips: function(args){
-        require(["apps/main/rips/rips_app"], function(){
+        require(["apps/main/rips/rips_app", "apps/main/leftnav/leftnav_app"], function(){
           checkMainViewRendered();
+          RipManager.trigger("leftnav:rips");
           RipManager.trigger("rips:list");
         });
       },

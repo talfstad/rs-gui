@@ -1,16 +1,13 @@
+<td><%- url %></td>
 <td><%- hits %></td>
-<td><%- rate %></td>
+<td><%- replacement_link %></td>
+<td><%- redirect_rate %></td>
+
 <td>
-  <a href="#contacts/<%- id %>" class="btn btn-small js-show">
-    <i class="icon-eye-open"></i>
-    Show
-  </a>
+  
   <a href="#contacts/<%- id %>/edit" class="btn btn-small js-edit">
-    <i class="icon-pencil"></i>
+    <i class="fa fa-pencil"></i>
       Edit
   </a>
-  <button class="btn btn-small js-delete">
-    <i class="icon-remove"></i>
-    Delete
-  </button>
+  
 </td>
