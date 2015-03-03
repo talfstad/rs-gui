@@ -4,6 +4,7 @@ function(RipManager, dashTpl){
   RipManager.module("DashboardApp.List.View", function(View, RipManager, Backbone, Marionette, $, _){
 
     View.Dash = Marionette.ItemView.extend({
+      className: "right-side",
       template: dashTpl,
       
       modelEvents: {
@@ -16,7 +17,16 @@ function(RipManager, dashTpl){
 
       onDomRefresh: function() {
       
+      },
+
+      serializeData: function(){
+        return {
+          overViewStatsModel: this.options.overViewStatsModel
+          // : this.options.model2.toJSON()
+        };
       }
+
+
     });
   });
 
