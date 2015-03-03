@@ -1,10 +1,8 @@
 <thead>
   <tr>
-    <th>Last Hit</th>
-    <th>Hits</th>
-    <th>Rate</th>
-    <th>Url</th>
-    <th>Replacement Link</th>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th></th>
   </tr>
 </thead>
 <tbody>

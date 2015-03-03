@@ -32,8 +32,8 @@ requirejs.config({
     adminLTEdemo: {
       deps: ['jquery','jquery-ui', 'bootstrap']
     },
-    parsley: { 
-      deps: ['jquery'] 
+    parsley: {
+      deps: ['jquery']
     },
     underscore: {
       exports: "_"

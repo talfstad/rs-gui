@@ -6,21 +6,7 @@ define(["app","tpl!apps/main/leftnav/list/templates/list.tpl", "adminLTEapp"],
     View.LeftNav = Marionette.ItemView.extend({
       template: listTpl,
 
-      onShow: function() {
-        /*
-         * INITIALIZE BUTTON TOGGLE
-         * ------------------------
-         */
-        $('.btn-group[data-toggle="btn-toggle"]').each(function() {
-            var group = $(this);
-            $(this).find(".btn").click(function(e) {
-                group.find(".btn.active").removeClass("active");
-                $(this).addClass("active");
-                e.preventDefault();
-            });
-
-        });
-
+      onDomRefresh: function() {
         $("[data-widget='remove']").click(function() {
             //Find the box parent        
             var box = $(this).parents(".box").first();

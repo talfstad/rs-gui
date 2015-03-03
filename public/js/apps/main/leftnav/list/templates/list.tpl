@@ -25,12 +25,12 @@
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
                         <li class="active">
-                            <a href="index.html">
+                            <a href="#dash">
                                 <i class="fa fa-dashboard"></i> <span>Overview</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="#rips">
                                 <i class="fa fa-diamond"></i> <span>Rips</span> <small class="badge pull-right bg-green">new</small>
                             </a>
                         </li>

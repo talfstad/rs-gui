@@ -3,7 +3,7 @@ define(["app", "authentication/login/login_view", "authentication/session/user_m
     Login.Controller = {
       
       login: function(id){
-        require(["entities/authentication"], function(){
+        require(["entities/authentication", "apps/main/main/main_app"], function(){
           var loginView = new View.Login({user: "", pass: ""});
 
           loginView.on("login:submit", function(args){
@@ -14,7 +14,7 @@ define(["app", "authentication/login/login_view", "authentication/session/user_m
                 loginView.trigger("login:invalid");
               } else {
                 RipManager.session.set({logged_in: true});
-                RipManager.trigger("rips:list");
+                RipManager.trigger("main:dash:list");
               }
             });
           });

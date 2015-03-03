@@ -1,19 +1,11 @@
 define(["app",
-        "tpl!apps/main/rips/list/templates/layout.tpl",
-        "tpl!apps/main/rips/list/templates/panel.tpl",
+        "tpl!apps/main/main/main_layout.tpl", 
+        "tpl!apps/main/rips/list/templates/list_item.tpl",
         "tpl!apps/main/rips/list/templates/none.tpl",
-        "tpl!apps/main/rips/list/templates/list.tpl",
-        "tpl!apps/main/rips/list/templates/list_item.tpl"],
-       function(RipManager, layoutTpl, panelTpl, noneTpl, listTpl, listItemTpl){
+        "tpl!apps/main/rips/list/templates/list.tpl"],
+       function(RipManager, layoutTpl, listItemTpl, noneTpl, listTpl){
   RipManager.module("RipsApp.List.View", function(View, RipManager, Backbone, Marionette, $, _){
-    View.Layout = Marionette.LayoutView.extend({
-      template: layoutTpl,
-
-      regions: {
-        leftNavRegion: "#left-nav-region",
-        ripsRegion: "#main-region"
-      }
-    });
+    
 
     View.Rip = Marionette.ItemView.extend({
       tagName: "tr",

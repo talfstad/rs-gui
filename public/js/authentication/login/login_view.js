@@ -20,31 +20,23 @@ define(["app",
                 username: this.$("#login-username-input").val(),
                 password: this.$("#login-password-input").val()
             });
+        }
+      },
 
-        //     app.session.login({
-        //         username: this.$("#login-username-input").val(),
-        //         password: this.$("#login-password-input").val()
-        //     }, {
-        //         success: function(mod, res) {
-        //             if(DEBUG) console.log("SUCCESS", mod, res);
-        //         },
-        //         error: function(err) {
-        //             if(DEBUG) console.log("ERROR", err);
-        //             app.showAlert('Bummer dude!', err.error, 'alert-danger'); 
-        //         }
-        //     });
-        // } else {
-        //     // Invalid clientside validations thru parsley
-        //     if(DEBUG) console.log("Did not pass clientside validation");
+      onDomRefresh: function() {
+        var me = this;
 
-        // }
+        //little trick to login on enter key
+        $("#login-password-input, #login-username-input").keyup(function(e){
+          if(e.keyCode == 13){
+            me.loginAttempt(e);
+          }
+        });
+      }   
 
 
-      }
-    
-    }
+    });
   });
-});
 
   return RipManager.AuthenticationApp.Login.View;
 });

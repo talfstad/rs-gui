@@ -15,8 +15,9 @@ define(["marionette", "authentication/session/user_model"], function(Marionette,
     return Backbone.history.fragment
   };
 
+  //Globals needed to maintain state of things
   RipManager.session = new UserModel({});
-
+  
   RipManager.startSubApp = function(appName, args){
     var currentApp = appName ? RipManager.module(appName) : null;
     if (RipManager.currentApp === currentApp){ return; }
@@ -31,12 +32,10 @@ define(["marionette", "authentication/session/user_model"], function(Marionette,
     }
   };
 
-  
-
   RipManager.on("start", function(){
     if(Backbone.history){
       require([
-        "apps/main/rips/rips_app",
+        "apps/main/main/main_app",
         "authentication/authentication_app"], function () {
         
         Backbone.history.start();
@@ -55,7 +54,7 @@ define(["marionette", "authentication/session/user_model"], function(Marionette,
 
 
         if(RipManager.getCurrentRoute() === ""){
-          RipManager.trigger("rips:list");
+          RipManager.trigger("main:load");
         }
       
       });
