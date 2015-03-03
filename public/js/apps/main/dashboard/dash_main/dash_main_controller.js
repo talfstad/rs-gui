@@ -11,7 +11,9 @@ define(["app", "apps/main/dashboard/dash_main/dash_view"], function(RipManager, 
             var fetchingOverviewStats = RipManager.request("dashboard:overviewStats");
 
             $.when(fetchingOverviewStats).done(function(model){
-              
+              $.each(model.models[0].attributes, function(index, value){
+                model.models[0].attributes[index] = numbersWithCommas(value);
+              });
               var dashListView = new DashView.Dash({
                 overViewStatsModel: model.models[0].attributes
               });
@@ -21,7 +23,6 @@ define(["app", "apps/main/dashboard/dash_main/dash_view"], function(RipManager, 
             });
           });
         }
-      
     }
   });
 
