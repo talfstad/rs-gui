@@ -45,7 +45,7 @@
                                    <i class="ion ion-person-add"></i>
                                 </div>
                                 <a href="#" class="small-box-footer">
-                                    <%= overViewStatsModel.total_rips_100 %> Total Rips
+                                    <%= overViewStatsModel.total_rips_100 %> Total Rips with 100+ Hits
                                 </a>
                             </div>
                         </div><!-- ./col -->
@@ -74,10 +74,10 @@
                             <div class="small-box bg-yellow">
                                 <div class="inner">
                                     <h3>
-                                        $240.00
+                                        $0
                                     </h3>
                                     <p>
-                                        Earned Today
+                                        Money Earned Today
                                     </p>
                                 </div>
                                 <div class="icon">
@@ -90,4 +90,25 @@
                         </div><!-- ./col -->
                     </div><!-- /.row -->
 
+
+                    <div class="row">
+                        <!-- Left col -->
+                        <section class="col-lg-12 connectedSortable">                            
+
+
+                            <!-- Custom tabs (Charts with tabs)-->
+                            <div class="nav-tabs-custom">
+                                <!-- Tabs within a box -->
+                                <ul class="nav nav-tabs pull-right">
+                                    <li class="active"><a href="#ripped-hits-chart" data-toggle="tab">Ripped Hits</a></li> 
+                                    <li class="pull-left header"><i class="fa fa-inbox"></i> Total Ripped Hits for the last 20 days</li>
+                                </ul>
+                                <div class="tab-content no-padding">
+                                    <!-- Morris chart - Sales -->
+                                    <div class="chart tab-pane active" id="ripped-hits-chart" style="position: relative; height: 300px;"></div>
+                                </div>
+                            </div><!-- /.nav-tabs-custom -->
+                        </section>
+                    </div>
                   </section>
+

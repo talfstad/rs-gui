@@ -16,7 +16,9 @@ requirejs.config({
     parsley: 'lib/parsleyjs/dist/parsley',
     adminLTEapp: 'vendor/AdminLTE/app',
     adminLTEdash: 'vendor/AdminLTE/dashboard',
-    adminLTEdemo: 'vendor/AdminLTE/demo'
+    adminLTEdemo: 'vendor/AdminLTE/demo',
+    morris: 'vendor/plugins/morris/morris',
+    raphael: 'vendor/plugins/raphael/raphael'
   },
 
   shim: {
@@ -34,6 +36,13 @@ requirejs.config({
     },
     parsley: {
       deps: ['jquery']
+    },
+    raphael: {
+      exports:'Raphael'
+    },
+    morris: {
+      deps: ['jquery', 'raphael'],
+      exports: "Morris"
     },
     underscore: {
       exports: "_"
