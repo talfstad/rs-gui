@@ -15,18 +15,6 @@ define(["app"], function(RipManager){
     });
 
     var API = {
-      getOverviewStats: function(args){
-        var overviewStats = new OverviewStats.collection();
-        var defer = $.Deferred();
-        overviewStats.fetch({
-          success: function(data){
-            defer.resolve(data);
-          }
-        });
-        var promise = defer.promise();
-        return promise;
-      },
-
       getTotalRippedHitsGraph: function(args){
         var totalRippedHitsGraphData = new OverviewGraph.collection();
         var defer = $.Deferred();

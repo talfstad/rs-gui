@@ -23,7 +23,7 @@ define(["app", "apps/main/dashboard/dash_main/dash_view"], function(RipManager, 
                 
                 var dashListView = new DashView.Dash({
                   overViewStatsModel: model.models[0].attributes,
-                  totalRippedHitsGraph: totalRippedHitsData.models[0].attributes
+                  totalRippedHitsGraph: totalRippedHitsData.models
                 });
 
                 RipManager.mainLayout.mainRegion.show(dashListView);

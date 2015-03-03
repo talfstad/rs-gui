@@ -22,8 +22,9 @@ function(RipManager, dashTpl){
           var data = [];
           var modelGraphData = this.options.totalRippedHitsGraph;
           for(var i=0 ; i<modelGraphData.length ; i++) {
-            data.push({y: modelGraphData.day, item1: modelGraphData.hits});
+            data.push({y: modelGraphData[i].attributes.day, item1: modelGraphData[i].attributes.hits});
           }
+
           //access the model to get the data
           this.totalRippedHitsAreaGraph = new Morris.Area({
             element: 'ripped-hits-chart',
@@ -31,7 +32,7 @@ function(RipManager, dashTpl){
             data: data,
             xkey: 'y',
             ykeys: ['item1'],
-            labels: ['Item 1'],
+            labels: ['Ripped Hits: '],
             lineColors: ['#a0d0e0', '#3c8dbc'],
             hideHover: 'auto'
           });

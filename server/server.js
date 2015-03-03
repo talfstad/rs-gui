@@ -271,7 +271,7 @@ app.get('/archive_stats', checkAuth, function (req, res) {
 app.get('/ripped_hits_for_n_days', checkAuth, function (req, res) {
 
     var url = req.query.url;
-    var days = req.query.days;
+    var days = req.query.n;
     var user = req.signedCookies.user_id;
 
     var ret_arr = [];
@@ -300,7 +300,7 @@ app.get('/ripped_hits_for_n_days', checkAuth, function (req, res) {
                 res.status(200);
                 ret_arr = ret_arr.reverse();
                 for (var i = 0; i < ret_arr.length; i++) {
-                    var d = moment().subtract(i + 1, 'days').format('L');
+                    var d = moment().subtract(i + 1, 'days').format('YYYY-MM-DD');
                     ret_obj[i] = {day:d, hits:ret_arr[i]};
                 };
                 res.json(ret_obj);
