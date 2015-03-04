@@ -31,7 +31,7 @@
                         </li>
                         <li>
                             <a href="#rips">
-                                <i class="fa fa-diamond"></i> <span>Rips</span>
+                                <i class="fa fa-heartbeat"></i> <span>Rips</span>
                             </a>
                         </li>
                         <!-- <li>

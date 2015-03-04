@@ -2,14 +2,14 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
   RipManager.module("RipsApp.List", function(List, RipManager, Backbone, Marionette, $, _){
     List.Controller = {
       listRips: function(criterion){
-        require(["entities/rip"], function(){
+        require(["apps/main/rips/list/list_model"], function(getRipsModel){
         
-          var fetchingRips = RipManager.request("rip:entities");
+          var fetchingRips = RipManager.request("rips:getrips");
 
           $.when(fetchingRips).done(function(rips){
             
             var ripsListView = new RipsListView.Rips({
-              collection: rips
+              ripsCollection: rips.models[0].attributes.rows
             });
 
             //first check if main application has loaded, must load that first

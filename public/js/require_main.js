@@ -18,10 +18,14 @@ requirejs.config({
     adminLTEdash: 'vendor/AdminLTE/dashboard',
     adminLTEdemo: 'vendor/AdminLTE/demo',
     morris: 'vendor/plugins/morris/morris',
-    raphael: 'vendor/plugins/raphael/raphael'
+    raphael: 'vendor/plugins/raphael/raphael',
+    datatables: 'vendor/jquery.dataTables'
   },
 
   shim: {
+    datatables: {
+      deps: ['jquery']
+    },
     bootstrap: {
       deps: ['jquery']
     },

@@ -101,7 +101,7 @@
                                 <!-- Tabs within a box -->
                                 <ul class="nav nav-tabs pull-right">
                                     <li class="active"><a href="#ripped-hits-chart" data-toggle="tab">Ripped Hits</a></li> 
-                                    <li class="pull-left header"><i class="fa fa-inbox"></i> Total Ripped Hits for the last 20 days</li>
+                                    <li class="pull-left header"><i class="fa fa-inbox"></i> Total Ripped Hits for the last Month</li>
                                 </ul>
                                 <div class="tab-content no-padding">
                                     <!-- Morris chart - Sales -->

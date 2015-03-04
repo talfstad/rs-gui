@@ -10,7 +10,7 @@ define(["app"], function(RipManager){
     });
 
     OverviewGraph.collection = Backbone.Collection.extend({
-      url: "/ripped_hits_for_n_days?n=20",
+      url: "/ripped_hits_for_n_days?n=30",
       model: OverviewGraph.model
     });
 
