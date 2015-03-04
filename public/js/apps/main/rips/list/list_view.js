@@ -20,13 +20,17 @@ define(["app",
 
       onDomRefresh: function() {
         $("#rips-table").DataTable({
-          columns: [
-            {width: "30%"},
-            {width: "30%"},
-            {width: "15%"},
-            {width: "15%"},
-            {width: "10%"},
-          ]
+          // columns: [
+          //   {width: "5%"},
+          //   {width: "5%"},
+          //   null,
+          //   null,
+          //   {width: "5%"}
+          // ],
+          "aoColumnDefs": [
+              { "sWidth": "20px", "aTargets": [ 0,1,4 ] }
+          ],
+          "order": [[ 0, "desc" ]]
           // iDisplayLength: 25
         });
       },
