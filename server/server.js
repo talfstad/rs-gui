@@ -332,14 +332,20 @@ app.get('/ripped', checkAuth, function (req, res) {
 
     var user = req.signedCookies.user_id;
 
-    db.query('SELECT ripped.*,get_country_distribution(url) AS country_dist FROM ripped WHERE user = ? ORDER BY url;', [user], function(err, docs) {
+    db.query('CALL get_ripped_data(?);', [user], function(err, docs) {
         if (err) {
             console.log(err);
             res.status(500);
             res.json({error:"Internal server error looking up the ripped stats."});
         } else {          
-            res.status(200);
-            res.json({rows:docs});
+            if(docs[0]) {
+                res.status(200);
+                res.json({rows:docs[0]});
+            }
+            else {
+                res.status(500);
+                res.json({error:"Internal server error looking up the ripped stats."});
+            }
         }
     });
 });
@@ -383,7 +389,6 @@ app.get('/stats_overview', checkAuth, function (req, res) {
 app.post("/update_ripped_url", checkAuth, function(req, res) {
     
     var url = req.body.url;
-    var uuid = req.body.uuid;
     var user = req.signedCookies.user_id;
     var replacement_links = req.body.replacement_links;
     var redirect_rate = req.body.redirect_rate;
@@ -402,7 +407,7 @@ app.post("/update_ripped_url", checkAuth, function(req, res) {
         return;
     }
 
-    db.query('CALL update_ripped_url(?,?,?,?,?);', [url, uuid, user, replacement_links, redirect_rate], function(err, docs) {
+    db.query('CALL update_ripped_url(?,?,?,?);', [url, user, replacement_links, redirect_rate], function(err, docs) {
         if(err) {
             console.log(err);
             res.status(500);
