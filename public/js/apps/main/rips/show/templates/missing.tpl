@@ -1,1 +1,0 @@
-<div class="alert alert-error">This rip doesn't exist !</div>

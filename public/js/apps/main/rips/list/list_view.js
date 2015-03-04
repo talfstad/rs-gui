@@ -28,7 +28,8 @@ define(["app",
           //   {width: "5%"}
           // ],
           "aoColumnDefs": [
-              { "sWidth": "20px", "aTargets": [ 0,1,4 ] }
+              { "sWidth": "20px", "aTargets": [ 0,1] },
+              { "sWidth": "120px", "aTargets": [4]}
           ],
           "order": [[ 0, "desc" ]]
           // iDisplayLength: 25

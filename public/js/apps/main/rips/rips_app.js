@@ -29,18 +29,6 @@ define(["app"], function(RipManager){
         executeAction(ListController.listRips, args);
         RipManager.navigate("rips");
       });
-    },
-
-    showRip: function(args){
-      require(["apps/main/rips/show/show_controller"], function(ShowController){
-        executeAction(ShowController.showRip, args);
-      });
-    },
-
-    editRip: function(args){
-      require(["apps/main/rips/edit/edit_controller"], function(EditController){
-        executeAction(EditController.editRip, args);
-      });
     }
   };
 
@@ -57,28 +45,15 @@ define(["app"], function(RipManager){
     }
   });
 
-  RipManager.on("rip:show", function(id){
-    RipManager.navigate("rip/" + id);
-    API.showRip(id);
-  });
+  
 
-  RipManager.on("rip:edit", function(id){
-    RipManager.navigate("rips/" + id + "/edit");
-    API.editRip(id);
-  });
 
   var authEnabledAPI = {
     listRips: function(criterion){
       checkAuth(API.listRips);
     },
 
-    showRip: function(id){
-      checkAuth(API.showRip);
-    },
-
-    editRip: function(id){
-      checkAuth(API.editRip);
-    }
+  
   };
 });
 
