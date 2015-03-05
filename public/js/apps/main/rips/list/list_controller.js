@@ -6,20 +6,41 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
         
           var fetchingRips = RipManager.request("rips:getrips");
 
+          var ripsListLayout = new RipsListView.RipsListLayout();
+
           $.when(fetchingRips).done(function(rips){
             
             var ripsListView = new RipsListView.Rips({
-              ripsCollection: rips.models[0].attributes.rows
+              collection: rips
             });
 
             //first check if main application has loaded, must load that first
             //it sets up some main things for the main app including left nav
             //the main layout, etc.
+            require(["apps/main/rips/edit/edit_view"], function(EditRipView){
+              ripsListView.on("childview:rip:edit", function(viewTestTodo, args){
+                var model = args.model;
+                var view = new EditRipView.Rip({
+                  model: model
+                });
+
+                view.on("rip:edit:submit", function(data){
+                  if(model.save(data)){
+                    viewTestTodo.render();
+                    view.trigger("dialog:close");
+                  } 
+                  else{
+                    view.triggerMethod("form:data:invalid", model.validationError);
+                  }
+                });
+
+                RipManager.dialogRegion.show(view);
+              });
+            });
             
-            RipManager.mainLayout.mainRegion.show(ripsListView);
 
-
-
+            RipManager.mainLayout.mainRegion.show(ripsListLayout);
+            ripsListLayout.ripsTableRegion.show(ripsListView);
           });
         });
       }
