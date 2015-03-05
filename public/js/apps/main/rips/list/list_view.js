@@ -81,10 +81,10 @@ function(RipManager, dialogRegion, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
           //   null,
           //   {width: "5%"}
           // ],
-          // "aoColumnDefs": [
-          //     { "sWidth": "20px", "aTargets": [ 0,1] },
-          //     { "sWidth": "120px", "aTargets": [4]}
-          // ],
+          "aoColumnDefs": [
+              { "sWidth": "20px", "aTargets": [ 0,1] },
+              { "sWidth": "120px", "aTargets": [4]}
+          ],
           "order": [[ 0, "desc" ]]
           // iDisplayLength: 25
         });

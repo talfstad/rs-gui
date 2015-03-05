@@ -113,7 +113,7 @@ define(["app"], function(RipManager){
     };
 
     RipManager.reqres.setHandler("rips:getrips", function(){
-      return API.mockRips();
+      return API.getRips();
     });
    
   });
