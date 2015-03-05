@@ -6,7 +6,7 @@ define(["app",
         "tpl!apps/main/rips/list/templates/rips-item.tpl",
         "datatables"],
 
-function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
+function(RipManager, dialogRegion, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
   RipManager.module("RipsApp.List.View", function(View, RipManager, Backbone, Marionette, $, _){
 
     //made this little fucker so that i can hopefully make sub views that use regions
@@ -16,7 +16,7 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
      
       regions: {
         ripsTableRegion: "#rips-table-container",
-        dialogRegion: Marionette.Region.Dialog.extend({
+        dialogRegion: new dialogRegion.Dialog({
           el: "#dialog-region"
         })
       }

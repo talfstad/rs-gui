@@ -34,7 +34,7 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
                   }
                 });
 
-                RipManager.dialogRegion.show(view);
+                ripsListLayout.dialogRegion.show(view);
               });
             });
             
