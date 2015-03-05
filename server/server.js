@@ -394,7 +394,7 @@ app.get('/ripped', checkAuth, function (req, res) {
         } else {          
             if(docs[0]) {
                 res.status(200);
-                res.json({rows:docs[0]});
+                res.json({docs[0]});
             }
             else {
                 res.status(500);
