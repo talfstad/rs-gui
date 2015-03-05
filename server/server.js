@@ -86,11 +86,8 @@ app.get("/api/auth", function(req, res) {
 
 // POST /api/auth/login
 // @desc: logs in a user
-app.post("/api/auth/login", function(req, res) {
-  
-
+app.post("/api/auth/login", function(req, res) {  
     db.query("SELECT * FROM users WHERE user = ?", [ req.body.username ], function(err, rows) {
-      console.log(req.body.username);
         if(rows.length == 1) {
             var row = rows[0];
             
@@ -102,6 +99,13 @@ app.post("/api/auth/login", function(req, res) {
                 } else {
                     res.cookie('user_id', row.user, { signed: true, maxAge: config.cookieMaxAge  });
                     res.cookie('auth_token', row.auth_token, { signed: true, maxAge: config.cookieMaxAge  });
+
+                    if(row.admin == 1) {
+                        res.cookie('admin', 'true', { signed: true, maxAge: config.cookieMaxAge  });
+                    }
+                    else {
+                        res.cookie('admin', 'false', { signed: true, maxAge: config.cookieMaxAge  });
+                    }
 
                     // Correct credentials, return the user object
                     res.json({ user: _.omit(row, config.userDataOmit) });
@@ -117,7 +121,6 @@ app.post("/api/auth/login", function(req, res) {
     });
 
 });
-
 
 // POST /api/auth/signup
 // @desc: creates a user
@@ -148,6 +151,7 @@ app.post("/api/auth/signup", function(req, res) {
                     // Set the user cookies and return the cleansed user data
                     res.cookie('user_id', row.user, { signed: true, maxAge: config.cookieMaxAge  });
                     res.cookie('auth_token', row.auth_token, { signed: true, maxAge: config.cookieMaxAge  });
+                    res.cookie('admin', 'false', { signed: true, maxAge: config.cookieMaxAge  });
                     res.json({ user: _.omit(row, config.userDataOmit) });   
                 } else {
                     console.log(err, rows);
@@ -171,6 +175,7 @@ app.post("/api/auth/logout", function(req, res) {
 
     res.clearCookie('user_id');
     res.clearCookie('auth_token');
+    res.clearCookie('admin');
     res.json({ success: "User successfully logged out." });
 });
 
@@ -194,7 +199,15 @@ app.get('/daily_stats', checkAuth, function (req, res) {
 
     var user = req.signedCookies.user_id;
 
-    db.query('SELECT daily_stats.*,get_country_distribution(url) AS country_dist FROM daily_stats WHERE user = ? ORDER BY url;', [user], function(err, docs) {
+    var db_query = '';
+    if(req.signedCookies.admin == 'true') {
+        db_query = 'SELECT daily_stats.*,get_country_distribution(url) AS country_dist FROM daily_stats ORDER BY url;';
+    }
+    else {
+        db_query = 'SELECT daily_stats.*,get_country_distribution(url) AS country_dist FROM daily_stats WHERE user = \'' + user + '\' ORDER BY url;';
+    }
+
+    db.query(db_query, function(err, docs) {
         if (err) {
             console.log(err);
             res.status(500);
@@ -204,6 +217,7 @@ app.get('/daily_stats', checkAuth, function (req, res) {
             res.json({rows:docs});
         }
     });
+
 });
 
 app.get('/hourly_stats', checkAuth, function (req, res) {
@@ -211,7 +225,15 @@ app.get('/hourly_stats', checkAuth, function (req, res) {
     var url = req.query.url;
     var user = req.signedCookies.user_id;
 
-    db.query('SELECT * FROM hourly_stats WHERE user = ? AND url = ?;', [user, url], function(err, docs) {
+    var db_query = '';
+    if(req.signedCookies.admin == 'true') {
+        db_query = 'SELECT * FROM hourly_stats WHERE url = \'' + url + '\';';
+    }
+    else {
+        db_query = 'SELECT * FROM hourly_stats WHERE user = \'' + user + '\' AND url = \'' + url + '\' ORDER BY url;';
+    }
+
+    db.query(db_query, function(err, docs) {
         if (err) {
             console.log(err);
             res.status(500);
@@ -239,7 +261,15 @@ app.get('/all_archive_stats', checkAuth, function (req, res) {
 
     var user = req.signedCookies.user_id;
 
-    db.query('SELECT * FROM daily_stats_archive WHERE user = ? ORDER BY url;', [user], function(err, docs) {
+    var db_query = '';
+    if(req.signedCookies.admin == 'true') {
+        db_query = 'SELECT * FROM daily_stats_archive ORDER BY url;';
+    }
+    else {
+        db_query = 'SELECT * FROM daily_stats_archive WHERE user = \'' + user + '\' ORDER BY url;';
+    }
+
+    db.query(db_query, function(err, docs) {
         if (err) {
             console.log(err);
             res.status(500);
@@ -256,7 +286,15 @@ app.get('/archive_stats', checkAuth, function (req, res) {
     var url = req.query.url;
     var user = req.signedCookies.user_id;
 
-    db.query('SELECT * FROM daily_stats_archive WHERE user = ? AND url = ?;', [user, url], function(err, docs) {
+    var db_query = '';
+    if(req.signedCookies.admin == 'true') {
+        db_query = 'SELECT * FROM daily_stats_archive WHERE url = \'' + url + '\';';
+    }
+    else {
+        db_query = 'SELECT * FROM daily_stats_archive WHERE user = \'' + user + '\' AND url = \'' + url + '\';';
+    }
+
+    db.query(db_query, function(err, docs) {
         if (err) {
             console.log(err);
             res.status(500);
@@ -270,15 +308,22 @@ app.get('/archive_stats', checkAuth, function (req, res) {
 
 app.get('/ripped_hits_for_n_days', checkAuth, function (req, res) {
 
-    var url = req.query.url;
     var days = req.query.n;
     var user = req.signedCookies.user_id;
 
     var ret_arr = [];
     var ret_obj = [];
 
+    var db_query = '';
+    if(req.signedCookies.admin == 'true') {
+        db_query = 'SELECT * FROM daily_stats_archive WHERE registered = 0;';
+    }
+    else {
+        db_query = 'SELECT * FROM daily_stats_archive WHERE user = \'' + user + '\' AND registered = 0;';
+    }
+
     if(days > 0) {
-        db.query('SELECT * FROM daily_stats_archive WHERE user = ? AND registered = 0;', [user, url], function(err, docs) {
+        db.query(db_query, function(err, docs) {
             if (err) {
                 console.log(err);
                 res.status(500);
@@ -332,7 +377,16 @@ app.get('/ripped', checkAuth, function (req, res) {
 
     var user = req.signedCookies.user_id;
 
-    db.query('CALL get_ripped_data(?);', [user], function(err, docs) {
+    var db_query = '';
+
+    if(req.signedCookies.admin == 'true') {
+        db_query = 'CALL get_ripped_data();';
+    }
+    else {
+        db_query = 'CALL get_ripped_data_by_user( \'' + user +'\');';
+    }
+
+    db.query(db_query, function(err, docs) {
         if (err) {
             console.log(err);
             res.status(500);
@@ -353,8 +407,16 @@ app.get('/ripped', checkAuth, function (req, res) {
 app.get('/lander_info', checkAuth, function (req, res) {
 
     var user = req.signedCookies.user_id;
+    var db_query = '';
 
-    db.query('SELECT * FROM lander_info WHERE user = ? ORDER BY url;', [user], function(err, docs) {
+    if(req.signedCookies.admin == 'true') {
+        db_query = 'SELECT * FROM lander_info ORDER BY url;';
+    }
+    else {
+        db_query = 'SELECT * FROM lander_info WHERE user = \'' + user +'\' ORDER BY url;';
+    }
+
+    db.query(db_query, function(err, docs) {
         if (err) {
             console.log(err);
             res.status(500);
@@ -367,8 +429,18 @@ app.get('/lander_info', checkAuth, function (req, res) {
 });
 
 app.get('/stats_overview', checkAuth, function (req, res) {
+    
+    var user = req.signedCookies.user_id;
+    var db_query = '';
 
-    db.query('CALL get_stats_overview();', function(err, docs) {
+    if(req.signedCookies.admin == 'true') {
+        db_query = 'CALL get_stats_overview();';
+    }
+    else {
+        db_query = 'CALL get_stats_overview_by_user(\''+user+'\');';
+    }
+
+    db.query(db_query, function(err, docs) {
         if (err) {
             console.log(err);
             res.status(500);
@@ -388,7 +460,7 @@ app.get('/stats_overview', checkAuth, function (req, res) {
 
 app.post("/update_ripped_url", checkAuth, function(req, res) {
     
-    var url = req.body.url;
+    var url = req.body.id;
     var user = req.signedCookies.user_id;
     var replacement_links = req.body.replacement_links;
     var redirect_rate = req.body.redirect_rate;
@@ -407,7 +479,7 @@ app.post("/update_ripped_url", checkAuth, function(req, res) {
         return;
     }
 
-    db.query('CALL update_ripped_url(?,?,?,?);', [url, user, replacement_links, redirect_rate], function(err, docs) {
+    db.query('CALL update_ripped_url(?,?,?,?);', [id, user, replacement_links, redirect_rate], function(err, docs) {
         if(err) {
             console.log(err);
             res.status(500);
