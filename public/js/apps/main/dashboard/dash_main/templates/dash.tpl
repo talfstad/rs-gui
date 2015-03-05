@@ -74,17 +74,17 @@
                             <div class="small-box bg-yellow">
                                 <div class="inner">
                                     <h3>
-                                        $0
+                                        <%= overViewStatsModel.total_daily_jacks %>
                                     </h3>
                                     <p>
-                                        Money Earned Today
+                                        Replacement offers shown
                                     </p>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-social-usd"></i>
                                 </div>
                                 <a href="#" class="small-box-footer">
-                                    <span style="color: rgba(255, 255, 255, 0.0)">.</span>
+                                    <%= overViewStatsModel.total_jacks %> Total Replacement Offers Shown
                                 </a>
                             </div>
                         </div><!-- ./col -->
