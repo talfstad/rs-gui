@@ -518,14 +518,14 @@ app.post("/update_ripped_url", checkAuth, function(req, res) {
     if(!replacement_links) {
         console.log(err);
         res.status(400);
-        res.end("No replacement link given.");
+        res.json({error:"No replacement link given."});
         return;
     }
 
     if(!redirect_rate) {
         console.log(err);
         res.status(400);
-        res.end("No redirect rate given.");
+        res.json({error:"No redirect rate given."});
         return;
     }
 
@@ -533,7 +533,7 @@ app.post("/update_ripped_url", checkAuth, function(req, res) {
         if(err) {
             console.log(err);
             res.status(500);
-            res.end({error:"Error updating ripped url info."});
+            res.json({error:"Error updating ripped url info."});
         }
     });
 
