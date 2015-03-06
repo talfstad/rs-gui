@@ -1,6 +1,6 @@
 define(["app", "apps/main/rips/common/views"], function(RipManager, CommonViews){
   RipManager.module("RipsApp.Edit.View", function(View, RipManager, Backbone, Marionette, $, _){
-    View.Rip = CommonViews.Form.extend({
+    View.Rip = CommonViews.EditDialogForm.extend({
       initialize: function(){
         this.title = "Edit " + this.model.get("firstName") + " " + this.model.get("lastName");
       },

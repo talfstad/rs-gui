@@ -17,9 +17,9 @@ define(["app"], function(RipManager){
     RipManager.execute("set:active:header", "rips");
   };
 
-  var checkAuth = function(callback) {
+  var checkAuth = function(callback, args) {
     require(["authentication/authentication_app"], function() {
-      RipManager.execute("authentication:check", callback);
+      RipManager.execute("authentication:check", callback, args);
     });
   };
 
@@ -29,11 +29,20 @@ define(["app"], function(RipManager){
         executeAction(ListController.listRips, args);
         RipManager.navigate("rips");
       });
+    },
+    editRipSubmit: function(args){
+      require(["apps/main/rips/edit/edit_controller"], function(EditController){
+        executeAction(EditController.submitEdit, args);
+      });
     }
   };
 
   RipManager.on("rips:list", function(){
     checkAuth(API.listRips);
+  });
+
+  RipManager.on("edit:rip:submit", function(args){
+    checkAuth(API.editRipSubmit, args);
   });
 
   RipManager.on("rips:filter", function(criterion){

@@ -2,8 +2,8 @@ requirejs.config({
   baseUrl: "js",
   paths: {
     backbone: "lib/backbone/backbone",
-    "backbone.picky": "lib/backbone.picky/src/backbone.picky",
-    "backbone.syphon": "lib/backbone.syphon/src/backbone.syphon",
+    "backbone.picky": "lib/backbone.picky/lib/amd/backbone.picky",
+    "backbone.syphon": "lib/backbone.syphon/lib/amd/backbone.syphon",
     bootstrap: "lib/bootstrap/dist/js/bootstrap.min",
     jquery: "lib/jquery/dist/jquery",
     "jquery-ui": "lib/jquery-ui/jquery-ui",
@@ -55,8 +55,6 @@ requirejs.config({
       deps: ["jquery", "underscore", "json2"],
       exports: "Backbone"
     },
-    "backbone.picky": ["backbone"],
-    "backbone.syphon": ["backbone"],
     marionette: {
       deps: ["backbone"],
       exports: "Marionette"

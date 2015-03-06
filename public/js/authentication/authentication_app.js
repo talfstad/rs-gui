@@ -63,14 +63,14 @@ define(["app"], function(RipManager){
       checkAuth(API.logout);
     });
 
-    var check = function(callback){
+    var check = function(callback, args){
       require(["authentication/check/check_controller"], function(CheckController){
-        CheckController.check(callback);
+        CheckController.check(callback, args);
       });
     };
 
-    RipManager.commands.setHandler("authentication:check", function(callback){
-      check(callback);
+    RipManager.commands.setHandler("authentication:check", function(callback, args){
+      check(callback, args);
     });
 
 

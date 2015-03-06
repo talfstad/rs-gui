@@ -1,19 +1,20 @@
-define(["app", "tpl!apps/main/rips/common/contact-form.tpl"], function(RipManager, ContactFormTpl){
-
+define(["app", "tpl!apps/main/rips/common/rip-edit-form.tpl", "backbone.syphon"], function(RipManager, RipEditFormTpl){
   RipManager.module("RipsApp.Common.View", function(View, RipManager, Backbone, Marionette, $, _){
-    
 
-      View.Form = Marionette.ItemView.extend({
-        template: ContactFormTpl,
+      View.EditDialogForm = Marionette.ItemView.extend({
+        template: RipEditFormTpl,
 
         events: {
           "click button.js-submit": "submitClicked"
         },
 
         submitClicked: function(e){
-          e.preventDefault();
-          var data = Backbone.Syphon.serialize(this);
-          this.trigger("form:submit", data);
+          
+            e.preventDefault();
+            var data = Backbone.Syphon.serialize(this);
+            data.id = this.model.attributes.id;
+            RipManager.trigger("edit:rip:submit", data);
+          
         },
 
         onFormDataInvalid: function(errors){
@@ -39,7 +40,6 @@ define(["app", "tpl!apps/main/rips/common/contact-form.tpl"], function(RipManage
           _.each(errors, markErrors);
         }
       });
-
   });
 
   return RipManager.RipsApp.Common.View;

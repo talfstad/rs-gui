@@ -459,11 +459,10 @@ app.get('/stats_overview', checkAuth, function (req, res) {
 });
 
 app.post("/update_ripped_url", checkAuth, function(req, res) {
-    
-    var url = req.body.id;
+    var id = req.body.model.id;
     var user = req.signedCookies.user_id;
-    var replacement_links = req.body.replacement_links;
-    var redirect_rate = req.body.redirect_rate;
+    var replacement_links = req.body.model.replacement_links;
+    var redirect_rate = req.body.model.redirect_rate;
 
     if(!replacement_links) {
         console.log(err);
