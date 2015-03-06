@@ -316,10 +316,10 @@ app.get('/ripped_hits_for_n_days', checkAuth, function (req, res) {
 
     var db_query = '';
     if(req.signedCookies.admin == 'true') {
-        db_query = 'SELECT * FROM daily_stats_archive WHERE registered = 0;';
+        db_query = 'SELECT hits_list FROM daily_stats_archive WHERE registered = 0;';
     }
     else {
-        db_query = 'SELECT * FROM daily_stats_archive WHERE user = \'' + user + '\' AND registered = 0;';
+        db_query = 'SELECT hits_list FROM daily_stats_archive WHERE user = \'' + user + '\' AND registered = 0;';
     }
 
     if(days > 0) {
@@ -327,7 +327,7 @@ app.get('/ripped_hits_for_n_days', checkAuth, function (req, res) {
             if (err) {
                 console.log(err);
                 res.status(500);
-                res.json({error: "Internal server error looking up the archive stats."});
+                res.json({error: "Internal server error looking up the hits list from archive stats."});
             } else {       
 
                 for (var i = 0; i < docs.length; i++) {
@@ -340,6 +340,57 @@ app.get('/ripped_hits_for_n_days', checkAuth, function (req, res) {
                         }
                         if(hits_arr[j]) {
                             ret_arr[j] += Number(hits_arr[j]);
+                        }
+                    };
+                };
+                for (var i = 0; i < ret_arr.length; i++) {
+                    var d = moment().subtract(i + 1, 'days').format('YYYY-MM-DD');
+                    ret_obj[i] = {day:d, hits:ret_arr[i]};
+                };
+                res.status(200);
+                res.json(ret_obj);
+            }
+        });
+    } else {
+        res.status(400);
+        res.json({error: "Days must be greater than 0."});
+    }
+});
+
+app.get('/jacks_for_n_days', checkAuth, function (req, res) {
+
+    var days = req.query.n;
+    var user = req.signedCookies.user_id;
+
+    var ret_arr = [];
+    var ret_obj = [];
+
+    var db_query = '';
+    if(req.signedCookies.admin == 'true') {
+        db_query = 'SELECT jacks_list FROM daily_stats_archive WHERE registered = 0;';
+    }
+    else {
+        db_query = 'SELECT jacks_list FROM daily_stats_archive WHERE user = \'' + user + '\' AND registered = 0;';
+    }
+
+    if(days > 0) {
+        db.query(db_query, function(err, docs) {
+            if (err) {
+                console.log(err);
+                res.status(500);
+                res.json({error: "Internal server error looking up the jacks list from archive stats."});
+            } else {       
+
+                for (var i = 0; i < docs.length; i++) {
+                    var jacks_list = docs[i].jacks_list;
+                    var jacks_arr = jacks_list.split(',');
+                    jacks_arr = jacks_arr.reverse();
+                    for (var j = 0; j < days; j++) {
+                        if(!ret_arr[j]) {
+                            ret_arr[j] = 0;
+                        }
+                        if(jacks_arr[j]) {
+                            ret_arr[j] += Number(jacks_arr[j]);
                         }
                     };
                 };
