@@ -26,6 +26,12 @@ function(RipManager, dialogRegion, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
     //View.Rip is a row view that belongs to a composite view! This allows us to pass the model
     //and stuff when we do events and stuff (i think)
     View.Rip = Marionette.ItemView.extend({
+      initialize: function() {
+        this.listenTo(this.model, 'change', this.render, this);
+        this.listenTo(this, "rip:edit", this.highlightRow); 
+        this.listenTo(this, "remove:highlightrow", this.removeHighlightRow); 
+      },
+
       template: ripItemTpl,
       tagName: "tr",
 
@@ -34,8 +40,18 @@ function(RipManager, dialogRegion, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
       },
 
       events: {
-       
+        "rip:edit": "highlightRow"
       },
+
+      highlightRow: function(e){
+        //highlight the current row
+        this.$el.addClass("rips-row-edit-highlight");
+      },
+
+      removeHighlightRow: function(e){
+        //when dialog closed remove highlight
+        this.$el.removeClass("rips-row-edit-highlight");
+      }
 
       
     });
@@ -59,6 +75,7 @@ function(RipManager, dialogRegion, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
     childViewContainer: "tbody",
 
     initialize: function(){
+
       this.listenTo(this.collection, "reset", function(){
         this.attachHtml = function(collectionView, childView, index){
           collectionView.$el.append(childView.el);
@@ -82,8 +99,9 @@ function(RipManager, dialogRegion, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
           //   {width: "5%"}
           // ],
           "aoColumnDefs": [
-              { "sWidth": "20px", "aTargets": [ 0,1] },
-              { "sWidth": "120px", "aTargets": [4]}
+              { "sWidth": "65px", "aTargets": [0] },
+              { "sWidth": "90px", "aTargets": [1] },
+              { "sWidth": "120px", "aTargets": [4] }
           ],
           "order": [[ 0, "desc" ]]
           // iDisplayLength: 25

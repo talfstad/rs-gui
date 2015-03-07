@@ -13,7 +13,7 @@ define(["app", "tpl!apps/main/rips/common/rip-edit-form.tpl", "backbone.syphon"]
             e.preventDefault();
             var data = Backbone.Syphon.serialize(this);
             data.id = this.model.attributes.id;
-            RipManager.trigger("edit:rip:submit", data);
+            this.trigger("rip:edit:submit", data);
           
         },
 

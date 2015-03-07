@@ -96,3 +96,16 @@ p.featured {
 .rip-edit-container {
   width: 350px;
 }
+
+#rips-table-container .rips-row-edit-highlight td{
+  background-color:#fcf8e3;
+}
+
+#rips-table-container .rips-row-edit-highlight td:hover {
+  background-color:#faf2cc;
+}
+
+
+
+
+

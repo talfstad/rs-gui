@@ -19,6 +19,9 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
             //the main layout, etc.
             require(["apps/main/rips/edit/edit_view"], function(EditRipView){
               ripsListView.on("childview:rip:edit", function(viewTestTodo, args){
+                
+                
+
                 var model = args.model;
                 var view = new EditRipView.Rip({
                   model: model
@@ -28,10 +31,14 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
                   if(model.save(data)){
                     viewTestTodo.render();
                     view.trigger("dialog:close");
-                  } 
+                  }
                   else{
                     view.triggerMethod("form:data:invalid", model.validationError);
                   }
+                });
+
+                view.on("destroy", function(){
+                  args.view.trigger("remove:highlightrow");
                 });
 
                 ripsListLayout.dialogRegion.show(view);

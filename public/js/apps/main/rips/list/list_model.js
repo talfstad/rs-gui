@@ -1,7 +1,11 @@
 define(["app"], function(RipManager){
   RipManager.module("GetRips", function(GetRips, RipManager, Backbone, Marionette, $, _){
     GetRips.Rip = Backbone.Model.extend({
-      urlRoot: "/API/rips",
+      urlRoot: "/update_ripped_url",
+
+      events: {
+
+      },
 
       defaults: {
         "id": "",
