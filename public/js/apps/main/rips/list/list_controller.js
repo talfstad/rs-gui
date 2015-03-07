@@ -14,6 +14,14 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
               collection: rips
             });
 
+            var saveRipSuccess = function(model, message) {
+              ripsListView.trigger("rip:edit:notify", message.success, "success");
+            };
+
+            var saveRipError = function(model, message) {
+              ripsListView.trigger("rip:edit:notify", message.error, "danger");
+            };
+
             //first check if main application has loaded, must load that first
             //it sets up some main things for the main app including left nav
             //the main layout, etc.
@@ -28,7 +36,7 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
                 });
 
                 view.on("rip:edit:submit", function(data){
-                  if(model.save(data)){
+                  if(model.save(data, { success: saveRipSuccess, error: saveRipError })){
                     viewTestTodo.render();
                     view.trigger("dialog:close");
                   }

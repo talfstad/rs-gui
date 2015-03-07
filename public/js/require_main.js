@@ -5,6 +5,7 @@ requirejs.config({
     "backbone.picky": "lib/backbone.picky/lib/amd/backbone.picky",
     "backbone.syphon": "lib/backbone.syphon/lib/amd/backbone.syphon",
     bootstrap: "lib/bootstrap/dist/js/bootstrap.min",
+    "bootstrap-notify": "vendor/bootstrap-notify",
     jquery: "lib/jquery/dist/jquery",
     "jquery-ui": "lib/jquery-ui/jquery-ui",
     json2: "lib/json2/json2",
