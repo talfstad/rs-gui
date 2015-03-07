@@ -28,7 +28,7 @@ function(RipManager, dialogRegion, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
     //and stuff when we do events and stuff (i think)
     View.Rip = Marionette.ItemView.extend({
       initialize: function() {
-        this.listenTo(this.model, 'change', this.render, this);
+        this.listenTo(this.model, 'change', this.updateDataTable, this);
         this.listenTo(this, "rip:edit", this.highlightRow); 
         this.listenTo(this, "remove:highlightrow", this.removeHighlightRow); 
       },
@@ -42,6 +42,19 @@ function(RipManager, dialogRegion, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
 
       events: {
         "rip:edit": "highlightRow"
+      },
+
+      updateDataTable: function(e) {
+        //redraw the table to make sure it knows about hte new data
+        var data = $("#rips-table").DataTable().row(this.$el).data();
+        data[1] = this.model.attributes.redirect_rate;
+        data[3] = this.model.attributes.replacement_links;
+
+        $("#rips-table").DataTable().row(this.$el).data(data).draw();
+
+        //resort to preserve sort css *ugh*
+        // currentSort = $("#rips-table").dataTable().fnSettings().aaSorting[0];
+        // $("#rips-table").dataTable().fnSort([currentSort[0],currentSort[1]]); //col idx, asc/desc
       },
 
       highlightRow: function(e){
@@ -85,6 +98,7 @@ function(RipManager, dialogRegion, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
     },
 
     notify: function(data, type) {
+
       var notifyOptions = {
         icon: 'glyphicon glyphicon-refresh glyphicon-refresh-animate',
         title: "Updating Ripped Url: ",
@@ -133,7 +147,7 @@ function(RipManager, dialogRegion, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
       };
 
       if(type=="danger"){
-        notifyOptions.title = "Failed to Update Rip. <br />Please Stand by, one of our surfer dude coder guys will investigate this shortly.";
+        notifyOptions.title = "<strong>Failed to Update Rip</strong> <br />Please Stand by, one of our surfer dude coder guys will investigate this shortly.";
         notifyOptions.icon = "glyphicon glyphicon-warning-sign";
         otherOptions.delay = 0;
       } 
@@ -155,14 +169,9 @@ function(RipManager, dialogRegion, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
     },
 
     onDomRefresh: function() {
+
         $("#rips-table").DataTable({
-          // columns: [
-          //   {width: "5%"},
-          //   {width: "5%"},
-          //   null,
-          //   null,
-          //   {width: "5%"}
-          // ],
+          "bSortClasses": true,
           "aoColumnDefs": [
               { "sWidth": "65px", "aTargets": [0] },
               { "sWidth": "90px", "aTargets": [1] },
