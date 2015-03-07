@@ -14,17 +14,18 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
               collection: rips
             });
 
-            var saveRipSuccess = function(model, message) {
+            var saveRipSuccess = function(model, message, other) {
               ripsListView.trigger("rip:edit:notify", message.success, "success");
             };
 
-            var saveRipError = function(model, message) {
+            var saveRipError = function(model, message, other) {
               ripsListView.trigger("rip:edit:notify", message.error, "danger");
+              model.set(model.previousAttributes());
             };
 
             //first check if main application has loaded, must load that first
             //it sets up some main things for the main app including left nav
-            //the main layout, etc.
+            //the main layout, etc. TODO
             require(["apps/main/rips/edit/edit_view"], function(EditRipView){
               ripsListView.on("childview:rip:edit", function(viewTestTodo, args){
                 
@@ -36,7 +37,7 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
                 });
 
                 view.on("rip:edit:submit", function(data){
-                  if(model.save(data, { success: saveRipSuccess, error: saveRipError })){
+                  if(model.save(data, {success: saveRipSuccess, error: saveRipError})){
                     viewTestTodo.render();
                     view.trigger("dialog:close");
                   }

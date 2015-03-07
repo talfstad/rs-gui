@@ -85,14 +85,15 @@ function(RipManager, dialogRegion, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
     },
 
     notify: function(data, type) {
-      var notify = $.notify({
-        // options
+      var notifyOptions = {
         icon: 'glyphicon glyphicon-refresh glyphicon-refresh-animate',
-        title: "Updating Ripped Url",
+        title: "Updating Ripped Url: ",
         message: "",
         // url: 'https://github.com/mouse0270/bootstrap-notify',
-        target: '_blank'
-      },{
+        //target: '_blank'
+      };
+
+      var otherOptions = {
         // settings
         element: 'body',
         position: null,
@@ -129,7 +130,15 @@ function(RipManager, dialogRegion, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
           '</div>' +
           // '<a href="{3}" target="{4}" data-notify="url"></a>' +
         '</div>' 
-      });
+      };
+
+      if(type=="danger"){
+        notifyOptions.title = "Failed to Update Rip. <br />Please Stand by, one of our surfer dude coder guys will investigate this shortly.";
+        notifyOptions.icon = "glyphicon glyphicon-warning-sign";
+        otherOptions.delay = 0;
+      } 
+
+      var notify = $.notify(notifyOptions,otherOptions);
 
 
       setTimeout(function() {

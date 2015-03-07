@@ -538,7 +538,7 @@ app.put("/update_ripped_url/:id", checkAuth, function(req, res) {
     });
 
     res.status(200);
-    res.json({success:"Successfully updated ripped url info."});
+    res.json({success:"Success"});
 });
 
 module.exports = app;
