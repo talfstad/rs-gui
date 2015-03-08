@@ -541,4 +541,15 @@ app.put("/update_ripped_url/:id", checkAuth, function(req, res) {
     res.json({success:"Success"});
 });
 
+app.post('/test', function (req, res){
+    console.log('post test');
+    console.log(req.body);
+});
+
+app.get('/test', function (req, res){
+    console.log('get test');
+    console.log(req.query.offer_id);
+    console.log(req.query.transaction_id);
+});
+
 module.exports = app;
