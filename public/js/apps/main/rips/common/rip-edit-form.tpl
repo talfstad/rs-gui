@@ -1,26 +1,25 @@
-<div class="rip-edit-container">
-
-
-  <form>
-    <div class="control-group">
-      <label for="replacement-links" class="control-label">Replacement Offer:</label>
-      <input id="replacement-links" name="replacement_links" type="text" value="<%= replacement_links %>" placeholder="<%= replacement_links %>"/>
+<form class="form-horizontal">
+  <div class="form-group">
+    <label for="replacement_links" class="col-sm-3 control-label">Replacement Link</label>
+    <div class="col-sm-9">
+      <input type="text" class="form-control" id="replacement_links" name="replacement_links" value="<%= replacement_links %>">
     </div>
-    
-    <div class="control-group">
-      <label for="redirect-rate" class="control-label">Redirect Rate (0-100):</label>
-      <input id="redirect-rate" name="redirect_rate" type="text" value="<%= redirect_rate %>" placeholder="<%= redirect_rate %>"/>%
+    <div class="col-sm-offset-3 col-sm-9">
+      <p class="help-block">Please enter your replacement offer link.</p>
     </div>
+  </div>
+  <div class="form-group">
+    <label for="redirect_rate" class="col-sm-3 control-label">Redirect Rate</label>
+    <div class="col-sm-4">
+      <div class="input-group">
+        <input type="text" class="form-control" id="redirect_rate" name="redirect_rate" value="<%= redirect_rate %>">
+        <div class="input-group-addon">%</div>
+      </div>
+    </div>
+    <div class="col-sm-offset-3 col-sm-9">
+      <p class="help-block">This is the % of ripped traffic that will redirect to your offer.</p>
+    </div>
+
+  </div>
   
-  <!--   <div class="input-group input-group-md">
-    <input type="text" class="form-control" placeholder="<%= redirect_rate %>" aria-describedby="sizing-addon1">
-
-    <span class="input-group-addon" id="sizing-addon1">%</span>
-  </div>  -->
-    
-    <button class="btn js-submit">Update Rip</button>
-
-  </form>
-
-
-</div>
+</form>

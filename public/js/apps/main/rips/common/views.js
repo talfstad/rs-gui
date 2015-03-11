@@ -1,44 +1,82 @@
-define(["app", "tpl!apps/main/rips/common/rip-edit-form.tpl", "backbone.syphon"], function(RipManager, RipEditFormTpl){
+define(["app", "tpl!apps/main/rips/common/rip-edit-form.tpl", "bootstrap-dialog", "backbone.syphon", "backbone-validation"], function(RipManager, RipEditFormTpl, BootstrapDialog){
   RipManager.module("RipsApp.Common.View", function(View, RipManager, Backbone, Marionette, $, _){
 
       View.EditDialogForm = Marionette.ItemView.extend({
         template: RipEditFormTpl,
-
-        events: {
-          "click button.js-submit": "submitClicked"
+        
+        initialize: function() {
+          Backbone.Validation.bind(this,{
+            valid: function (view, attr, selector) {
+              var $el = view.$('[name=' + attr + ']'), 
+              $group = $el.closest('.form-group');
+          
+              $group.removeClass('has-error');
+              $group.find('.help-block').html('').addClass('hidden');
+            },
+            invalid: function (view, attr, error, selector) {
+              var $el = view.$('[name=' + attr + ']'), 
+              $group = $el.closest('.form-group');
+          
+              $group.addClass('has-error');
+              $group.find('.help-block').html(error).removeClass('hidden');
+            }
+          });
         },
 
-        submitClicked: function(e){
-          
-            e.preventDefault();
-            var data = Backbone.Syphon.serialize(this);
-            data.id = this.model.attributes.id;
-            this.trigger("rip:edit:submit", data);
-          
+        triggers: {
+          "click button.js-close" : "close"
         },
 
-        onFormDataInvalid: function(errors){
-          var $view = this.$el;
+        showDialog: function(e){
+          var me = this;
+          this.render();
 
-          var clearFormErrors = function(){
-            var $form = $view.find("form");
-            $form.find(".help-inline.error").each(function(){
-              $(this).remove();
-            });
-            $form.find(".control-group.error").each(function(){
-              $(this).removeClass("error");
-            });
-          }
+          BootstrapDialog.show({
+            type: BootstrapDialog.TYPE_PRIMARY,
+            title: '<h5><strong>Edit Rip:</strong> ' + this.model.attributes.url + '</h5>',
+            message: this.$el,
+            cssClass: 'login-dialog',
+            onhide: function(dialogRef){
+              me.trigger("close");
+            },
+            buttons: [{
+              label: 'Close',
+              action: function(dialogRef) {
+                  dialogRef.close();
+              }
+            },
+            {
+              label: 'Update Rip',
+              cssClass: 'btn-success',
+              hotkey: 13, //Enter key
+              action: function(dialogRef) {
+                  me.submitRipEdit();
+              }
+            }],
+            draggable: true
+          });
+        },
 
-          var markErrors = function(value, key){
-            var $controlGroup = $view.find("#contact-" + key).parent();
-            var $errorEl = $("<span>", { class: "help-inline error", text: value });
-            $controlGroup.append($errorEl).addClass("error");
-          }
+        submitRipEdit: function() {
+          var data = Backbone.Syphon.serialize(this);
+          data.id = this.model.attributes.id;
+          this.model.set(data);
+          this.trigger("rip:edit:submit", data);
+        },
 
-          clearFormErrors();
-          _.each(errors, markErrors);
+        closeDialog: function(e){
+          BootstrapDialog.closeAll();
+        },
+
+        remove: function() {
+          // Remove the validation binding
+          // See: http://thedersen.com/projects/backbone-validation/#using-form-model-validation/unbinding
+          Backbone.Validation.unbind(this);
+          return Backbone.View.prototype.remove.apply(this, arguments);
         }
+
+        
+
       });
   });
 

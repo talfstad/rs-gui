@@ -12,13 +12,14 @@
   background-color: #303030;
 }
 
-.btn.btn-default {
+/*.btn.btn-default {
   color: #fff;
-}
+}*/
 
 #login-btn {
   background-color: #08c;
   border: #444 1px solid;
+  color: #fff !important;
 }
 
 
@@ -126,5 +127,15 @@ p.featured {
     to { -webkit-transform: rotate(360deg);}
 }
 
+.rip-edit-dialog {
+  max-width: 500px;
+  /* new custom width */
+    /* must be half of the width, minus scrollbar on the left (30px) */
+    /*margin-left: -250px;*/
+}
+
+.bootstrap-dialog .modal-header.bootstrap-dialog-draggable {
+  cursor: move;
+}
 
 

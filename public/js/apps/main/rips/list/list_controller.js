@@ -7,6 +7,7 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
           var fetchingRips = RipManager.request("rips:getrips");
 
           var ripsListLayout = new RipsListView.RipsListLayout();
+          ripsListLayout.render();
 
           $.when(fetchingRips).done(function(rips){
             
@@ -28,8 +29,6 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
             //the main layout, etc. TODO
             require(["apps/main/rips/edit/edit_view"], function(EditRipView){
               ripsListView.on("childview:rip:edit", function(viewTestTodo, args){
-                
-                
 
                 var model = args.model;
                 var view = new EditRipView.Rip({
@@ -37,20 +36,23 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
                 });
 
                 view.on("rip:edit:submit", function(data){
-                  if(model.save(data, {success: saveRipSuccess, error: saveRipError})){
-                    viewTestTodo.render();
-                    view.trigger("dialog:close");
+                  
+                  if(this.model.isValid(true)) {
+                    model.save(data, {success: saveRipSuccess, error: saveRipError});
+                    view.closeDialog();
+                  } else {
+                    view.model.set(view.model.previousAttributes());
                   }
-                  else{
-                    view.triggerMethod("form:data:invalid", model.validationError);
-                  }
+                  
                 });
 
-                view.on("destroy", function(){
+
+                view.on("close", function(){
                   args.view.trigger("remove:highlightrow");
                 });
 
-                ripsListLayout.dialogRegion.show(view);
+                view.showDialog();
+
               });
             });
             

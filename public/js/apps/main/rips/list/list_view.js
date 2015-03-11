@@ -1,5 +1,4 @@
 define(["app",
-        "apps/main/rips/common/dialog-region",
         "tpl!apps/main/rips/list/templates/rips.tpl",
         "tpl!apps/main/rips/list/templates/rips-list.tpl",
         "tpl!apps/main/rips/list/templates/no-rips.tpl",
@@ -7,7 +6,7 @@ define(["app",
         "datatables",
         "bootstrap-notify"],
 
-function(RipManager, dialogRegion, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
+function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
   RipManager.module("RipsApp.List.View", function(View, RipManager, Backbone, Marionette, $, _){
 
     //made this little fucker so that i can hopefully make sub views that use regions
@@ -17,9 +16,7 @@ function(RipManager, dialogRegion, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
      
       regions: {
         ripsTableRegion: "#rips-table-container",
-        dialogRegion: new dialogRegion.Dialog({
-          el: "#dialog-region"
-        })
+        dialogRegion: "#dialog-region"
       }
     });
 
@@ -166,12 +163,15 @@ function(RipManager, dialogRegion, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
       this.attachHtml = function(collectionView, childView, index){
         collectionView.$el.prepend(childView.el);
       }
+
+    
     },
 
     onDomRefresh: function() {
 
         $("#rips-table").DataTable({
-          "bSortClasses": true,
+          "bSortClasses": false,
+          "deferRender": true,
           "aoColumnDefs": [
               { "sWidth": "65px", "aTargets": [0] },
               { "sWidth": "90px", "aTargets": [1] },

@@ -24,7 +24,19 @@ define(["app"], function(RipManager){
         "date_ripped": "",
         "last_updated": "",
         "country_dist": ""
+      },
+
+      validation: {
+        redirect_rate: {
+            required: true,
+            range: [0, 100]
+        },
+        replacement_links: {
+            required: true,
+            pattern: 'url'
+        }
       }
+
     });
 
     GetRips.RipCollection = Backbone.Collection.extend({

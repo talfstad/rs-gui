@@ -3,7 +3,9 @@ requirejs.config({
   paths: {
     backbone: "lib/backbone/backbone",
     "backbone.picky": "lib/backbone.picky/lib/amd/backbone.picky",
+    "backbone-validation": "vendor/backbone-validation-amd",
     "backbone.syphon": "lib/backbone.syphon/lib/amd/backbone.syphon",
+    "bootstrap-dialog": "vendor/bootstrap-dialog",
     bootstrap: "lib/bootstrap/dist/js/bootstrap.min",
     "bootstrap-notify": "vendor/bootstrap-notify",
     jquery: "lib/jquery/dist/jquery",
@@ -24,6 +26,10 @@ requirejs.config({
   },
 
   shim: {
+    "bootstrap-dialog": {
+      deps: ["jquery", "underscore","backbone", "bootstrap"],
+      exports: ['BootstrapDialog']
+    },
     datatables: {
       deps: ['jquery']
     },
@@ -55,6 +61,9 @@ requirejs.config({
     backbone: {
       deps: ["jquery", "underscore", "json2"],
       exports: "Backbone"
+    },
+    'backbone-validation': {
+      deps: ["jquery", "underscore", "backbone"]
     },
     marionette: {
       deps: ["backbone"],

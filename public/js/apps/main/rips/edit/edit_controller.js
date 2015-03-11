@@ -14,6 +14,8 @@ define(["app", "apps/main/rips/edit/edit_view"], function(RipManager, View){
                 generateTitle: true
               });
 
+              
+
               view.on("form:submit", function(data){
                 if(rip.save(data)){
                   RipManager.trigger("rip:show", rip.get('id'));
