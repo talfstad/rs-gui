@@ -32,8 +32,7 @@ define(["app"], function(RipManager){
             range: [0, 100]
         },
         replacement_links: {
-            required: true,
-            pattern: 'url'
+            required: true
         }
       }
 

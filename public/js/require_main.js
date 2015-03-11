@@ -4,7 +4,7 @@ requirejs.config({
     backbone: "lib/backbone/backbone",
     "backbone.picky": "lib/backbone.picky/lib/amd/backbone.picky",
     "backbone-validation": "vendor/backbone-validation-amd",
-    "backbone.syphon": "lib/backbone.syphon/lib/amd/backbone.syphon",
+    "backbone.syphon": "lib/backbone.syphon/lib/backbone.syphon",
     "bootstrap-dialog": "vendor/bootstrap-dialog",
     bootstrap: "lib/bootstrap/dist/js/bootstrap.min",
     "bootstrap-notify": "vendor/bootstrap-notify",
