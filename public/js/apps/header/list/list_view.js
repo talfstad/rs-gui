@@ -1,12 +1,13 @@
 define(["app",
-        "tpl!apps/header/list/templates/list.tpl", "adminLTEapp"],
+        "tpl!apps/header/list/templates/list.tpl", "slimscroll"],
         function(RipManager, listTpl, listItemTpl){
 
   RipManager.module("HeaderApp.List.View", function(View, RipManager, Backbone, Marionette, $, _){
 
     View.Header = Marionette.ItemView.extend({
       template: listTpl,
-      
+      tagName: "header",
+      className: "main-header",
       modelEvents: {
         'change': 'render'
       },

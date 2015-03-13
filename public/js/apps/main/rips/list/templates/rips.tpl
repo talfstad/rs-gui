@@ -6,10 +6,21 @@
 </section>
 
 <section class="content">
-    <!-- Small boxes (Stat box) -->
-    <div class="row">
-        <section id="rips-table-container" class="col-lg-12 connectedSortable"></section>
-    </div><!-- /.row -->
-
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">Hover Data Table</h3>
+        </div><!-- /.box-header -->
+        <div class="box-body table-responsive">
+          <div id="rips-table-container" class="box-body">
+            <table id="rips-table"></table>
+          </div><!-- /.box-body -->
+        </div><!-- /.box -->
+      </div>
+    </div>
+  </div>
 </section>
+
 <div id="dialog-region"></div>
+

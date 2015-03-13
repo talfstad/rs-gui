@@ -16,13 +16,15 @@ requirejs.config({
     text: "lib/requirejs-text/text",
     tpl: "lib/requirejs-underscore-tpl/underscore-tpl",
     underscore: "lib/underscore/underscore",
+    slimscroll: "../plugins/slimScroll/jquery.slimscroll",
+    treeview: "../plugins/treeview/treeview",
     parsley: 'lib/parsleyjs/dist/parsley',
-    adminLTEapp: 'vendor/AdminLTE/app',
-    adminLTEdash: 'vendor/AdminLTE/dashboard',
-    adminLTEdemo: 'vendor/AdminLTE/demo',
-    morris: 'vendor/plugins/morris/morris',
-    raphael: 'vendor/plugins/raphael/raphael',
-    datatables: 'vendor/jquery.dataTables'
+    // adminLTEapp: 'vendor/AdminLTE/app',
+    // adminLTEdash: 'vendor/AdminLTE/dashboard',
+    // adminLTEdemo: 'vendor/AdminLTE/demo',
+    morris: '../plugins/morris/morris',
+    datatablesjquery: '../plugins/datatables/jquery.dataTables',
+    datatablesbootstrap: '../plugins/datatables/dataTables.bootstrap'
   },
 
   shim: {
@@ -30,7 +32,13 @@ requirejs.config({
       deps: ["jquery", "underscore","backbone", "bootstrap"],
       exports: ['BootstrapDialog']
     },
-    datatables: {
+    datatablesbootstrap: {
+      deps: ['datatablesjquery']
+    },
+    treeview: {
+      deps: ['jquery']
+    },
+    slimscroll: {
       deps: ['jquery']
     },
     bootstrap: {
@@ -48,9 +56,9 @@ requirejs.config({
     parsley: {
       deps: ['jquery']
     },
-    raphael: {
-      exports:'Raphael'
-    },
+    // raphael: {
+    //   exports:'Raphael'
+    // },
     morris: {
       deps: ['jquery', 'raphael'],
       exports: "Morris"

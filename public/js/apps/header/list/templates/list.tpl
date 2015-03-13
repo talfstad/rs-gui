@@ -1,17 +1,20 @@
-            <a href="#" class="logo">
-                <!-- Add the class icon to your logo image or logo icon to add the margining -->
-                <img src="../img/cjlogo.png" alt="Clickjacker Home" />
-            </a>
-            <!-- Header Navbar: style can be found in header.less -->
-            <nav class="navbar navbar-static-top" role="navigation">
-                <!-- Sidebar toggle button-->
-                <a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </a>
-        <% if(logged_in == true){ %>
+
+
+
+            <!-- Logo -->
+        <a href="index2.html" class="logo"><img src="../img/cjlogo.png" alt="Clickjacker Home" /></a>
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top" role="navigation">
+          <!-- Sidebar toggle button-->
+          <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+          </a>
+          <!-- Navbar Right Menu -->
+          <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+           
+              <!-- User Account: style can be found in dropdown.less -->
+              <% if(logged_in == true){ %>
                 <div class="navbar-right">
                     <ul class="nav navbar-nav">
                         <li class="dropdown user user-menu">
@@ -21,7 +24,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
-                                <li class="user-header bg-light-blue">
+                                <li class="user-header bg-light-black">
                                     <img src="../img/trackerjacker.png" class="img-circle" alt="User Image">
                                     <p>
                                         Buildcave ClickJacker <!-- ™ -->
@@ -39,21 +42,6 @@
                     </ul>
                 </div>
         <% } %>
-            </nav>
-
-
-            <script type="text/javascript">
-
-
-    /*
-     * ADD SLIMSCROLL TO THE TOP NAV DROPDOWNS
-     * ---------------------------------------
-     */
-    $(".navbar .menu").slimscroll({
-        height: "200px",
-        alwaysVisible: false,
-        size: "3px"
-    }).css("width", "100%");
-
-    
-            </script>
+            </ul>
+          </div>
+        </nav>

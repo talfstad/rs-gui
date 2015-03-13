@@ -23,6 +23,8 @@ define(["app",
         }
       },
 
+
+
       onDomRefresh: function() {
         var me = this;
 
@@ -32,7 +34,10 @@ define(["app",
             me.loginAttempt(e);
           }
         });
+        
       }   
+
+
 
 
     });

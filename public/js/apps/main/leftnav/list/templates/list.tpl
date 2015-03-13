@@ -2,16 +2,7 @@
                 <!-- sidebar: style can be found in sidebar.less -->
                 <section class="sidebar">
                     <!-- Sidebar user panel -->
-                    <div class="user-panel">
-                        <div class="pull-left image">
-                            <img src="img/trackerjacker.png" class="img-circle" alt="User Image" />
-                        </div>
-                        <div class="pull-left info">
-                            <p>Buildcave, LLC</p>
-
-                            <!-- <a href="#"><i class="fa fa-circle text-success"></i> Get Those Clicks</a> -->
-                        </div>
-                    </div>
+                    
                     <!-- search form -->
                     <!-- <form action="#" method="get" class="sidebar-form">
                         <div class="input-group">
@@ -24,6 +15,7 @@
                     <!-- /.search form -->
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
+                        <li class="header">MAIN NAVIGATION</li>
                         <li class="active">
                             <a href="#dash">
                                 <i class="fa fa-dashboard"></i> <span>Overview</span>

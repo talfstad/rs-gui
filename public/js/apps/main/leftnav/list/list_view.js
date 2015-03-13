@@ -1,10 +1,14 @@
-define(["app","tpl!apps/main/leftnav/list/templates/list.tpl", "adminLTEapp"],
+define(["app","tpl!apps/main/leftnav/list/templates/list.tpl", "slimscroll", "treeview"],
         function(RipManager, listTpl){
 
   RipManager.module("LeftNavApp.List.View", function(View, RipManager, Backbone, Marionette, $, _){
 
     View.LeftNav = Marionette.ItemView.extend({
       template: listTpl,
+
+      onRender: function() {
+        $(".skin-blue > #header-region .logo").css("background-color", "#222d32");
+      },
 
       onDomRefresh: function() {
         $("[data-widget='remove']").click(function() {

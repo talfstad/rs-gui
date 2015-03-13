@@ -3,7 +3,7 @@ define(["app",
         "tpl!apps/main/rips/list/templates/rips-list.tpl",
         "tpl!apps/main/rips/list/templates/no-rips.tpl",
         "tpl!apps/main/rips/list/templates/rips-item.tpl",
-        "datatables",
+        "datatablesbootstrap",
         "bootstrap-notify"],
 
 function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
@@ -43,11 +43,11 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
 
       updateDataTable: function(e) {
         //redraw the table to make sure it knows about hte new data
-        var data = $("#rips-table").DataTable().row(this.$el).data();
-        data[1] = this.model.attributes.redirect_rate;
-        data[3] = this.model.attributes.replacement_links;
+        // var data = $("#rips-table").DataTable().row(this.$el).data();
+        // data[1] = this.model.attributes.redirect_rate;
+        // data[3] = this.model.attributes.replacement_links;
 
-        $("#rips-table").DataTable().row(this.$el).data(data).draw();
+        // $("#rips-table").DataTable().row(this.$el).data(data).draw();
 
         //resort to preserve sort css *ugh*
         // currentSort = $("#rips-table").dataTable().fnSettings().aaSorting[0];
@@ -168,18 +168,23 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
     },
 
     onDomRefresh: function() {
+        // $('#rips-table').dataTable({
+        //   pagingType: simple_numbers
+        // });
 
         $("#rips-table").DataTable({
-          "bSortClasses": false,
           "deferRender": true,
           "aoColumnDefs": [
-              { "sWidth": "65px", "aTargets": [0] },
-              { "sWidth": "90px", "aTargets": [1] },
-              { "sWidth": "120px", "aTargets": [4] }
+              { "sWidth": "100px", "aTargets": [0] },
+              { "sWidth": "100px", "aTargets": [1] },
+              { "sWidth": "300px", "aTargets": [3] },
+              { "sWidth": "150px", "aTargets": [4] }
           ],
+          pagingType: "full_numbers",
           "order": [[ 0, "desc" ]]
           // iDisplayLength: 25
         });
+        $("#rips-table").addClass("table table-bordered table-hover");
       }
     });
   });
