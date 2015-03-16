@@ -515,6 +515,10 @@ app.put("/update_ripped_url/:id", checkAuth, function(req, res) {
     var replacement_links = req.body.replacement_links;
     var redirect_rate = req.body.redirect_rate;
 
+    if(req.signedCookies.admin == 'true') {
+        user = 'admin';
+    }
+
     if(!replacement_links) {
         console.log(err);
         res.status(400);
@@ -541,15 +545,66 @@ app.put("/update_ripped_url/:id", checkAuth, function(req, res) {
     res.json({success:"Success"});
 });
 
-app.post('/test', function (req, res){
-    console.log('post test');
-    console.log(req.body);
+app.get('/offers', checkAuth, function (req, res) {
+    
+    var user = req.signedCookies.user_id;
+    var db_query = '';
+
+    if(req.signedCookies.admin == 'true') {
+        db_query = 'SELECT * FROM offers;';
+    }
+    else {
+        db_query = 'SELECT * FROM offers WHERE USER = \''+user+'\'';
+    }
+
+    db.query(db_query, function(err, docs) {
+        if (err) {
+            console.log(err);
+            res.status(500);
+            res.json({error:"Internal server error looking up the offers list."});
+        } else {          
+            if(docs[0][0]) {
+                res.status(200);
+                res.json(docs[0][0]);
+            }
+            else {
+                res.status(500);
+                res.json({error:"Internal server error looking up the offers list."});
+            }
+        }
+    });
 });
 
-app.get('/test', function (req, res){
-    console.log('get test');
-    console.log(req.query.offer_id);
-    console.log(req.query.transaction_id);
+app.post("/add_offer", checkAuth, function(req, res) {
+
+    var user = req.signedCookies.user_id;
+    var offer_links = req.body.offer_links;
+    var name = req.body.name;
+
+    if(!offer_links) {
+        console.log(err);
+        res.status(400);
+        res.json({error:"No offer link given."});
+        return;
+    }
+
+    if(!name) {
+        console.log(err);
+        res.status(400);
+        res.json({error:"No offer name given."});
+        return;
+    }
+
+    db.query('INSERT INTO offers (name, offer_link, user) VALUES (?, ?, ?);', [name, offer_link, user], function(err, docs) {
+        if(err) {
+            console.log(err);
+            res.status(500);
+            res.json({error:"Error adding new offer."});
+        }
+    });
+
+    res.status(200);
+    res.json({success:"Success"});
 });
 
 module.exports = app;
