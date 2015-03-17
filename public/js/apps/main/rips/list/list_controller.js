@@ -2,13 +2,18 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
   RipManager.module("RipsApp.List", function(List, RipManager, Backbone, Marionette, $, _){
     List.Controller = {
       listRips: function(criterion){
-        require(["apps/main/rips/list/list_model"], function(getRipsModel){
-        
-          var fetchingRips = RipManager.request("rips:getrips");
+        require(["apps/main/rips/list/list_model",
+                 "common/loading_view"], function(getRipsModel, LoadingView){
 
           var ripsListLayout = new RipsListView.RipsListLayout();
           ripsListLayout.render();
 
+          RipManager.mainLayout.mainRegion.show(ripsListLayout);
+
+          var loadingView = new LoadingView.Loading();
+          ripsListLayout.ripsTableRegion.show(loadingView);
+
+          var fetchingRips = RipManager.request("rips:getrips");
           $.when(fetchingRips).done(function(rips){
             
             var ripsListView = new RipsListView.Rips({
@@ -57,7 +62,7 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
             });
             
 
-            RipManager.mainLayout.mainRegion.show(ripsListLayout);
+            
             ripsListLayout.ripsTableRegion.show(ripsListView);
           });
         });

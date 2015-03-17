@@ -22,6 +22,8 @@ requirejs.config({
     // adminLTEapp: 'vendor/AdminLTE/app',
     // adminLTEdash: 'vendor/AdminLTE/dashboard',
     // adminLTEdemo: 'vendor/AdminLTE/demo',
+    eve: 'vendor/eve',
+    raphael: 'http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min',
     morris: '../plugins/morris/morris',
     datatablesjquery: '../plugins/datatables/jquery.dataTables',
     datatablesbootstrap: '../plugins/datatables/dataTables.bootstrap'
@@ -56,9 +58,13 @@ requirejs.config({
     parsley: {
       deps: ['jquery']
     },
-    // raphael: {
-    //   exports:'Raphael'
-    // },
+    eve: {
+      exports: ['eve']
+    },
+    raphael: {
+      deps: ['eve'],
+      exports:'Raphael'
+    },
     morris: {
       deps: ['jquery', 'raphael'],
       exports: "Morris"

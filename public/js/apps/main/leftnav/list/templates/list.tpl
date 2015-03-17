@@ -16,16 +16,16 @@
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
                         <li class="header">MAIN NAVIGATION</li>
-                        <li class="active">
-                            <a href="#dash">
+                        <!-- <li>
+                            <a class="leftnav-link">
                                 <i class="fa fa-dashboard"></i> <span>Overview</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#rips">
+                            <a class="leftnav-link">
                                 <i class="fa fa-heartbeat"></i> <span>Rips</span>
                             </a>
-                        </li>
+                        </li> -->
                         <!-- <li>
                             <a href="#">
                                 <i class="fa fa-bar-chart-o"></i> <span>Reports</span>

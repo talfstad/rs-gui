@@ -5,7 +5,7 @@ define(["app", "apps/main/leftnav/list/list_controller"], function(RipManager, L
         ListController.listLeftNav();
       },
       selectCurrent: function(current){
-        ListController.selectCurrent(current);
+        ListController.setActiveLeftNav(current);
       }
     };
 
@@ -17,9 +17,9 @@ define(["app", "apps/main/leftnav/list/list_controller"], function(RipManager, L
       API.selectCurrent("rips");
     });
 
-    
-
-
+    RipManager.commands.setHandler("set:active:leftnav", function(name){
+      ListController.setActiveLeftNav(name);
+    });
   });
 
   return RipManager.LeftNavApp;

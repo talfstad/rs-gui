@@ -47,7 +47,6 @@ define(["app"], function(RipManager){
     };
 
     var API = {
-      
       rips: function(args){
         require(["apps/main/rips/rips_app", "apps/main/leftnav/leftnav_app"], function(){
           checkMainViewRendered();
@@ -56,8 +55,9 @@ define(["app"], function(RipManager){
         });
       },
       dash: function(args){
-        require(["apps/main/dashboard/dashboard_app"], function(){
+        require(["apps/main/dashboard/dashboard_app", "apps/main/leftnav/leftnav_app"], function(){
           checkMainViewRendered();
+          RipManager.trigger("leftnav:rips");
           RipManager.trigger("dash:list");
         });
       }

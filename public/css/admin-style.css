@@ -99,11 +99,11 @@ p.featured {
 }
 
 #rips-table-container .rips-row-edit-highlight td{
-  background-color:#fcf8e3;
+  background-color:#dedede;
 }
 
 #rips-table-container .rips-row-edit-highlight td:hover {
-  background-color:#faf2cc;
+  background-color:#ccc;
 }
 
 
@@ -160,6 +160,10 @@ p.featured {
     border-top-right-radius: 0px;
 }
 
+.leftnav-link {
+  cursor: pointer;
+}
+
 /*.pagination > li > a {
   background: #444;
   color: #444;
@@ -181,3 +185,10 @@ p.featured {
   border: 1px solid #ffff00;
 }
 */
+
+
+.loading {
+  font-size: 20px;
+  width: 100%;
+  text-align: center;
+}

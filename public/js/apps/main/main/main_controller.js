@@ -3,13 +3,17 @@ define(["app","apps/main/rips/rips_app", "apps/main/leftnav/list/list_view", "ap
     List.Controller = {
       loadMainApp: function(criterion){
         require(["entities/rip", "apps/main/leftnav/list/list_view", "apps/main/dashboard/dashboard_app"], function(){
-          var leftNav = new LeftNavView.LeftNav();
+          
+
+          // var leftNav = new LeftNavView.LeftNav();
           
           RipManager.mainLayout = new MainLayout.Layout();
           RipManager.mainLayout.render();
-
+          
           RipManager.mainRegion.show(RipManager.mainLayout);
-          RipManager.mainLayout.leftNavRegion.show(leftNav);
+
+          RipManager.trigger("leftnav:list");
+          // RipManager.mainLayout.leftNavRegion.show(leftNav);
         });
       }
     }

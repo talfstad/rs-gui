@@ -42,16 +42,10 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
       },
 
       updateDataTable: function(e) {
-        //redraw the table to make sure it knows about hte new data
-        // var data = $("#rips-table").DataTable().row(this.$el).data();
-        // data[1] = this.model.attributes.redirect_rate;
-        // data[3] = this.model.attributes.replacement_links;
+        //update the grid with latest data
+        $("#rips-table").dataTable().fnUpdate(this.model.attributes.redirect_rate + "%", this._index, 1); //redirect rate
+        $("#rips-table").dataTable().fnUpdate("<a href='"+ this.model.attributes.replacement_links + "'>" + this.model.attributes.replacement_links + "</a>", this._index, 3); //replacement link
 
-        // $("#rips-table").DataTable().row(this.$el).data(data).draw();
-
-        //resort to preserve sort css *ugh*
-        // currentSort = $("#rips-table").dataTable().fnSettings().aaSorting[0];
-        // $("#rips-table").dataTable().fnSort([currentSort[0],currentSort[1]]); //col idx, asc/desc
       },
 
       highlightRow: function(e){
@@ -168,11 +162,7 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
     },
 
     onDomRefresh: function() {
-        // $('#rips-table').dataTable({
-        //   pagingType: simple_numbers
-        // });
-
-        $("#rips-table").DataTable({
+        $("#rips-table").dataTable({
           "deferRender": true,
           "aoColumnDefs": [
               { "sWidth": "100px", "aTargets": [0] },
@@ -180,8 +170,7 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
               { "sWidth": "300px", "aTargets": [3] },
               { "sWidth": "150px", "aTargets": [4] }
           ],
-          pagingType: "full_numbers",
-          "order": [[ 0, "desc" ]]
+          // "order": [[ 1, 'desc' ]] doesn't work...
           // iDisplayLength: 25
         });
         $("#rips-table").addClass("table table-bordered table-hover");

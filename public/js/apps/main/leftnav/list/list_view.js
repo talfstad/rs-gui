@@ -1,10 +1,28 @@
-define(["app","tpl!apps/main/leftnav/list/templates/list.tpl", "slimscroll", "treeview"],
-        function(RipManager, listTpl){
+define(["app","tpl!apps/main/leftnav/list/templates/list.tpl",
+        "tpl!apps/main/leftnav/list/templates/linkItem.tpl", "slimscroll", "treeview"],
+        function(RipManager, listTpl, linkTpl){
 
   RipManager.module("LeftNavApp.List.View", function(View, RipManager, Backbone, Marionette, $, _){
 
-    View.LeftNav = Marionette.ItemView.extend({
+    View.LeftNavItem = Marionette.ItemView.extend({
+      template: linkTpl,
+      tagName: "li",
+      events: {
+        'click a': "navigate"
+      },
+
+      navigate: function(e) {
+        e.preventDefault();
+        this.trigger("navigate", this.model);
+      }
+    });
+
+
+    View.LeftNav = Marionette.CompositeView.extend({
       template: listTpl,
+      className: "",
+      childView: View.LeftNavItem,
+      childViewContainer: "ul",
 
       onRender: function() {
         $(".skin-blue > #header-region .logo").css("background-color", "#222d32");
@@ -29,44 +47,44 @@ define(["app","tpl!apps/main/leftnav/list/templates/list.tpl", "slimscroll", "tr
          * 
          **/
         
-            //Get window height and the wrapper height
-            var height = $(window).height() - $("body > .header").height() - ($("body > .footer").outerHeight() || 0);
-            $(".wrapper").css("min-height", height + "px");
-            var content = $(".wrapper").height();
-            //If the wrapper height is greater than the window
-            if (content > height)
-                //then set sidebar height to the wrapper
-                $(".left-side, html, body").css("min-height", content + "px");
-            else {
-                //Otherwise, set the sidebar to the height of the window
-                $(".left-side, html, body").css("min-height", height + "px");
-            }
+        //Get window height and the wrapper height
+        var height = $(window).height() - $("body > .header").height() - ($("body > .footer").outerHeight() || 0);
+        $(".wrapper").css("min-height", height + "px");
+        var content = $(".wrapper").height();
+        //If the wrapper height is greater than the window
+        if (content > height)
+            //then set sidebar height to the wrapper
+            $(".left-side, html, body").css("min-height", content + "px");
+        else {
+            //Otherwise, set the sidebar to the height of the window
+            $(".left-side, html, body").css("min-height", height + "px");
+        }
         
         //Fire when wrapper is resized
         $(".wrapper").resize(function() {
-            //Get window height and the wrapper height
-            var height = $(window).height() - $("body > .header").height() - ($("body > .footer").outerHeight() || 0);
-            $(".wrapper").css("min-height", height + "px");
-            var content = $(".wrapper").height();
-            //If the wrapper height is greater than the window
-            if (content > height)
-                //then set sidebar height to the wrapper
-                $(".left-side, html, body").css("min-height", content + "px");
-            else {
-                //Otherwise, set the sidebar to the height of the window
-                $(".left-side, html, body").css("min-height", height + "px");
-            }
+          //Get window height and the wrapper height
+          var height = $(window).height() - $("body > .header").height() - ($("body > .footer").outerHeight() || 0);
+          $(".wrapper").css("min-height", height + "px");
+          var content = $(".wrapper").height();
+          //If the wrapper height is greater than the window
+          if (content > height)
+              //then set sidebar height to the wrapper
+              $(".left-side, html, body").css("min-height", content + "px");
+          else {
+              //Otherwise, set the sidebar to the height of the window
+              $(".left-side, html, body").css("min-height", height + "px");
+          }
 
                      //Make sure the body tag has the .fixed class
-        if (!$("body").hasClass("fixed")) {
-            return;
-        }
+          if (!$("body").hasClass("fixed")) {
+              return;
+          }
 
-        //Add slimscroll
-        $(".sidebar").slimscroll({
-            height: ($(window).height() - $(".header").height()) + "px",
-            color: "rgba(0,0,0,0.2)"
-        });
+          //Add slimscroll
+          $(".sidebar").slimscroll({
+              height: ($(window).height() - $(".header").height()) + "px",
+              color: "rgba(0,0,0,0.2)"
+          });
         });
 
         //Fix the fixed layout sidebar scroll bug
@@ -90,15 +108,8 @@ define(["app","tpl!apps/main/leftnav/list/templates/list.tpl", "slimscroll", "tr
             checkboxClass: 'icheckbox_minimal',
             radioClass: 'iradio_minimal'
         });
-
-
-
-
       }
     });
-
-
-
   });
 
   return RipManager.LeftNavApp.List.View;

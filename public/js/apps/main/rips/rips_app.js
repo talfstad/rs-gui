@@ -41,22 +41,7 @@ define(["app"], function(RipManager){
     checkAuth(API.listRips);
   });
 
-  // RipManager.on("rip:edit", function(args){
-  //   checkAuth(API.editRipSubmit, args);
-  // });
-
-  RipManager.on("rips:filter", function(criterion){
-    if(criterion){
-      RipManager.navigate("rips/filter/criterion:" + criterion);
-    }
-    else{
-      RipManager.navigate("rips");
-    }
-  });
-
-  
-
-
+ 
   var authEnabledAPI = {
     listRips: function(criterion){
       checkAuth(API.listRips);

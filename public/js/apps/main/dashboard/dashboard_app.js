@@ -14,6 +14,7 @@ define(["app"], function(RipManager){
   var executeAction = function(action, arg){
     RipManager.startSubApp("DashboardApp");
     action(arg);
+    RipManager.execute("set:active:header", "Daily Overview");
   };
 
   var checkAuth = function(callback) {
