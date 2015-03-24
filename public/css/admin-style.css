@@ -192,3 +192,23 @@ p.featured {
   width: 100%;
   text-align: center;
 }
+
+
+.bootstrap-dialog.type-primary .modal-header {
+  background-color: #222;
+}
+
+.bootstrap-dialog .bootstrap-dialog-title {
+  color: #fef966;
+}
+
+
+.close {
+    color: #fff; 
+    opacity: 1;
+}
+
+.close:hover {
+  color: #fff;
+}
+

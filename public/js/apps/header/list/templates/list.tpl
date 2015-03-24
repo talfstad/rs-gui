@@ -2,7 +2,7 @@
 
 
             <!-- Logo -->
-        <a href="index2.html" class="logo"><img src="../img/cjlogo.png" alt="Clickjacker Home" /></a>
+        <a href="#dash" class="logo"><img src="../img/cjlogo.png" alt="Clickjacker Home" /></a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top" role="navigation">
           <!-- Sidebar toggle button-->

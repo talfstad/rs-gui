@@ -47,7 +47,7 @@ define(["app", "tpl!apps/main/rips/common/rip-edit-form.tpl", "bootstrap-dialog"
             },
             {
               label: 'Update Rip',
-              cssClass: 'btn-success',
+              cssClass: 'btn-primary',
               hotkey: 13, //Enter key
               action: function(dialogRef) {
                   me.submitRipEdit();

@@ -174,6 +174,7 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
           // iDisplayLength: 25
         });
         $("#rips-table").addClass("table table-bordered table-hover");
+        $("#rips-table").dataTable().fnSort([[0, 'desc']])
       }
     });
   });

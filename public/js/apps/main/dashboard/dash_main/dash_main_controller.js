@@ -3,10 +3,19 @@ define(["app", "apps/main/dashboard/dash_main/dash_view"], function(RipManager, 
     Main.Controller = {
       
         listDash: function(criterion){
-          require(["apps/main/dashboard/models/overview_stats_model","apps/main/dashboard/models/overview_graph_model"], function(){
+          require(["common/loading_view", "apps/main/dashboard/models/overview_stats_model","apps/main/dashboard/models/overview_graph_model"], function(LoadingView){
             var numbersWithCommas = function(number) {
               return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
+
+            // var DashLayout = new DashListView.DashListLayout();
+            // DashLayout.render();
+
+            // RipManager.mainLayout.mainRegion.show(DashLayout);
+
+            //show loading
+            var loadingView = new LoadingView.Loading();
+            RipManager.mainLayout.mainRegion.show(loadingView);
 
             //get the overview data
             var fetchingOverviewStats = RipManager.request("dashboard:overviewStats");
