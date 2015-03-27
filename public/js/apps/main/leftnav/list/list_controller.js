@@ -19,12 +19,24 @@ define(["app", "apps/main/leftnav/list/list_view",
       },
 
       
-      setActiveLeftNav: function(headerUrl){
+      setActiveLeftNav: function(url){
         var links = RipManager.request("leftNav:links"); // get collection for links
-        var leftNavToSelect = links.find(function(header){ return header.get("url") === headerUrl; });
+
+        var leftNavToSelect = links.find(function(header){ return header.get("url") === url; });
         
-        // headerToSelect.addClass("active");
+        //iterate through all links turn
+        links.each(function(link){
+          if(link.get("url") === url) {
+            link.attributes.active = true;
+          } else {
+            link.attributes.active = false;
+          }
+        });
         links.trigger("reset");
+
+
+        // // headerToSelect.addClass("active");
+        // links.trigger("reset");
       }
     };
   });

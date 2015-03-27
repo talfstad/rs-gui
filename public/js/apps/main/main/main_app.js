@@ -2,13 +2,13 @@ define(["app"], function(RipManager){
   RipManager.module("MainApp", function(MainApp, RipManager, Backbone, Marionette, $, _){
     MainApp.startWithParent = false;
 
-    MainApp.onStart = function(){
-      console.log("starting MainApp");
-    };
+    // MainApp.onStart = function(){
+    //   console.log("starting MainApp");
+    // };
 
-    MainApp.onStop = function(){
-      console.log("stopping MainApp");
-    };
+    // MainApp.onStop = function(){
+    //   console.log("stopping MainApp");
+    // };
   });
 
   RipManager.module("Routers.MainApp", function(RipsAppRouter, RipManager, Backbone, Marionette, $, _){

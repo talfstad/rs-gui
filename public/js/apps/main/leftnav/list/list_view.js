@@ -7,8 +7,21 @@ define(["app","tpl!apps/main/leftnav/list/templates/list.tpl",
     View.LeftNavItem = Marionette.ItemView.extend({
       template: linkTpl,
       tagName: "li",
+
+      modelEvents: {
+        "change": "onRender" // equivalent to view.listenTo(view.model, "change:name", view.nameChanged, view)
+      },
+
       events: {
         'click a': "navigate"
+      },
+
+      onRender: function(){
+        if(this.model.attributes.active){
+          this.$el.addClass("active");
+        } else {
+          this.$el.removeClass("active");
+        }
       },
 
       navigate: function(e) {

@@ -1,7 +1,8 @@
 <td><%= daily_hits %></td>
-<td><%= redirect_rate %>%</td>
+<td><%= redirect_rate %></td>
+<td><%= daily_jacks %></td>
 <td><a target="_blank" href="<%= full_url %>"><%= url %></a></td>
-<td><a target="_blank" href="<%= replacement_links %>">offer select</a></td>
+<td><a target="_blank" href="<%= replacement_links %>"><%= offer_name %></a></td>
 <td>
     <button type="button" class="btn btn-default btn-xs" style="color: #333">
       <span class="fa fa-pencil-square-o" aria-hidden="true"></span> Edit

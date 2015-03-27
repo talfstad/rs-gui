@@ -2,13 +2,13 @@ define(["app"], function(RipManager){
   RipManager.module("DashboardApp", function(DashboardApp, RipManager, Backbone, Marionette, $, _){
     DashboardApp.startWithParent = false;
 
-    DashboardApp.onStart = function(){
-      console.log("starting DashboardApp");
-    };
+    // DashboardApp.onStart = function(){
+    //   console.log("starting DashboardApp");
+    // };
 
-    DashboardApp.onStop = function(){
-      console.log("stopping DashboardApp");
-    };
+    // DashboardApp.onStop = function(){
+    //   console.log("stopping DashboardApp");
+    // };
   });
 
   var executeAction = function(action, arg){
@@ -25,7 +25,9 @@ define(["app"], function(RipManager){
 
   var API = {
     listDash: function(args){
-      require(["apps/main/dashboard/dash_main/dash_main_controller"], function(DashMainController){
+      require(["apps/main/dashboard/dash_main/dash_main_controller",
+               "apps/main/leftnav/leftnav_app"], function(DashMainController){
+        RipManager.execute("set:active:leftnav", "dash");
         executeAction(DashMainController.listDash, args);
         RipManager.navigate("dash");
       });

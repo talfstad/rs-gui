@@ -1,7 +1,11 @@
 define(["app"], function(RipManager){
   RipManager.module("LeftNavApp.Model", function(Model, RipManager, Backbone, Marionette, $, _){
 
-    Model.leftNavLink = Backbone.Model.extend({});
+    Model.leftNavLink = Backbone.Model.extend({
+      defaults: {
+        active: false
+      }
+    });
 
     Model.leftNavLinkCollection = Backbone.Collection.extend({
       model: Model.leftNavLink
@@ -9,7 +13,7 @@ define(["app"], function(RipManager){
 
     var initializeLinks = function(){
       Model.links = new Model.leftNavLinkCollection([
-        { name: "Daily Overview", url: "dash", icon: "fa fa-dashboard", navigationTrigger: "dash:list" },
+        { name: "Dashboard", url: "dash", icon: "fa fa-dashboard", navigationTrigger: "dash:list" },
         { name: "Rips", url: "rips", icon: "fa fa-heartbeat", navigationTrigger: "rips:list" }
       ]);
     };

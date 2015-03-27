@@ -165,10 +165,12 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
         $("#rips-table").dataTable({
           "deferRender": true,
           "aoColumnDefs": [
-              { "sWidth": "100px", "aTargets": [0] },
-              { "sWidth": "100px", "aTargets": [1] },
-              { "sWidth": "300px", "aTargets": [3] },
-              { "sWidth": "150px", "aTargets": [4] }
+              { "sWidth": "80px", "aTargets": [0] },
+              { "sWidth": "120px", "aTargets": [1] },
+              { "sWidth": "90px", "aTargets": [2] },
+
+              { "sWidth": "300px", "aTargets": [4] },
+              { "sWidth": "150px", "bSortable": false, "aTargets": [5] }
           ],
           // "order": [[ 1, 'desc' ]] doesn't work...
           // iDisplayLength: 25

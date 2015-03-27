@@ -1,28 +1,65 @@
-define(["app", "tpl!apps/main/dashboard/dash_main/templates/dash.tpl", "morris"],
-function(RipManager, dashTpl){
+define(["app", "tpl!apps/main/dashboard/dash_main/templates/dash.tpl", 
+  "tpl!apps/main/dashboard/dash_main/templates/overview_dash_item.tpl", 
+  "tpl!apps/main/dashboard/dash_main/templates/overview_stats_graph.tpl", "morris"],
+function(RipManager, dashTpl, overviewDashItem, overviewStatsGraphTpl){
 
   RipManager.module("DashboardApp.List.View", function(View, RipManager, Backbone, Marionette, $, _){
 
-    View.Dash = Marionette.ItemView.extend({
+    //made this little fucker so that i can hopefully make sub views that use regions
+    View.DashListLayout = Marionette.LayoutView.extend({
       className: "right-side",
       template: dashTpl,
-      totalRippedHitsAreaGraph: null,
-      
-      modelEvents: {
-        // 'change': 'render'
+     
+      regions: {
+        overviewStat1Region: "#overview-stat-1",
+        overviewStat2Region: "#overview-stat-2",
+        overviewStat3Region: "#overview-stat-3",
+        overviewStat4Region: "#overview-stat-4",
+        overviewStatsGraph: "#overview-stats-graph",
+        overviewTotals: "#overview-totals"
+      }
+    });
+
+
+    View.OverviewDailyStatItem = Marionette.ItemView.extend({
+
+      initialize: function (attrs) {
+        this.options = attrs;
       },
 
-      events: {
-        // "click #logout-link": "logout"
+      // className: "right-side",
+      template: overviewDashItem,
+      
+      onDomRefresh: function() {
+        
       },
+
+      serializeData: function(){
+        return this.options;
+      }
+
+    });
+
+
+    View.overviewStatsGraph = Marionette.ItemView.extend({
+      template: overviewStatsGraphTpl,
+
+      totalRippedHitsAreaGraph: null,
 
       onDomRefresh: function() {
         //check if its null before making a call out
         if(!this.totalRippedHitsAreaGraph) {
           var data = [];
           var modelGraphData = this.options.totalRippedHitsGraph;
+          var modelGraphJacksData = this.options.totalJacksGraph;
+
           for(var i=0 ; i<modelGraphData.length ; i++) {
-            data.push({y: modelGraphData[i].attributes.day, item1: modelGraphData[i].attributes.hits});
+            data.push({
+              time: modelGraphData[i].attributes.day,
+              jacks: modelGraphJacksData[i].attributes.hits,
+              rippedHits: modelGraphData[i].attributes.hits
+              
+            });
           }
 
           //access the model to get the data
@@ -30,10 +67,10 @@ function(RipManager, dashTpl){
             element: 'ripped-hits-chart',
             resize: true,
             data: data,
-            xkey: 'y',
-            ykeys: ['item1'],
-            labels: ['Ripped Hits: '],
-            lineColors: ['#a0d0e0', '#3c8dbc'],
+            xkey: 'time',
+            ykeys: ['jacks', 'rippedHits'],
+            labels: ['Jacks: ', 'Ripped Hits: '],
+            lineColors: ['#3c8dbc', '#a0d0e0'],
             hideHover: 'auto'
           });
         }
@@ -41,13 +78,14 @@ function(RipManager, dashTpl){
 
       serializeData: function(){
         return {
-          overViewStatsModel: this.options.overViewStatsModel,
-          totalRippedHitsGraph: this.options.totalRippedHitsGraph
+          totalRippedHitsGraph: this.options.totalRippedHitsGraph,
+          modelGraphJacksData: this.options.totalJacksGraph
         };
       }
-
-
     });
+
+
+
   });
 
   return RipManager.DashboardApp.List.View;

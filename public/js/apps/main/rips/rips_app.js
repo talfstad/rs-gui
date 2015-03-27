@@ -2,13 +2,13 @@ define(["app"], function(RipManager){
   RipManager.module("RipsApp", function(RipsApp, RipManager, Backbone, Marionette, $, _){
     RipsApp.startWithParent = false;
 
-    RipsApp.onStart = function(){
-      console.log("starting RipsApp");
-    };
+    // RipsApp.onStart = function(){
+    //   console.log("starting RipsApp");
+    // };
 
-    RipsApp.onStop = function(){
-      console.log("stopping RipsApp");
-    };
+    // RipsApp.onStop = function(){
+    //   console.log("stopping RipsApp");
+    // };
   });
 
   var executeAction = function(action, arg){
@@ -25,8 +25,10 @@ define(["app"], function(RipManager){
 
   var API = {
     listRips: function(args){
-      require(["apps/main/rips/list/list_controller"], function(ListController){
+      require(["apps/main/rips/list/list_controller",
+               "apps/main/leftnav/leftnav_app"], function(ListController){
         executeAction(ListController.listRips, args);
+        RipManager.execute("set:active:leftnav", "rips");
         RipManager.navigate("rips");
       });
     },

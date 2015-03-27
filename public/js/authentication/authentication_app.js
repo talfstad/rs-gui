@@ -2,13 +2,13 @@ define(["app"], function(RipManager){
   RipManager.module("AuthenticationApp", function(AuthenticationApp, RipManager, Backbone, Marionette, $, _){
     AuthenticationApp.startWithParent = false;
 
-    AuthenticationApp.onStart = function(){
-      console.log("starting AuthenticationApp");
-    };
+    // AuthenticationApp.onStart = function(){
+    //   console.log("starting AuthenticationApp");
+    // };
 
-    AuthenticationApp.onStop = function(){
-      console.log("stopping AuthenticationApp");
-    };
+    // AuthenticationApp.onStop = function(){
+    //   console.log("stopping AuthenticationApp");
+    // };
   });
 
   RipManager.module("Routers.AuthenticationApp", function(AuthenticationAppRouter, RipManager, Backbone, Marionette, $, _){

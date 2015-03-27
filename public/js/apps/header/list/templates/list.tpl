@@ -4,11 +4,15 @@
             <!-- Logo -->
         <a href="#dash" class="logo"><img src="../img/cjlogo.png" alt="Clickjacker Home" /></a>
         <!-- Header Navbar: style can be found in header.less -->
-        <nav class="navbar navbar-static-top" role="navigation">
+        <nav class="navbar navbar-static-top" <% if(logged_in == false){ %>style="background-color: #222"<% } %> role="navigation">
+          
+            <% if(logged_in == true){ %>
           <!-- Sidebar toggle button-->
           <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
             <span class="sr-only">Toggle navigation</span>
           </a>
+
+            <% } %>
           
           <!-- Navbar Right Menu -->
           <div class="navbar-custom-menu">

@@ -46,6 +46,8 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
                     model.save(data, {success: saveRipSuccess, error: saveRipError});
                     view.closeDialog();
                   } else {
+                    //TODO This doesn't contain the actual previous attr right now
+                    //because of the validation (i think)
                     view.model.set(view.model.previousAttributes());
                   }
                   
@@ -62,8 +64,10 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
             });
             
 
+            try {
+              ripsListLayout.ripsTableRegion.show(ripsListView);
+            } catch(e){}
             
-            ripsListLayout.ripsTableRegion.show(ripsListView);
           });
         });
       }
