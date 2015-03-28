@@ -456,6 +456,37 @@ app.get('/ripped', checkAuth, function (req, res) {
     });
 });
 
+app.get('/new_ripped', checkAuth, function (req, res) {
+
+    var user = req.signedCookies.user_id;
+
+    var db_query = '';
+
+    if(req.signedCookies.admin == 'true') {
+        db_query = 'CALL get_new_ripped_data();';
+    }
+    else {
+        db_query = 'CALL get_new_ripped_data_by_user( \'' + user +'\');';
+    }
+
+    db.query(db_query, function(err, docs) {
+        if (err) {
+            console.log(err);
+            res.status(500);
+            res.json({error:"Internal server error looking up the new ripped stats."});
+        } else {          
+            if(docs[0]) {
+                res.status(200);
+                res.json(docs[0]);
+            }
+            else {
+                res.status(500);
+                res.json({error:"Internal server error looking up the new ripped stats."});
+            }
+        }
+    });
+});
+
 app.get('/lander_info', checkAuth, function (req, res) {
 
     var user = req.signedCookies.user_id;
@@ -732,6 +763,283 @@ app.put("/update_offer/:offer_id", checkAuth, function(req, res) {
 
     res.status(200);
     res.json({success:"Success"});
+});
+
+function createStagingPath(unique_zip_name, callback){
+    var error;
+
+    var unique_str = unique_zip_name.split('.')[0];
+
+    var staging_path = "/staging/" + unique_str;
+    var created_path =  base_clickjacker_dir + staging_path;
+
+    console.log("Creating staging path: " + created_path)
+
+    //make dir here
+    var mkdir_cmd = 'mkdir -p ' + created_path;
+    cmd.exec(mkdir_cmd, function (err, stdout, stderr) {
+        if(err) {
+            console.log(stderr);
+            error = "Server error making staging directory."
+        }
+        callback(created_path, error);
+    });
+}
+
+function stageFile(file_path, staging_path, zip_name, callback) {
+    var error;
+
+    //req.files.myFile.path
+
+    console.log("Copying " + file_path + " to " + staging_path + "/" + zip_name);
+
+    fs.rename(
+        file_path,
+        staging_path + "/" + zip_name,
+        function(err) {
+            if(err) {
+                console.log(err);
+                error = 'Server error writing file.'
+            }
+            callback(error);
+        }
+    );
+}
+
+function getLanderId(user, callback) {
+    var error;
+    var lander_id;
+
+    var lander_uuid = uuid.v1();
+
+    connection.query("CALL get_lander_id(?, ?);", [user, lander_uuid], function(err, docs) {
+        if(err) {
+            error = err;
+        }
+        else {
+            if(docs[0]) {
+                lander_id=docs[0][0].id;
+            } 
+            console.log("Created lander id: " + lander_id + " with UUID: " + lander_uuid);
+        }
+        callback(lander_id, lander_uuid, error)
+    });
+}
+
+function unzip(zip_path, index_name, zip_name, callback) {
+    var error;
+    var index_path_and_name;
+
+    var unzip_cmd = 'unzip -o ' + zip_path + "/" + zip_name + ' -d ' + zip_path;
+    var find_cmd = 'find ' + zip_path + ' -name \"' + index_name +'\"';
+    cmd.exec(unzip_cmd, function (err, stdout, stderr) {
+        if(!err) {
+            cmd.exec(find_cmd, function (err, stdout, stderr) {
+                var lines = stdout.split('\n');
+                if(lines.length == 1) {
+                    index_path_and_name = lines[0];
+                    callback(index_path_and_name, error)
+                }
+                else if (lines.length > 1){
+                    index_path_and_name = lines[0];
+                    console.log("Warning: more than one index file with name=" + index_name + ". Using first one...");
+                    callback(index_path_and_name, error)
+                }
+                else {
+                    error = "Index file not found."
+                    callback('', error)
+                }
+            });
+        }
+        else {
+            error = "Error unziping file";
+            cleanUpStaging(zip_path);
+            callback('', error);
+        }
+    });
+}
+
+function extractData(index_path_and_name, lander_uuid, callback) {
+    var error;
+
+    console.log('Extracting links from: ' + index_path_and_name);
+
+    fs.readFile(index_path_and_name, function(err, html) {
+        if(err) {
+            error = 'Error reading index file.';
+            callback(error);
+        }
+        else {
+            var $ = cheerio.load(html);
+
+            var links_str = "";
+            $('a').each(function(i, elem) {
+                links_str = links_str + elem.attribs.href + ",";
+            });
+
+            links_str = links_str.substring(0, links_str.length - 1); //remove trailing comma
+
+            connection.query("UPDATE lander_info SET links_list = ? WHERE (uuid = ?);", [links_str, lander_uuid], function(err2, docs) {
+                if(err2) {
+                    error = "Could not update links list for lander uuid = " + lander_uuid;
+                }
+                callback(error);
+            });
+        }
+    });  
+}
+
+function installLanderCode(staging_path, lander_uuid, callback) {
+    var error;
+    var find_cmd = 'find ' + staging_path + ' -name "*.js"';
+
+    console.log("Installing clickjacker...");
+
+    cmd.exec(find_cmd, function (err, stdout, stderr) {
+        var js_files = stdout.split('\n');
+        callback(error);
+    });
+
+}
+
+function rezipAndArchive(staging_path, zip_name, lander_uuid, user, callback) {
+    var error;
+
+    var archive_path = base_clickjacker_dir + "/public/archive/" + user + "/" + lander_uuid + "/";
+
+    var mkdir_cmd = "mkdir -p " + archive_path;
+    var zip_cmd = "cd " + staging_path + " && zip -r " + archive_path + zip_name + " *";
+
+    console.log("Archiving " + staging_path + "/* to " + archive_path + zip_name);
+
+    cmd.exec(mkdir_cmd, function (err1, stdout, stderr) {
+        if(err1) {
+            console.log(stderr);
+            error = "Error creating archive directory";
+            callback(archive_path + zip_name, error);
+        }
+
+        cmd.exec(zip_cmd, function (err2, stdout, stderr) {
+            if(err2) {
+                console.log(stderr);
+                error = "Error archiving zip file.";
+            }
+            connection.query("UPDATE lander_info SET archive_path = ? WHERE (uuid = ?);", [archive_path + zip_name, lander_uuid], function(err2, docs) {
+                if(err2) {
+                    error = "Could save archive path for lander uuid = " + lander_uuid;
+                }
+                callback(archive_path + zip_name, error);
+            });
+        });
+    });
+}
+
+function cleanUpStaging(staging_path, callback){
+    var error;
+    console.log("Cleaning up staging path: " + staging_path);
+
+    cmd.exec("rm -rf " + staging_path, function (err, stdout, stderr) {
+        if(err) {
+            error = "Could not clean up staging directory: " + staging_path;
+        }
+        callback(error);
+    });
+}
+
+app.post('/upload', checkAuth, function(req, res) {
+ 
+    var user = req.session.user_id;
+    var index_name = req.body.indexName;
+    var staging_path;                
+    var zip_name=req.files.myFile.originalname; 
+    var zip_path;
+    var lander_id;
+    var lander_uuid;
+    var index_path;
+    var index_path_and_name;
+
+    createStagingPath(req.files.myFile.name, function(staging_path, error) {
+        if(error) {
+            console.log(error);
+            res.status(500);
+            res.send(error);
+            return;
+        }
+        else {
+            zip_path=staging_path;
+        }
+
+        stageFile(req.files.myFile.path, staging_path, zip_name, function(error) {
+            if(error) {
+                console.log(error);
+                res.status(500);
+                res.send(error);
+                return;
+            }
+
+            unzip(staging_path, index_name, zip_name, function(index_file_and_path, error) {
+                if(error) {
+                    console.log(error);
+                    res.status(500);
+                    res.send(error);
+                    return;
+                }
+
+                getLanderId(user, function(lander_id, lander_uuid, error) {
+                    if(error) {
+                        console.log(error);
+                        res.status(500);
+                        res.send(error);
+                        return;
+                    }
+
+                    extractData(index_file_and_path, lander_uuid, function(error) {
+                        if(error) {
+                            console.log(error);
+                            res.status(500);
+                            res.send(error);
+                            return;
+                        }
+
+                        installLanderCode(staging_path, lander_uuid, function(error) {
+                            if(error) {
+                                console.log(error);
+                                res.status(500);
+                                res.send(error);
+                                return;
+                            }
+
+                            rezipAndArchive(staging_path, zip_name, lander_uuid, user, function(archive_path, error) {
+                                if(error) {
+                                    console.log(error);
+                                    res.status(500);
+                                    res.send(error);
+                                    return;
+                                }
+                                else {
+                                    cleanUpStaging(staging_path, function(error) {
+                                        if(error) {
+                                            console.log("Warning: " + error);
+                                        }
+                                        res.status(200);
+
+                                        var response = {
+                                          download: archive_path
+                                        };
+
+                                        res.send(response);
+                                    });
+                                }
+                            }); //rezipAndArchive
+                        }); //installLanderCode
+                    }); //extractData
+                }); //getLanderId
+            }); //unzip 
+        }); //stageFile
+   
+    }); //createStagingPath
+
+
 });
 
 module.exports = app;
