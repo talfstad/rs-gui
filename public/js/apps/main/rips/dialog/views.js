@@ -1,4 +1,4 @@
-define(["app", "tpl!apps/main/rips/common/rip-edit-form.tpl", "bootstrap-dialog", "backbone.syphon", "backbone-validation"], function(RipManager, RipEditFormTpl, BootstrapDialog){
+define(["app", "tpl!apps/main/rips/dialog/rip-edit-form.tpl", "bootstrap-dialog", "backbone.syphon", "backbone-validation"], function(RipManager, RipEditFormTpl, BootstrapDialog){
   RipManager.module("RipsApp.Common.View", function(View, RipManager, Backbone, Marionette, $, _){
 
       View.EditDialogForm = Marionette.ItemView.extend({

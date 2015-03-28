@@ -1,7 +1,7 @@
  <section class="content-header">
-    <h1>Rips <small> &mdash; A list of all the Rips</small></h1>
+    <h1>Offers <small> &mdash; A list of all the Offers</small></h1>
     <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-line-chart"></i> Rips</a></li>
+        <li><a href="#"><i class="fa fa-shopping-cart"></i> Offers</a></li>
     </ol>
 </section>
 
@@ -10,11 +10,11 @@
     <div class="col-xs-12">
       <div class="box">
         <div class="box-header">
-          <h3 class="box-title">Edit Rip Replacement Offers and Offer Redirect Rates</h3>
+          <h3 class="box-title">Edit Offers</h3>
         </div><!-- /.box-header -->
         <div class="box-body table-responsive">
-          <div id="rips-table-container" class="box-body">
-            <table id="rips-table"></table>
+          <div id="offers-table-container" class="box-body">
+            <table id="offers-table"></table>
           </div><!-- /.box-body -->
         </div><!-- /.box -->
       </div>

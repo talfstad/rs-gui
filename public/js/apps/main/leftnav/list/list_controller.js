@@ -1,28 +1,35 @@
 define(["app", "apps/main/leftnav/list/list_view",
-        "apps/main/leftnav/models/leftnav_model"], function(RipManager, View, leftNavModel){
+        "apps/main/leftnav/models/leftnav_model",
+        "apps/main/dashboard/dashboard_app",
+        "apps/main/offers/offers_app",
+        "apps/main/rips/rips_app"], function(RipManager, View, leftNavModel){
   RipManager.module("LeftNavApp.List", function(List, RipManager, Backbone, Marionette, $, _){
     List.Controller = {
       
+      leftNavView: null,
 
 
       listLeftNav: function(){
         var links = RipManager.request("leftNav:links"); // get collection for links
-        var leftNav = new View.LeftNav({collection: links});
+        this.leftNavView = new View.LeftNav({collection: links});
 
-        leftNav.on("childview:navigate", function(childView, model) {
-          var trigger = model.get("navigationTrigger");
-          RipManager.trigger(trigger);
+        this.leftNavView.on("childview:navigate", function(childView, model, child) {
+          if(child){
+            children = model.get("children");
+            var childModel = children[child];
+            RipManager.trigger(childModel.navigationTrigger);
+          } else {
+            var trigger = model.get("navigationTrigger");
+            RipManager.trigger(trigger);
+          }
         });
 
-        RipManager.mainLayout.leftNavRegion.show(leftNav);
-      
+        RipManager.mainLayout.leftNavRegion.show(this.leftNavView);    
       },
 
       
       setActiveLeftNav: function(url){
         var links = RipManager.request("leftNav:links"); // get collection for links
-
-        var leftNavToSelect = links.find(function(header){ return header.get("url") === url; });
         
         //iterate through all links turn
         links.each(function(link){
@@ -33,12 +40,10 @@ define(["app", "apps/main/leftnav/list/list_view",
           }
         });
         links.trigger("reset");
-
-
-        // // headerToSelect.addClass("active");
-        // links.trigger("reset");
+        this.leftNavView.onDomRefresh();
       }
     };
+ 
   });
 
   return RipManager.LeftNavApp.List.Controller;

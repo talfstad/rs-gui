@@ -16,32 +16,9 @@
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
                         <li class="header">MAIN NAVIGATION</li>
-                        <!-- <li>
-                            <a class="leftnav-link">
-                                <i class="fa fa-dashboard"></i> <span>Overview</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="leftnav-link">
-                                <i class="fa fa-heartbeat"></i> <span>Rips</span>
-                            </a>
-                        </li> -->
-                        <!-- <li>
-                            <a href="#">
-                                <i class="fa fa-bar-chart-o"></i> <span>Reports</span>
-                            </a>
-                        </li>
-                        <li class="treeview">
-                            <a href="#">
-                                <i class="fa fa-laptop"></i>
-                                <span>Landers</span>
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li><a href="pages/UI/general.html"><i class="fa fa-angle-double-right"></i> General</a></li>
-                                <li><a href="pages/UI/icons.html"><i class="fa fa-angle-double-right"></i> Add New</a></li>
-                            </ul>
-                        </li> -->
+                        
+
+
                         
                         
                     </ul>

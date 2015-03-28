@@ -7,6 +7,7 @@ define(["app","tpl!apps/main/leftnav/list/templates/list.tpl",
     View.LeftNavItem = Marionette.ItemView.extend({
       template: linkTpl,
       tagName: "li",
+      className: "treeview",
 
       modelEvents: {
         "change": "onRender" // equivalent to view.listenTo(view.model, "change:name", view.nameChanged, view)
@@ -26,7 +27,8 @@ define(["app","tpl!apps/main/leftnav/list/templates/list.tpl",
 
       navigate: function(e) {
         e.preventDefault();
-        this.trigger("navigate", this.model);
+        var child = $(e.currentTarget).attr("data-link");
+        this.trigger("navigate", this.model, child);
       }
     });
 
@@ -37,19 +39,11 @@ define(["app","tpl!apps/main/leftnav/list/templates/list.tpl",
       childView: View.LeftNavItem,
       childViewContainer: "ul",
 
-      onRender: function() {
-        $(".skin-blue > #header-region .logo").css("background-color", "#222d32");
-      },
 
       onDomRefresh: function() {
-        $("[data-widget='remove']").click(function() {
-            //Find the box parent        
-            var box = $(this).parents(".box").first();
-            box.slideUp();
-        });
 
         /* Sidebar tree view */
-        $(".sidebar .treeview").tree();
+        $(".sidebar .treeview").tree()
 
         /* 
          * Make sure that the sidebar is streched full height

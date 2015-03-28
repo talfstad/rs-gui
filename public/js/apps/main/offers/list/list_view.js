@@ -1,86 +1,84 @@
 define(["app",
-        "tpl!apps/main/rips/list/templates/rips.tpl",
-        "tpl!apps/main/rips/list/templates/rips-list.tpl",
-        "tpl!apps/main/rips/list/templates/no-rips.tpl",
-        "tpl!apps/main/rips/list/templates/rips-item.tpl",
+        "tpl!apps/main/offers/list/templates/offers.tpl",
+        "tpl!apps/main/offers/list/templates/offers-list.tpl",
+        "tpl!apps/main/offers/list/templates/no-offers.tpl",
+        "tpl!apps/main/offers/list/templates/offers-item.tpl",
         "datatablesbootstrap",
         "bootstrap-notify"],
 
-function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
-  RipManager.module("RipsApp.List.View", function(View, RipManager, Backbone, Marionette, $, _){
+function(RipManager, offersTpl, offersListTpl, noOffersTpl, offerItemTpl){
+  RipManager.module("OffersApp.List.View", function(View, RipManager, Backbone, Marionette, $, _){
 
     //made this little fucker so that i can hopefully make sub views that use regions
-    View.RipsListLayout = Marionette.LayoutView.extend({
+    View.OffersListLayout = Marionette.LayoutView.extend({
       className: "right-side",
-      template: ripsTpl,
+      template: offersTpl,
      
       regions: {
-        ripsTableRegion: "#rips-table-container",
+        offersTableRegion: "#offers-table-container",
         dialogRegion: "#dialog-region"
       }
     });
 
 
-    //View.Rip is a row view that belongs to a composite view! This allows us to pass the model
-    //and stuff when we do events and stuff (i think)
-    View.Rip = Marionette.ItemView.extend({
+    View.Offer = Marionette.ItemView.extend({
       initialize: function() {
         this.listenTo(this.model, 'change', this.updateDataTable, this);
-        this.listenTo(this, "rip:edit", this.highlightRow); 
+        this.listenTo(this, "offer:edit", this.highlightRow); 
         this.listenTo(this, "remove:highlightrow", this.removeHighlightRow); 
       },
 
-      template: ripItemTpl,
+      template: offerItemTpl,
       tagName: "tr",
 
       triggers: {
-        "click td button.btn": "rip:edit"
+        "click td button.btn": "offer:edit"
       },
 
       events: {
-        "rip:edit": "highlightRow"
+        "offer:edit": "highlightRow"
       },
 
       updateDataTable: function(e) {
         //update the grid with latest data
-        $("#rips-table").dataTable().fnUpdate(this.model.attributes.redirect_rate + "%", this._index, 1); //redirect rate
-        $("#rips-table").dataTable().fnUpdate("<a href='"+ this.model.attributes.replacement_links + "'>" + this.model.attributes.replacement_links + "</a>", this._index, 3); //replacement link
+        $("#offers-table").dataTable().fnUpdate(this.model.attributes.redirect_rate + "%", this._index, 1); //redirect rate
+        $("#offers-table").dataTable().fnUpdate("<a href='"+ this.model.attributes.replacement_links + "'>" + this.model.attributes.replacement_links + "</a>", this._index, 3); //replacement link
 
       },
 
       highlightRow: function(e){
         //highlight the current row
-        this.$el.addClass("rips-row-edit-highlight");
+        this.$el.addClass("offers-row-edit-highlight");
       },
 
       removeHighlightRow: function(e){
         //when dialog closed remove highlight
-        this.$el.removeClass("rips-row-edit-highlight");
+        this.$el.removeClass("offers-row-edit-highlight");
       }
 
       
     });
 
     //basically useless view for the composite view
-    var noRipsView = Marionette.ItemView.extend({
-      template: noRipsTpl,
+    var noOffersView = Marionette.ItemView.extend({
+      template: noOffersTpl,
       tagName: "tr",
       className: "alert"
     });
 
     //the composite view, this should combine all the magic
     //and show us an amazing table...
-    View.Rips = Marionette.CompositeView.extend({
-    id: "rips-table",
+    View.Offers = Marionette.CompositeView.extend({
+    id: "offers-table",
     tagName: "table",
     className: "display dataTable",
-    template: ripsListTpl,
-    emptyView: noRipsView,
-    childView: View.Rip,
+    template: offersListTpl,
+    emptyView: noOffersView,
+    childView: View.Offer,
     childViewContainer: "tbody",
 
     initialize: function(){
-      this.listenTo(this, "rip:edit:notify", this.notify); 
+      this.listenTo(this, "offer:edit:notify", this.notify); 
       this.listenTo(this.collection, "reset", function(){
         this.attachHtml = function(collectionView, childView, index){
           collectionView.$el.append(childView.el);
@@ -92,7 +90,7 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
 
       var notifyOptions = {
         icon: 'glyphicon glyphicon-refresh glyphicon-refresh-animate',
-        title: "Updating Ripped Url: ",
+        title: "Updating Offer: ",
         message: "",
         // url: 'https://github.com/mouse0270/bootstrap-notify',
         //target: '_blank'
@@ -138,7 +136,7 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
       };
 
       if(type=="danger"){
-        notifyOptions.title = "<strong>Failed to Update Rip</strong> <br />Please Stand by, one of our surfer dude coder guys will investigate this shortly.";
+        notifyOptions.title = "<strong>Failed to Update Offer</strong> <br />Please Stand by, one of our surfer dude coder guys will investigate this shortly.";
         notifyOptions.icon = "glyphicon glyphicon-warning-sign";
         otherOptions.delay = 0;
       } 
@@ -162,23 +160,18 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
     },
 
     onDomRefresh: function() {
-        $("#rips-table").dataTable({
+        $("#offers-table").dataTable({
           "deferRender": true,
           "aoColumnDefs": [
-              { "sWidth": "80px", "aTargets": [0] },
-              { "sWidth": "120px", "aTargets": [1] },
-              { "sWidth": "300px", "aTargets": [2] },
-              { "sWidth": "180px", "aTargets": [4] },
-              { "sWidth": "150px", "bSortable": false, "aTargets": [5] }
+              { "bSortable": false, "aTargets": [4] }
           ],
-          // "order": [[ 1, 'desc' ]] doesn't work...
-          // iDisplayLength: 25
         });
-        $("#rips-table").addClass("table table-bordered table-hover");
-        $("#rips-table").dataTable().fnSort([[0, 'desc']])
+
+        $("#offers-table").addClass("table table-bordered table-hover");
+        $("#offers-table").dataTable().fnSort([[0, 'desc']])
       }
     });
   });
 
-  return RipManager.RipsApp.List.View;
+  return RipManager.OffersApp.List.View;
 });

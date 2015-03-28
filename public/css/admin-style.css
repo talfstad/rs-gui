@@ -106,6 +106,14 @@ p.featured {
   background-color:#ccc;
 }
 
+#offers-table-container .offers-row-edit-highlight td{
+  background-color:#dedede;
+}
+
+#offers-table-container .offers-row-edit-highlight td:hover {
+  background-color:#ccc;
+}
+
 
 /* Used for small scrollbar on notifications */
 [data-notify="progressbar"] {

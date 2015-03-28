@@ -17,6 +17,7 @@ define(["app"], function(RipManager){
         // "rips(/filter/criterion::criterion)": "listDash",
         "dash": "dash",
         "rips": "rips",
+        "offers": "offers",
         "": "dash",
         ":notfound": "dash"
       }
@@ -60,6 +61,13 @@ define(["app"], function(RipManager){
           RipManager.trigger("leftnav:rips");
           RipManager.trigger("dash:list");
         });
+      },
+      offers: function(args){
+        require(["apps/main/offers/offers_app", "apps/main/leftnav/leftnav_app"], function(){
+          checkMainViewRendered();
+          RipManager.trigger("leftnav:offers");
+          RipManager.trigger("offers:list");
+        });
       }
     };
 
@@ -74,6 +82,9 @@ define(["app"], function(RipManager){
       },
       dash: function(criterion){
         checkAuth(API.dash);
+      },
+      offers: function(criterion){
+        checkAuth(API.offers);
       }
     };
 

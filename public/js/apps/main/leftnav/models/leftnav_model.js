@@ -13,8 +13,18 @@ define(["app"], function(RipManager){
 
     var initializeLinks = function(){
       Model.links = new Model.leftNavLinkCollection([
-        { name: "Dashboard", url: "dash", icon: "fa fa-dashboard", navigationTrigger: "dash:list" },
-        { name: "Rips", url: "rips", icon: "fa fa-heartbeat", navigationTrigger: "rips:list" }
+        { name: "Dashboard", url: "dash", icon: "fa fa-dashboard", children: false, navigationTrigger: "dash:list" },
+        { name: "Rips", url: "rips", icon: "fa fa-line-chart", children: false, navigationTrigger: "rips:list" },
+        { 
+          name: "Offers", 
+          url: "offers", 
+          icon: "fa fa-shopping-cart", 
+          navigationTrigger: "offers:list",
+          children: {
+            // offers_edit: { name: "Edit", url: "offers/edit", icon: "fa fa-edit", navigationTrigger: "offers:list" },
+            offers_new: { name: "New", url: "offers/new", icon: "fa fa-plus-square-o", navigationTrigger: "offers:list" }
+          }
+        }
       ]);
     };
 

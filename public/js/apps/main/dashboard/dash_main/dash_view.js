@@ -30,7 +30,7 @@ function(RipManager, dashTpl, overviewDashItem, overviewStatsGraphTpl){
       // className: "right-side",
       template: overviewDashItem,
       
-      onDomRefresh: function() {
+      onDomRefresh: function(){
         
       },
 
@@ -69,7 +69,7 @@ function(RipManager, dashTpl, overviewDashItem, overviewStatsGraphTpl){
             data: data,
             xkey: 'time',
             ykeys: ['jacks', 'rippedHits'],
-            labels: ['Jacks: ', 'Ripped Hits: '],
+            labels: ['Replacement Offers Shown: ', 'Ripped Hits: '],
             lineColors: ['#3c8dbc', '#a0d0e0'],
             hideHover: 'auto'
           });
