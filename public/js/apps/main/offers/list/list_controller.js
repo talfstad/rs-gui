@@ -33,7 +33,7 @@ define(["app", "apps/main/offers/list/list_view"], function(RipManager, OffersLi
             //it sets up some main things for the main app including left nav
             //the main layout, etc. TODO
             require(["apps/main/offers/list/edit_view"], function(EditOfferView){
-              offersListView.on("childview:offer:edit", function(viewTestTodo, args){
+              offersListView.on("childview:offer:edit", function(childView, args){
 
                 var model = args.model;
                 var view = new EditOfferView.Offer({
@@ -63,6 +63,10 @@ define(["app", "apps/main/offers/list/list_view"], function(RipManager, OffersLi
               });
             });
             
+            offersListView.on("childview:offer:delete", function(childView, model) {
+              //show a are you sure? dialog, on OK call destroy()
+              model.destroy();
+            });
 
             try {
               offersListLayout.offersTableRegion.show(offersListView);

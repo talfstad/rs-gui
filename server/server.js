@@ -689,7 +689,7 @@ app.post("/add_offer", checkAuth, function(req, res) {
     res.json({success:"Success"});
 });
 
-app.delete("/delete_offer/:id", checkAuth, function(req, res) {
+app.delete("/update_offer/:id", checkAuth, function(req, res) {
     var id = req.param("id");
     var user = req.signedCookies.user_id;
 

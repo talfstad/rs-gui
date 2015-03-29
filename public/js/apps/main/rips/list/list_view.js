@@ -42,10 +42,10 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
       },
 
       updateDataTable: function(e) {
-        //update the grid with latest data
-        $("#rips-table").dataTable().fnUpdate(this.model.attributes.redirect_rate + "%", this._index, 1); //redirect rate
-        $("#rips-table").dataTable().fnUpdate("<a href='"+ this.model.attributes.replacement_links + "'>" + this.model.attributes.replacement_links + "</a>", this._index, 3); //replacement link
-
+        var dt = $("#rips-table").dataTable();
+        //update the grid with latest data DONT REDRAW (4th param false)
+        dt.fnUpdate(this.model.attributes.redirect_rate, this._index, 1, false); //redirect rate
+        dt.fnUpdate("<a href='"+ this.model.attributes.replacement_links + "'>" + this.model.attributes.replacement_links + "</a>", this._index, 3, false); //replacement link
       },
 
       highlightRow: function(e){

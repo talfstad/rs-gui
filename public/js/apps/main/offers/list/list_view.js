@@ -3,10 +3,11 @@ define(["app",
         "tpl!apps/main/offers/list/templates/offers-list.tpl",
         "tpl!apps/main/offers/list/templates/no-offers.tpl",
         "tpl!apps/main/offers/list/templates/offers-item.tpl",
+        "bootstrap-dialog",
         "datatablesbootstrap",
         "bootstrap-notify"],
 
-function(RipManager, offersTpl, offersListTpl, noOffersTpl, offerItemTpl){
+function(RipManager, offersTpl, offersListTpl, noOffersTpl, offerItemTpl, BootstrapDialog){
   RipManager.module("OffersApp.List.View", function(View, RipManager, Backbone, Marionette, $, _){
 
     //made this little fucker so that i can hopefully make sub views that use regions
@@ -24,7 +25,8 @@ function(RipManager, offersTpl, offersListTpl, noOffersTpl, offerItemTpl){
     View.Offer = Marionette.ItemView.extend({
       initialize: function() {
         this.listenTo(this.model, 'change', this.updateDataTable, this);
-        this.listenTo(this, "offer:edit", this.highlightRow); 
+        this.listenTo(this, "offer:edit", this.highlightRow);
+        this.listenTo(this, "offer:delete:confirm", this.deleteOfferConfirm); 
         this.listenTo(this, "remove:highlightrow", this.removeHighlightRow); 
       },
 
@@ -32,23 +34,70 @@ function(RipManager, offersTpl, offersListTpl, noOffersTpl, offerItemTpl){
       tagName: "tr",
 
       triggers: {
-        "click td button.btn": "offer:edit"
+        "click td button.offer-edit": "offer:edit",
+        "click td button.offer-delete": "offer:delete:confirm"
       },
 
       events: {
-        "offer:edit": "highlightRow"
+        "offer:edit": "highlightRow",
+        "offer:delete:confirm": "deleteOfferConfirm"
       },
 
       updateDataTable: function(e) {
         //update the grid with latest data
-        $("#offers-table").dataTable().fnUpdate(this.model.attributes.redirect_rate + "%", this._index, 1); //redirect rate
-        $("#offers-table").dataTable().fnUpdate("<a href='"+ this.model.attributes.replacement_links + "'>" + this.model.attributes.replacement_links + "</a>", this._index, 3); //replacement link
+        $("#offers-table").dataTable().fnUpdate(this.model.attributes.name, this._index, 0, false); //offer name
+        $("#offers-table").dataTable().fnUpdate("<a href='"+ this.model.attributes.offer_link + "'>" + this.model.attributes.offer_link + "</a>", this._index, 1, false); //offer link
+        $("#offers-table").dataTable().fnUpdate("<a href='"+ this.model.attributes.website + "'>" + this.model.attributes.website + "</a>", this._index, 2, false); //admin URL
+        $("#offers-table").dataTable().fnUpdate(this.model.attributes.login, this._index, 3, false); //admin login username
 
       },
 
       highlightRow: function(e){
         //highlight the current row
         this.$el.addClass("offers-row-edit-highlight");
+      },
+
+      onDeleteDialogClose: function(){
+        this.$el.removeClass("offers-row-edit-highlight");
+      },
+
+      deleteOfferConfirm: function(e){
+          this.highlightRow();
+
+          var me = this;
+          this.render();
+
+          BootstrapDialog.show({
+            type: BootstrapDialog.TYPE_PRIMARY,
+            title: '<h5><strong>Offer Delete</strong></h5>',
+            message: '<p>Are you sure you want to delete this offer?</p>',
+            cssClass: 'login-dialog',
+            onhide: function(dialogRef){
+              me.onDeleteDialogClose();
+            },
+            buttons: [{
+              label: 'Close',
+              action: function(dialogRef) {
+                  me.onDeleteDialogClose();
+                  dialogRef.close();
+              }
+            },
+            {
+              label: 'Delete Offer',
+              cssClass: 'btn-primary',
+              hotkey: 13, //Enter key
+              action: function(dialogRef) {
+                  me.trigger("offer:delete", me.model); //actually delete offer
+                  me.onDeleteDialogClose();
+                  dialogRef.close();
+
+              }
+            }],
+            draggable: true
+          });
+        
+
+        
       },
 
       removeHighlightRow: function(e){

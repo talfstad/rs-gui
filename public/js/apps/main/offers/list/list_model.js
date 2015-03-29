@@ -8,16 +8,19 @@ define(["app"], function(RipManager){
       },
 
       defaults: {
-        "id": 0,
-        "external_id": 0,
-        "name": "",
-        "offer_link": "",
-        "website": "",
-        "login": "",
-        "user": ""
+        // "id": 0,
+        // "external_id": 0,
+        // "name": "",
+        // "offer_link": "",
+        // "website": "",
+        // "login": "",
+        // "user": ""
       },
 
       validation: {
+        name: {
+          required: true
+        },
         offer_link: {
             required: true
         },
