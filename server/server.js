@@ -646,7 +646,7 @@ app.get('/offers', checkAuth, function (req, res) {
     });
 });
 
-app.post("/add_offer", checkAuth, function(req, res) {
+app.post("/update_offer", checkAuth, function(req, res) {
     var user = req.signedCookies.user_id;
     var offer_link = req.body.offer_link;
     var name = req.body.name;

@@ -96,5 +96,5 @@ define(["app"], function(RipManager){
     });
    
   });
-
+  return RipManager.GetOffers;
 });

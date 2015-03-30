@@ -29,6 +29,11 @@ define(["app"], function(RipManager){
       require(["apps/main/offers/edit/edit_controller"], function(EditController){
         executeAction(EditController.submitEdit, args);
       });
+    },
+    addOffer: function(args){
+      require(["apps/main/offers/new/new_controller"], function(NewController){
+        executeAction(NewController.addOffer, args);
+      });
     }
   };
 
@@ -36,6 +41,9 @@ define(["app"], function(RipManager){
     checkAuth(API.listOffers);
   });
 
+  RipManager.on("offers:new", function(){
+    checkAuth(API.addOffer);
+  });
  
   var authEnabledAPI = {
     listOffers: function(criterion){

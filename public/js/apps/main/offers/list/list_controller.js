@@ -20,6 +20,12 @@ define(["app", "apps/main/offers/list/list_view"], function(RipManager, OffersLi
               collection: offers
             });
 
+
+            //add new offer into the grid
+            RipManager.on("offer:new:add", function(model){
+              offers.add(model);
+            });
+
             var saveOfferSuccess = function(model, message, other) {
               offersListView.trigger("offer:edit:notify", message.success, "success");
             };

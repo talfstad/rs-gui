@@ -22,7 +22,7 @@ define(["app"], function(RipManager){
           navigationTrigger: "offers:list",
           children: {
             // offers_edit: { name: "Edit", url: "offers/edit", icon: "fa fa-edit", navigationTrigger: "offers:list" },
-            offers_new: { name: "New", url: "offers/new", icon: "fa fa-plus-square-o", navigationTrigger: "offers:list" }
+            offers_new: { name: "New", url: "offers/new", icon: "fa fa-plus-square-o", navigationTrigger: "offers:new" }
           }
         }
       ]);
