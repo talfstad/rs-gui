@@ -38,7 +38,15 @@ define(["marionette", "authentication/session/user_model"], function(Marionette,
         "apps/main/main/main_app",
         "authentication/authentication_app"], function () {
         
-        Backbone.history.start();
+      if(history.pushState) {
+        Backbone.history.start({
+          pushState: true
+        });
+      } else {
+        Backbone.history.start({
+          pushState: false
+        });
+      }
 
         //CSRF Protection here. Adding to all calls as a prefilter
         $.ajaxPrefilter(function(options, originalOptions, jqXHR) {

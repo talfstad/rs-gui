@@ -58,9 +58,7 @@ function checkAuth(req, res, next){
   });
 };
 
-app.get("/", function(req, res) {
-    res.render('index', { csrfToken: req.csrfToken() });
-});
+
 
 app.get("/api/rips", checkAuth, function(req, res, next) {
     db.query("select ripped.id, ripped.hits, ripped.url, ripped.links_list, ripped.replacement_links, pulse.period_start, pulse.rate from ripped, pulse where pulse.url = ripped.url ORDER BY rate DESC, period_start DESC", [] , function(err, rows) {
@@ -616,7 +614,7 @@ app.put("/update_ripped_url_by_offer_id/:ripped_id", checkAuth, function(req, re
     res.json({success:"Success"});
 });
 
-app.get('/offers', checkAuth, function (req, res) {
+app.get('/get_offers', checkAuth, function (req, res) {
     
     var user = req.signedCookies.user_id;
     var db_query = '';
@@ -1040,6 +1038,13 @@ app.post('/upload', checkAuth, function(req, res) {
     }); //createStagingPath
 
 
+});
+
+
+
+
+app.get("*", function(req, res) {
+    res.render('index', { csrfToken: req.csrfToken() });
 });
 
 module.exports = app;

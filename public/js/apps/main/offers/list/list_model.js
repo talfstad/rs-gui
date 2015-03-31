@@ -35,7 +35,7 @@ define(["app"], function(RipManager){
     });
 
     GetOffers.OfferCollection = Backbone.Collection.extend({
-      url: "/offers",
+      url: "/get_offers",
       model: GetOffers.Offer
     });
 
