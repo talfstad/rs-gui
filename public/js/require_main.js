@@ -8,6 +8,7 @@ requirejs.config({
     "bootstrap-dialog": "vendor/bootstrap-dialog",
     bootstrap: "lib/bootstrap/dist/js/bootstrap.min",
     "bootstrap-notify": "vendor/bootstrap-notify",
+    "bootstrap-select": "../plugins/bootstrap-select/dist/js/bootstrap-select",
     jquery: "lib/jquery/dist/jquery",
     "jquery-ui": "lib/jquery-ui/jquery-ui",
     json2: "lib/json2/json2",
@@ -30,6 +31,9 @@ requirejs.config({
   },
 
   shim: {
+    "bootstrap-select": {
+      deps: ["jquery", "bootstrap"]
+    },
     "bootstrap-dialog": {
       deps: ["jquery", "underscore","backbone", "bootstrap"],
       exports: ['BootstrapDialog']

@@ -581,6 +581,7 @@ app.put("/update_ripped_url_by_offer_id/:ripped_id", checkAuth, function(req, re
     var ripped_id = req.param("ripped_id");
     var user = req.signedCookies.user_id;
     var offer_id = req.body.offer_id;
+    var redirect_rate = req.body.redirect_rate;
 
     if(req.signedCookies.admin == 'true') {
         user = 'admin';
@@ -602,7 +603,15 @@ app.put("/update_ripped_url_by_offer_id/:ripped_id", checkAuth, function(req, re
         return;
     }
 
-    db.query('CALL update_ripped_url_by_offer_id(?,?,?);', [offer_id, ripped_id, user], function(err, docs) {
+    if(!redirect_rate) {
+        var err = "No redirect rate given.";
+        console.log(err);
+        res.status(400);
+        res.json({error:err});
+        return;
+    }
+
+    db.query('CALL update_ripped_url_by_offer_id(?,?,?,?);', [offer_id, redirect_rate, ripped_id, user], function(err, docs) {
         if(err) {
             console.log(err);
             res.status(500);

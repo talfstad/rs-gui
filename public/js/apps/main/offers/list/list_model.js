@@ -1,5 +1,10 @@
 define(["app"], function(RipManager){
   RipManager.module("GetOffers", function(GetOffers, RipManager, Backbone, Marionette, $, _){
+    GetOfferList = Backbone.Model.extend({
+      urlRoot: ""
+    });
+
+
     GetOffers.Offer = Backbone.Model.extend({
       urlRoot: "/update_offer",
 

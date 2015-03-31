@@ -1,4 +1,4 @@
-define(["app", "tpl!apps/main/rips/dialog/rip-edit-form.tpl", "bootstrap-dialog", "backbone.syphon", "backbone-validation"], function(RipManager, RipEditFormTpl, BootstrapDialog){
+define(["app", "tpl!apps/main/rips/dialog/rip-edit-form.tpl", "bootstrap-dialog", "backbone.syphon", "backbone-validation", "bootstrap-select"], function(RipManager, RipEditFormTpl, BootstrapDialog){
   RipManager.module("RipsApp.Common.View", function(View, RipManager, Backbone, Marionette, $, _){
 
       View.EditDialogForm = Marionette.ItemView.extend({
@@ -57,9 +57,16 @@ define(["app", "tpl!apps/main/rips/dialog/rip-edit-form.tpl", "bootstrap-dialog"
           });
         },
 
+        onRender: function() {
+          this.$el.find(".offer-select").val(this.model.attributes.offer_id).selectpicker('render');
+
+        },
+
         submitRipEdit: function() {
           var data = Backbone.Syphon.serialize(this);
           data.id = this.model.attributes.id;
+          data.offer_name = this.options.offerList.get(data.offer_id).attributes.name;
+          data.replacement_links = this.options.offerList.get(data.offer_id).attributes.offer_link;
           this.model.set(data);
           this.trigger("rip:edit:submit", data);
         },
@@ -73,6 +80,13 @@ define(["app", "tpl!apps/main/rips/dialog/rip-edit-form.tpl", "bootstrap-dialog"
           // See: http://thedersen.com/projects/backbone-validation/#using-form-model-validation/unbinding
           Backbone.Validation.unbind(this);
           return Backbone.View.prototype.remove.apply(this, arguments);
+        },
+
+        serializeData: function(){
+          return {
+            model: this.model.toJSON(),
+            offerList: this.options.offerList.toJSON()
+          };
         }
 
         

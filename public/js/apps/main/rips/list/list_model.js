@@ -1,7 +1,7 @@
 define(["app"], function(RipManager){
   RipManager.module("GetRips", function(GetRips, RipManager, Backbone, Marionette, $, _){
     GetRips.Rip = Backbone.Model.extend({
-      urlRoot: "/update_ripped_url",
+      urlRoot: "/update_ripped_url_by_offer_id",
 
       events: {
 
@@ -14,6 +14,8 @@ define(["app"], function(RipManager){
         "uuid": "",
         "url": "",
         "hits": 0,
+        "offer_id": "",
+        "offer_name": "",
         "full_url": "",
         "replacement_links": "",
         "split_test_links": null,
@@ -28,11 +30,14 @@ define(["app"], function(RipManager){
 
       validation: {
         redirect_rate: {
-            required: true,
-            range: [0, 100]
+          required: true,
+          range: [0, 100]
         },
-        replacement_links: {
-            required: true
+        offer_name: {
+          required: true
+        },
+        offer_id: {
+          required: true  
         }
       }
 
