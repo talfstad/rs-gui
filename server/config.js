@@ -1,6 +1,8 @@
 module.exports = {
   
   port: 3000,
+
+  ssl: false,
   
   sessionSecret: 'bb-login-secret',
   
@@ -10,8 +12,8 @@ module.exports = {
 
   //DB Connection information
   dbConnectionInfo: {
-    host : '54.187.184.91',
-    //host : 'localhost',
+    //host : '54.149.38.119',
+    host : 'localhost',
     user : 'root',
     password : 'derekisfat',
     database : 'domains_dev'

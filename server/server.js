@@ -43,6 +43,18 @@ app.engine('html', require('hbs').__express);
 app.use(express.static(__dirname + '/../public'));
 app.use(express.csrf());
 
+
+if(config.ssl) {
+    app.use(function(req, res, next) {
+      if(!req.secure) {
+        return res.redirect(['https://', req.get('Host'), req.url].join(''));
+      }
+      next();
+    });
+}
+
+
+
 //app.use(app.router);
 
 var db = mysql.createConnection(config.dbConnectionInfo);
