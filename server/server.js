@@ -696,16 +696,17 @@ app.post("/update_offer", checkAuth, function(req, res) {
         login = '';
     }
 
+    var id = null;
     db.query('INSERT INTO offers (name, offer_link, user, website, login) VALUES (?,?,?,?,?);', [name, offer_link, user, website, login], function(err, docs) {
         if(err) {
             console.log(err);
             res.status(500);
             res.json({error:"Error adding new offer."});
+        } else {
+            res.status(200);
+            res.json({id: docs.insertId});
         }
     });
-
-    res.status(200);
-    res.json({success:"Success"});
 });
 
 app.delete("/update_offer/:id", checkAuth, function(req, res) {

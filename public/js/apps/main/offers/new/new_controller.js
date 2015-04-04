@@ -14,7 +14,7 @@ define(["app", "apps/main/offers/new/new_view",
 
           var addOfferSuccess = function(model, message, other) {
             RipManager.trigger("offer:new:add", model);
-            view.trigger("offer:new:notify", message.success, "success", model);
+            view.trigger("offer:new:notify", "Success", "success", model);
           };
 
           var addOfferError = function(model, message, other) {
