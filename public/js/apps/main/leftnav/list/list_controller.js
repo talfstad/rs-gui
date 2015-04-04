@@ -40,7 +40,7 @@ define(["app", "apps/main/leftnav/list/list_view",
           }
         });
         links.trigger("reset");
-        this.leftNavView.onDomRefresh();
+        // this.leftNavView.onDomRefresh();
       }
     };
  
