@@ -2,8 +2,6 @@ module.exports = {
   
   port: 3000,
 
-  ssl: false,
-  
   sessionSecret: 'bb-login-secret',
   
   cookieSecret: 'bb-login-secret',
