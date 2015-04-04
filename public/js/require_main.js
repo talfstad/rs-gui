@@ -24,7 +24,7 @@ requirejs.config({
     // adminLTEdash: 'vendor/AdminLTE/dashboard',
     // adminLTEdemo: 'vendor/AdminLTE/demo',
     eve: 'vendor/eve',
-    raphael: 'http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min',
+    raphael: 'vendor/raphael-min',
     morris: '../plugins/morris/morris',
     datatablesjquery: '../plugins/datatables/jquery.dataTables',
     datatablesbootstrap: '../plugins/datatables/dataTables.bootstrap'
