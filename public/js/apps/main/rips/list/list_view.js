@@ -27,7 +27,8 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
       initialize: function() {
         this.listenTo(this.model, 'change', this.updateDataTable, this);
         this.listenTo(this, "rip:edit", this.highlightRow); 
-        this.listenTo(this, "remove:highlightrow", this.removeHighlightRow); 
+        this.listenTo(this, "remove:highlightrow", this.removeHighlightRow);
+
       },
 
       template: ripItemTpl,
@@ -41,7 +42,7 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
         "rip:edit": "highlightRow"
       },
 
-      updateDataTable: function(e) {
+      updateDataTable: function(e){
         var dt = $("#rips-table").dataTable();
         //update the grid with latest data DONT REDRAW (4th param false)
         dt.fnUpdate(this.model.attributes.redirect_rate, this._index, 1, false); //redirect rate
@@ -56,6 +57,10 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
       removeHighlightRow: function(e){
         //when dialog closed remove highlight
         this.$el.removeClass("rips-row-edit-highlight");
+      },
+
+      templateHelpers: {
+         admin: RipManager.session.get("admin")
       }
 
       

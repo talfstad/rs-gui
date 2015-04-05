@@ -18,6 +18,9 @@ define(["app"], function(RipManager){
               RipManager.trigger("authentication:login");
             } else {
               RipManager.session.set({logged_in: true});
+              if(statusCollection.models[0].attributes.user.admin) {
+                RipManager.session.set({admin: true});
+              }
               callback(args);
             }
           });

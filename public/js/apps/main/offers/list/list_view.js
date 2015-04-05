@@ -48,6 +48,10 @@ function(RipManager, offersTpl, offersListTpl, noOffersTpl, offerItemTpl, Bootst
         "offer:delete:confirm": "deleteOfferConfirm"
       },
 
+      templateHelpers: {
+         admin: RipManager.session.get("admin")
+      },
+
      
 
       highlightRow: function(e){
