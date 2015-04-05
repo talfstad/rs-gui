@@ -8,31 +8,38 @@ var express = require("express")
   , _ = require("underscore")
   , config = require("./config")
   , utils = require("./utils")
-  , validator = require("validator")
   , bcrypt = require("bcrypt-nodejs")
   , randomstring = require("randomstring")
-  , urlParser = require("url")
-  , methodOverride = require("method-override")
-  , bodyParser = require("body-parser")
   , fs = require("node-fs")
-  , mustache = require("mustache")
-  // , pause = require('connect-pause')
   , moment = require('moment');
+
+//new middlewares
+var logger = require('morgan');
+var methodOverride = require('method-override');
+var session = require('express-session');
+var bodyParser = require('body-parser');
+var multer = require('multer');
+var errorHandler = require('errorhandler');
+var cookieParser = require('cookie-parser');
+var cookieSession = require('cookie-session');
+var csrf = require('csurf');
 
 app.use(function logErrors(err, req, res, next) {
   console.error(err.stack);
   next(err);
 });
 
-// Compression (gzip)
-app.use(express.compress() );
-app.use(express.bodyParser());
-app.use(express.urlencoded({extended:true}));            // Needed to parse POST data sent as JSON payload
+app.use(methodOverride());
+app.use(logger('dev'));
+app.use(cookieParser());
+app.use(bodyParser.json());   
+app.use(bodyParser.urlencoded({ extended: true }));  // parse application/x-www-form-urlencoded
 app.use(bodyParser.json());
+app.use(multer());
 
 // Cookie config
-app.use( express.cookieParser( config.cookieSecret ) );           // populates req.signedCookies
-app.use( express.cookieSession( config.sessionSecret ) );         // populates req.session, needed for CSRF
+app.use( cookieParser( config.cookieSecret ) );           // populates req.signedCookies
+app.use( cookieSession( config.sessionSecret ) );         // populates req.session, needed for CSRF
 
 // We need serverside view templating to initially set the CSRF token in the <head> metadata
 // Otherwise, the html could just be served statically from the public directory
@@ -41,7 +48,7 @@ app.set('views', __dirname + '/' );
 app.engine('html', require('hbs').__express);
 
 app.use(express.static(__dirname + '/../public'));
-app.use(express.csrf());
+app.use(csrf());
 
 var db = mysql.createConnection(config.dbConnectionInfo);
 db.connect();
