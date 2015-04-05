@@ -41,6 +41,7 @@ define(["app", "apps/main/dashboard/dash_main/dash_view"], function(RipManager, 
               //create views
               var dailyRippedHitsView = new DashView.OverviewDailyStatItem({
                 value: model.models[0].attributes.total_daily_ripped_hits,
+                total: model.models[0].attributes.total_ripped_hits + " Total Ripped Hits",
                 color: "bg-aqua",
                 icon: "ion ion-stats-bars",
                 title: "Ripped Hits Today"
@@ -48,6 +49,7 @@ define(["app", "apps/main/dashboard/dash_main/dash_view"], function(RipManager, 
 
               var dailyReplacementOffersView = new DashView.OverviewDailyStatItem({
                 value: model.models[0].attributes.total_daily_jacks,
+                total: model.models[0].attributes.total_jacks + " Total Replacement Offers Shown",
                 color: "bg-yellow",
                 icon: "ion ion-social-usd",
                 title: "Replacement Offers Shown"
@@ -55,6 +57,7 @@ define(["app", "apps/main/dashboard/dash_main/dash_view"], function(RipManager, 
 
               var dailyRipsView = new DashView.OverviewDailyStatItem({
                 value: model.models[0].attributes.total_daily_rips,
+                total: model.models[0].attributes.total_rips_100 + " Total Rips Over 100 Hits",
                 color: "bg-red",
                 icon: "ion ion-person-add",
                 title: "Rips Today"
@@ -62,6 +65,7 @@ define(["app", "apps/main/dashboard/dash_main/dash_view"], function(RipManager, 
 
               var dailyRegisteredUserHitsView = new DashView.OverviewDailyStatItem({
                 value: model.models[0].attributes.total_daily_registered_hits,
+                total: model.models[0].attributes.total_registered_hits + " Total Registered Hits",
                 color: "bg-green",
                 icon: "ion ion-pie-graph",
                 title: "Registered User Hits Today"

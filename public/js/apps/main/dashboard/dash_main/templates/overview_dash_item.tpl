@@ -3,5 +3,9 @@
   <div class="info-box-content">
     <span class="info-box-text"><%= title %></span>
     <span class="info-box-number"><%= value %></span>
+    <div class="progress"></div>
+    <span class="progress-description">
+      <%= total %>
+    </span>
   </div><!-- /.info-box-content -->
 </div><!-- /.info-box -->

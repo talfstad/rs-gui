@@ -29,7 +29,7 @@
               <!-- Tabs within a box -->
               <ul class="nav nav-tabs pull-right">
                   <li class="active"><a href="#ripped-hits-chart" data-toggle="tab">Ripped Hits & Jacks</a></li> 
-                  <li class="pull-left header"><i class="fa fa-inbox"></i> Total Ripped Hits And Jacks for the last Month</li>
+                  <li class="pull-left header"><i class="fa fa-line-chart"></i> Total Ripped Hits And Jacks for the last Month</li>
               </ul>
               <div id="overview-stats-graph" class="tab-content no-padding"></div>
           </div><!-- /.nav-tabs-custom -->
