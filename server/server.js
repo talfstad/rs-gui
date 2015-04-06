@@ -63,8 +63,6 @@ function checkAuth(req, res, next){
   });
 };
 
-
-
 app.get("/api/rips", checkAuth, function(req, res, next) {
     db.query("select ripped.id, ripped.hits, ripped.url, ripped.links_list, ripped.replacement_links, pulse.period_start, pulse.rate from ripped, pulse where pulse.url = ripped.url ORDER BY rate DESC, period_start DESC", [] , function(err, rows) {
         if(rows.length >= 1) {
@@ -103,6 +101,8 @@ app.post("/api/auth/login", function(req, res) {
                 } else {
                     res.cookie('user_id', row.user, { signed: true, maxAge: config.cookieMaxAge  });
                     res.cookie('auth_token', row.auth_token, { signed: true, maxAge: config.cookieMaxAge  });
+                    res.cookie('img_icon', row.img_icon, { signed: true, maxAge: config.cookieMaxAge  });
+                    res.cookie('username', row.username, { signed: true, maxAge: config.cookieMaxAge  });
 
                     if(row.admin == 1) {
                         res.cookie('admin', 'true', { signed: true, maxAge: config.cookieMaxAge  });
@@ -361,6 +361,57 @@ app.get('/ripped_hits_for_n_days', checkAuth, function (req, res) {
     }
 });
 
+app.get('/registered_hits_for_n_days', checkAuth, function (req, res) {
+
+    var days = req.query.n;
+    var user = req.signedCookies.user_id;
+
+    var ret_arr = [];
+    var ret_obj = [];
+
+    var db_query = '';
+    if(req.signedCookies.admin == 'true') {
+        db_query = 'SELECT hits_list FROM daily_stats_archive WHERE registered = 1;';
+    }
+    else {
+        db_query = 'SELECT hits_list FROM daily_stats_archive WHERE user = \'' + user + '\' AND registered = 1;';
+    }
+
+    if(days > 0) {
+        db.query(db_query, function(err, docs) {
+            if (err) {
+                console.log(err);
+                res.status(500);
+                res.json({error: "Internal server error looking up the hits list from archive stats."});
+            } else {       
+
+                for (var i = 0; i < docs.length; i++) {
+                    var hits_list = docs[i].hits_list;
+                    var hits_arr = hits_list.split(',');
+                    hits_arr = hits_arr.reverse();
+                    for (var j = 0; j < days; j++) {
+                        if(!ret_arr[j]) {
+                            ret_arr[j] = 0;
+                        }
+                        if(hits_arr[j]) {
+                            ret_arr[j] += Number(hits_arr[j]);
+                        }
+                    };
+                };
+                for (var i = 0; i < ret_arr.length; i++) {
+                    var d = moment().subtract(i + 1, 'days').format('YYYY-MM-DD');
+                    ret_obj[i] = {day:d, hits:ret_arr[i]};
+                };
+                res.status(200);
+                res.json(ret_obj);
+            }
+        });
+    } else {
+        res.status(400);
+        res.json({error: "Days must be greater than 0."});
+    }
+});
+
 app.get('/jacks_for_n_days', checkAuth, function (req, res) {
 
     var days = req.query.n;
@@ -404,6 +455,49 @@ app.get('/jacks_for_n_days', checkAuth, function (req, res) {
                 };
                 res.status(200);
                 res.json(ret_obj);
+            }
+        });
+    } else {
+        res.status(400);
+        res.json({error: "Days must be greater than 0."});
+    }
+});
+
+app.get('/rips_for_n_days', checkAuth, function (req, res) {
+
+    var days = req.query.n;
+    var user = req.signedCookies.user_id;
+
+    var ret_obj = [];
+    var ret_arr = [];
+
+    var db_query = '';
+    if(req.signedCookies.admin == 'true') {
+        user = 'admin';
+    }
+
+    if(days > 0) {
+        db.query('SELECT get_rips_for_n_days(?, ?) AS rips_list;', [days, user], function(err, docs) {
+            if (err) {
+                console.log(err);
+                res.status(500);
+                res.json({error: "Internal server error looking up the rips for " + days + " days."});
+            } else {       
+                if(docs[0]) {
+                    var rips_list = docs[0].rips_list;
+                    var rips_arr = rips_list.split(',');
+                    for (var i = 0; i < rips_arr.length; i++) {
+                        //this function also returns todays rips
+                        var d = moment().subtract(i, 'days').format('YYYY-MM-DD');
+                        ret_obj[i] = {day:d, rips:rips_arr[i]};
+                    };
+                    res.status(200);
+                    res.json(ret_obj);
+                }
+                else {
+                    res.status(500);
+                    res.json({error: "Internal server error looking up the rips for " + days + " days."});
+                }
             }
         });
     } else {
