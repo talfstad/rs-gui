@@ -492,11 +492,84 @@ app.get('/rips_for_n_days', checkAuth, function (req, res) {
                         ret_obj[i] = {day:d, rips:rips_arr[i]};
                     };
                     res.status(200);
+                    ret_obj.shift(); //remove todays stats
                     res.json(ret_obj);
                 }
                 else {
                     res.status(500);
                     res.json({error: "Internal server error looking up the rips for " + days + " days."});
+                }
+            }
+        });
+    } else {
+        res.status(400);
+        res.json({error: "Days must be greater than 0."});
+    }
+});
+
+app.get('/url_report_for_n_days', checkAuth, function (req, res) {
+
+    var days = req.query.n;
+    var id = req.query.id;
+    var user = req.signedCookies.user_id;
+    var jacks_list;
+    var hits_list;
+
+    var hits_ret_arr = [];
+    var jacks_ret_arr = [];
+    var ret_obj = [];
+
+    var db_query = '';
+    if(req.signedCookies.admin == 'true') {
+       user = 'admin';
+    }
+
+    if(days > 0) {
+        db.query('CALL get_report_data(?, ?);', [id, user], function(err, docs) {
+            if (err) {
+                console.log(err);
+                res.status(500);
+                res.json({error: "Internal server error looking up the report data for id = " + id +"."});
+            } else {
+
+                console.log(docs[0]);
+
+                if(docs[0][0]) {
+                    hits_list = docs[0][0].hits_list;
+                    jacks_list = docs[0][0].jacks_list;
+
+                    var hits_arr = hits_list.split(',');
+                    hits_arr = hits_arr.reverse();
+                    
+                    var jacks_arr = jacks_list.split(',');
+                    jacks_arr = jacks_arr.reverse();
+
+                    for (var j = 0; j < days; j++) {
+                        if(!jacks_ret_arr[j]) {
+                            jacks_ret_arr[j] = 0;
+                        }
+                        if(jacks_arr[j]) {
+                            jacks_ret_arr[j] += Number(jacks_arr[j]);
+                        }
+
+                        if(!hits_ret_arr[j]) {
+                            hits_ret_arr[j] = 0;
+                        }
+                        if(hits_arr[j]) {
+                            hits_ret_arr[j] += Number(jacks_arr[j]);
+                        }
+                    };
+                    
+                    for (var i = 0; i < days; i++) {
+                        var d = moment().subtract(i + 1, 'days').format('YYYY-MM-DD');
+                        ret_obj[i] = {day:d, hits:hits_ret_arr[i], jacks:jacks_ret_arr[i]};
+                    };
+                    res.status(200);
+                    res.json(ret_obj);
+                }
+                else {
+                    res.status(500);
+                    res.json({error: "Internal server error looking up the report data for id = " + id +"."});
                 }
             }
         });
