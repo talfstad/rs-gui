@@ -16,7 +16,6 @@ var express = require("express")
 //new middlewares
 var logger = require('morgan');
 var methodOverride = require('method-override');
-var session = require('express-session');
 var bodyParser = require('body-parser');
 var multer = require('multer');
 var errorHandler = require('errorhandler');
@@ -31,7 +30,6 @@ app.use(function logErrors(err, req, res, next) {
 
 app.use(methodOverride());
 app.use(logger('dev'));
-app.use(cookieParser());
 app.use(bodyParser.json());   
 app.use(bodyParser.urlencoded({ extended: true }));  // parse application/x-www-form-urlencoded
 app.use(bodyParser.json());
@@ -40,6 +38,7 @@ app.use(multer());
 // Cookie config
 app.use( cookieParser( config.cookieSecret ) );           // populates req.signedCookies
 app.use( cookieSession( config.sessionSecret ) );         // populates req.session, needed for CSRF
+app.use(csrf({ cookie: true }));
 
 // We need serverside view templating to initially set the CSRF token in the <head> metadata
 // Otherwise, the html could just be served statically from the public directory
@@ -48,7 +47,6 @@ app.set('views', __dirname + '/' );
 app.engine('html', require('hbs').__express);
 
 app.use(express.static(__dirname + '/../public'));
-app.use(csrf());
 
 var db = mysql.createConnection(config.dbConnectionInfo);
 db.connect();
@@ -88,7 +86,7 @@ app.get("/api/auth", function(req, res) {
 
 // POST /api/auth/login
 // @desc: logs in a user
-app.post("/api/auth/login", function(req, res) {  
+app.post("/api/auth/login", function(req, res) {
     db.query("SELECT * FROM users WHERE user = ?", [ req.body.username ], function(err, rows) {
         if(rows.length == 1) {
             var row = rows[0];
@@ -101,7 +99,7 @@ app.post("/api/auth/login", function(req, res) {
                 } else {
                     res.cookie('user_id', row.user, { signed: true, maxAge: config.cookieMaxAge  });
                     res.cookie('auth_token', row.auth_token, { signed: true, maxAge: config.cookieMaxAge  });
-                    res.cookie('img_icon', row.img_icon, { signed: true, maxAge: config.cookieMaxAge  });
+                    res.cookie('icon_img', row.icon_img, { signed: true, maxAge: config.cookieMaxAge  });
                     res.cookie('username', row.username, { signed: true, maxAge: config.cookieMaxAge  });
 
                     if(row.admin == 1) {
@@ -180,6 +178,8 @@ app.post("/api/auth/logout", function(req, res) {
     res.clearCookie('user_id');
     res.clearCookie('auth_token');
     res.clearCookie('admin');
+    res.clearCookie('username');
+    res.clearCookie('img_icon');
     res.json({ success: "User successfully logged out." });
 });
 
@@ -1221,9 +1221,6 @@ app.post('/upload', checkAuth, function(req, res) {
 
 
 });
-
-
-
 
 app.get("*", function(req, res) {
     res.render('index', { csrfToken: req.csrfToken() });
