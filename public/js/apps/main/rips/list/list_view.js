@@ -24,22 +24,63 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
     //View.Rip is a row view that belongs to a composite view! This allows us to pass the model
     //and stuff when we do events and stuff (i think)
     View.Rip = Marionette.ItemView.extend({
-      initialize: function() {
-        this.listenTo(this.model, 'change', this.updateDataTable, this);
-        this.listenTo(this, "rip:edit", this.highlightRow); 
-        this.listenTo(this, "remove:highlightrow", this.removeHighlightRow);
-
-      },
 
       template: ripItemTpl,
       tagName: "tr",
-
-      triggers: {
+      
+      triggers:{
         "click td button.btn": "rip:edit"
       },
 
-      events: {
+      events:{
         "rip:edit": "highlightRow"
+      },
+
+      onRender: function(){
+        this.$el.find(".flag-tooltip").tooltip();
+      },
+
+      initialize: function(){
+        this.listenTo(this.model, 'change', this.updateDataTable, this);
+        this.listenTo(this, "rip:edit", this.highlightRow); 
+        this.listenTo(this, "remove:highlightrow", this.removeHighlightRow);
+      },
+
+      getTopFlagsForDisplay: function(){
+        var me = this;
+        var start = 0;
+        var topFlags = new Array();
+        var rawCountries = [];
+        var rawCountryData = this.model.attributes.country_dist;
+
+        if($.inArray(",", rawCountryData) > 0){
+          //double or more
+          rawCountries = rawCountryData.split(",");
+        } else{
+          //single
+          rawCountries.push(rawCountryData);
+        }
+
+        //create arr of objects
+        var formattedCountries = [];
+        $.each(rawCountries, function(idx, countryName){
+          var splitArr = countryName.split(":");
+          var country = splitArr[0].split(' ').join('_') + ".png";
+          var value = splitArr[1];
+          var returnObj = {};
+          returnObj.name = splitArr[0];
+          returnObj.url = country;
+          returnObj.hits = value;
+          formattedCountries.push(returnObj);
+        });
+        
+        $.each(formattedCountries, function(idx, country){
+          if(idx < 3)
+            topFlags.push(country);
+        });
+
+        return topFlags;
+        
       },
 
       updateDataTable: function(e){
@@ -59,8 +100,12 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
         this.$el.removeClass("rips-row-edit-highlight");
       },
 
-      templateHelpers: {
-         admin: RipManager.session.get("admin")
+      serializeData: function(){
+        var model = this.model.toJSON();
+        model.admin = RipManager.session.get("admin");
+        model.topFlags = this.getTopFlagsForDisplay();
+
+        return model;
       }
 
       

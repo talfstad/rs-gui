@@ -211,6 +211,7 @@ p.featured {
 }
 
 
+
 .close {
     color: #fff; 
     opacity: 1;
@@ -222,4 +223,8 @@ p.featured {
 
 .offer-select button {
   background: #fff;
+}
+
+.rips-grid-flag {
+  width: 25px;
 }
