@@ -75,7 +75,7 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
         });
         
         $.each(formattedCountries, function(idx, country){
-          if(idx < 3)
+          if(idx < 5)
             topFlags.push(country);
         });
 
@@ -214,13 +214,15 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
     onDomRefresh: function() {
         $("#rips-table").dataTable({
           "deferRender": true,
-          "aoColumnDefs": [
-              { "sWidth": "80px", "aTargets": [0] },
-              { "sWidth": "120px", "aTargets": [1] },
-              { "sWidth": "300px", "aTargets": [2] },
-              { "sWidth": "180px", "aTargets": [4] },
-              { "sWidth": "150px", "bSortable": false, "aTargets": [5] }
-          ],
+          // "aoColumnDefs": [
+          //     { "sWidth": "80px", "aTargets": [0] },
+          //     { "sWidth": "115px", "aTargets": [1] },
+          //     { "sWidth": "420px", "aTargets": [2] },
+          //     { "sWidth": "280px", "aTargets": [3] },
+          //     { "sWidth": "155px", "aTargets": [4] },
+          //     { "sWidth": "145px", "aTargets": [5] },
+          //     { "sWidth": "100px", "bSortable": false, "aTargets": [6] }
+          // ],
           // "order": [[ 1, 'desc' ]] doesn't work...
           // iDisplayLength: 25
         });

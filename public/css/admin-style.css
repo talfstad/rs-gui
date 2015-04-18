@@ -194,6 +194,10 @@ p.featured {
 }
 */
 
+#rips-table, #offers-table {
+  width: 100% !important;
+}
+
 
 .loading {
   font-size: 20px;

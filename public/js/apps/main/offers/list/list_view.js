@@ -232,13 +232,13 @@ function(RipManager, offersTpl, offersListTpl, noOffersTpl, offerItemTpl, Bootst
       onDomRefresh: function() {
         $("#offers-table").dataTable({
           "deferRender": true,
-          "aoColumnDefs": [
-              { "sWidth": "20%", "aTargets": [0] },
-              { "sWidth": "40%", "aTargets": [1] },
-              { "sWidth": "20%", "aTargets": [2] },
-              { "sWidth": "10%", "aTargets": [3] },
-              { "sWidth": "10%", "bSortable": false, "aTargets": [4] }
-          ]
+          // "aoColumnDefs": [
+          //   { "sWidth": "120px", "aTargets": [0] },
+          //   { "sWidth": "400px", "aTargets": [1] },
+          //   { "sWidth": "100px", "aTargets": [2] },
+          //   { "sWidth": "150px", "aTargets": [3] },
+          //   { "sWidth": "100px", "bSortable": false, "aTargets": [4] }
+          // ]
         });
 
         $("#offers-table").addClass("table table-bordered table-hover");

@@ -21,6 +21,7 @@ define(["app"], function(RipManager){
               if(statusCollection.models[0].attributes.user.admin) {
                 RipManager.session.set({admin: true});
               }
+              RipManager.session.set({username: statusCollection.models[0].attributes.user.username});
               callback(args);
             }
           });
