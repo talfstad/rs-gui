@@ -1,5 +1,5 @@
  <section class="content-header">
-    <h1>Rips <small> &mdash; A list of all the Rips</small></h1>
+    <h1>Rips <small> &mdash; Overview and Management of the Rips</small></h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-line-chart"></i> Rips</a></li>
     </ol>

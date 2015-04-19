@@ -48,10 +48,10 @@ define(["app", "apps/main/dashboard/dash_main/dash_view"], function(RipManager, 
 
               var dailyReplacementOffersView = new DashView.OverviewDailyStatItem({
                 value: model.models[0].attributes.total_daily_jacks,
-                total: model.models[0].attributes.total_jacks + " Total Replacement Offers Shown",
+                total: model.models[0].attributes.total_jacks + " Total Jacks Since March 1st",
                 color: "bg-yellow",
                 icon: "ion ion-social-usd",
-                title: "Replacement Offers Shown"
+                title: "Daily Jacks"
               });
 
               var dailyRipsView = new DashView.OverviewDailyStatItem({
