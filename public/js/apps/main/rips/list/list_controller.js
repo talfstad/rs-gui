@@ -1,21 +1,42 @@
 define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListView){
+
   RipManager.module("RipsApp.List", function(List, RipManager, Backbone, Marionette, $, _){
     List.Controller = {
       listRips: function(criterion){
         require(["apps/main/rips/list/list_model",
                  "apps/main/offers/list/list_model",
                  "common/loading_view",
-                 "apps/main/rips/edit/edit_view"], function(getRipsModel, getOffersModel, LoadingView, EditRipView){
+                 "apps/main/rips/edit/edit_view",
+                 "apps/main/rips/list/rips_stats_model"], function(getRipsModel, getOffersModel, LoadingView, EditRipView, RipsStatsModel){
+
           var ripsListLayout = new RipsListView.RipsListLayout();
           ripsListLayout.render();
 
           RipManager.mainLayout.mainRegion.show(ripsListLayout);
 
+
+          var loadingView = new LoadingView.Loading();
+          ripsListLayout.ripsStatsGraphRegion.show(loadingView);
+
           var loadingView = new LoadingView.Loading();
           ripsListLayout.ripsTableRegion.show(loadingView);
 
+          var fetchingRipsStatsGraph = RipManager.request("rips:stats");
           var fetchingRips = RipManager.request("rips:getrips");
           var fetchingOffers = RipManager.request("offers:getoffers");
+
+          $.when(fetchingRipsStatsGraph).done(function(totalRippedHitsData){
+            //create view
+            var totalRipsStatsGraph = new RipsListView.ripsStatsGraph({
+              totalRipsGraph: totalRippedHitsData.models,
+            });
+        
+            //show
+            try {
+              ripsListLayout.ripsStatsGraphRegion.show(totalRipsStatsGraph);
+            } catch(e){}
+          });
+
           $.when(fetchingRips).done(function(rips){
             var ripsListView = new RipsListView.Rips({
                 collection: rips
@@ -29,9 +50,6 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
               ripsListView.trigger("rip:edit:notify", message.error, "danger");
               model.set(model.previousAttributes());
             };
-
-            
-         
 
             $.when(fetchingOffers).done(function(offers){
               //first check if main application has loaded, must load that first

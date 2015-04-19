@@ -24,7 +24,6 @@ define(["app", "apps/main/dashboard/dash_main/dash_view"], function(RipManager, 
 
             DashLayout.overviewStatsGraph.show(loadingView);
 
-
             //get data
             var fetchingOverviewStats = RipManager.request("dashboard:overviewStats");
             var totalRippedHitsGraph = RipManager.request("dashboard:totalRippedHitsGraph");

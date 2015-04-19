@@ -3,10 +3,11 @@ define(["app",
         "tpl!apps/main/rips/list/templates/rips-list.tpl",
         "tpl!apps/main/rips/list/templates/no-rips.tpl",
         "tpl!apps/main/rips/list/templates/rips-item.tpl",
-        "datatablesbootstrap",
+        "tpl!apps/main/rips/list/templates/rips-stats-graph.tpl",
+        "datatablesbootstrap", "morris",
         "bootstrap-notify"],
 
-function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
+function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraphTpl){
   RipManager.module("RipsApp.List.View", function(View, RipManager, Backbone, Marionette, $, _){
 
     //made this little fucker so that i can hopefully make sub views that use regions
@@ -16,9 +17,50 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl){
      
       regions: {
         ripsTableRegion: "#rips-table-container",
-        dialogRegion: "#dialog-region"
+        dialogRegion: "#dialog-region",
+        ripsStatsGraphRegion: "#rips-stats-graph",
       }
     });
+
+    View.ripsStatsGraph = Marionette.ItemView.extend({
+      template: ripsStatsGraphTpl,
+
+      totalRipsAreaGraph: null,
+
+      onDomRefresh: function() {
+        //check if its null before making a call out
+        if(!this.totalRipsAreaGraph) {
+          var data = [];
+          var modelGraphData = this.options.totalRipsGraph;
+
+          for(var i=0 ; i<modelGraphData.length ; i++) {
+            data.push({
+              time: modelGraphData[i].attributes.day,
+              rips: modelGraphData[i].attributes.rips
+            });
+          }
+
+          //access the model to get the data
+          this.totalRipsAreaGraph = new Morris.Area({
+            element: 'rips-chart',
+            resize: true,
+            data: data,
+            xkey: 'time',
+            ykeys: ['rips'],
+            labels: ['Rips: '],
+            lineColors: ['#a0d0e0'], //'#3c8dbc', 
+            hideHover: 'auto'
+          });
+        }
+      },
+
+      serializeData: function(){
+        return {
+          totalRipsGraph: this.options.totalRipsGraph,
+        };
+      }
+    });
+
 
 
     //View.Rip is a row view that belongs to a composite view! This allows us to pass the model
