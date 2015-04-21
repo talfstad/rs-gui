@@ -230,5 +230,6 @@ p.featured {
 }
 
 .rips-grid-flag {
+  height: auto;
   width: 25px;
 }
