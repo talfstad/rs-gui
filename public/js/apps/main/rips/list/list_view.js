@@ -4,10 +4,13 @@ define(["app",
         "tpl!apps/main/rips/list/templates/no-rips.tpl",
         "tpl!apps/main/rips/list/templates/rips-item.tpl",
         "tpl!apps/main/rips/list/templates/rips-stats-graph.tpl",
+        "tpl!apps/main/rips/list/templates/new_rips_templates/no-rips.tpl",
+        "tpl!apps/main/rips/list/templates/new_rips_templates/new-rips-item.tpl",
+        "tpl!apps/main/rips/list/templates/new_rips_templates/new-rips-list.tpl",
         "datatablesbootstrap", "morris",
         "bootstrap-notify"],
 
-function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraphTpl){
+function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraphTpl, noNewRipsTpl, newRipItemTpl, newRipsListTpl){
   RipManager.module("RipsApp.List.View", function(View, RipManager, Backbone, Marionette, $, _){
 
     //made this little fucker so that i can hopefully make sub views that use regions
@@ -19,6 +22,7 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
         ripsTableRegion: "#rips-table-container",
         dialogRegion: "#dialog-region",
         ripsStatsGraphRegion: "#rips-stats-graph",
+        newRipsTableRegion: "#new-rips-table-container"
       }
     });
 
@@ -60,8 +64,6 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
         };
       }
     });
-
-
 
     //View.Rip is a row view that belongs to a composite view! This allows us to pass the model
     //and stuff when we do events and stuff (i think)
@@ -233,7 +235,7 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
         notifyOptions.title = "<strong>Failed to Update Rip</strong> <br />Please Stand by, one of our surfer dude coder guys will investigate this shortly.";
         notifyOptions.icon = "glyphicon glyphicon-warning-sign";
         otherOptions.delay = 0;
-      } 
+      }
 
       var notify = $.notify(notifyOptions,otherOptions);
 
@@ -256,15 +258,15 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
     onDomRefresh: function() {
         $("#rips-table").dataTable({
           "deferRender": true,
-          // "aoColumnDefs": [
+          "aoColumnDefs": [
           //     { "sWidth": "80px", "aTargets": [0] },
           //     { "sWidth": "115px", "aTargets": [1] },
           //     { "sWidth": "420px", "aTargets": [2] },
           //     { "sWidth": "280px", "aTargets": [3] },
           //     { "sWidth": "155px", "aTargets": [4] },
           //     { "sWidth": "145px", "aTargets": [5] },
-          //     { "sWidth": "100px", "bSortable": false, "aTargets": [6] }
-          // ],
+              {  "bSortable": false, "aTargets": [6] }
+          ],
           // "order": [[ 1, 'desc' ]] doesn't work...
           // iDisplayLength: 25
         });
@@ -272,7 +274,91 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
         $("#rips-table").dataTable().fnSort([[0, 'desc']])
       }
     });
-  });
 
+
+    //NEW RIPPED GRID VIEWS HERE
+    View.NewRip = Marionette.ItemView.extend({
+
+      template: newRipItemTpl,
+      tagName: "tr",
+      
+      triggers:{
+      },
+
+      events:{
+      },
+
+      onRender: function(){
+      },
+
+      initialize: function(){
+      },
+
+      updateDataTable: function(e){
+      },
+
+      serializeData: function(){
+        var model = this.model.toJSON();
+        model.admin = RipManager.session.get("admin");
+        model.topFlags = this.getTopFlagsForDisplay();
+
+        return model;
+      }
+    });
+
+    //basically useless view for the composite view
+    var noNewRipsView = Marionette.ItemView.extend({
+      template: noNewRipsTpl,
+      tagName: "tr",
+      className: "alert"
+    });
+
+    //the composite view, this should combine all the magic
+    //and show us an amazing table...
+    View.NewRips = Marionette.CompositeView.extend({
+    id: "new-rips-table",
+    tagName: "table",
+    className: "display dataTable",
+    template: newRipsListTpl,
+    emptyView: noNewRipsView,
+    childView: View.NewRip,
+    childViewContainer: "tbody",
+
+    initialize: function(){
+      this.listenTo(this.collection, "reset", function(){
+        this.attachHtml = function(collectionView, childView, index){
+          collectionView.$el.append(childView.el);
+        }
+      });
+    },
+
+    onRenderCollection: function(){
+      this.attachHtml = function(collectionView, childView, index){
+        collectionView.$el.prepend(childView.el);
+      }
+    },
+
+    onDomRefresh: function() {
+        $("#new-rips-table").dataTable({
+          "deferRender": true,
+          "aoColumnDefs": [
+          //     { "sWidth": "80px", "aTargets": [0] },
+          //     { "sWidth": "115px", "aTargets": [1] },
+          //     { "sWidth": "420px", "aTargets": [2] },
+          //     { "sWidth": "280px", "aTargets": [3] },
+          //     { "sWidth": "155px", "aTargets": [4] },
+          //     { "sWidth": "145px", "aTargets": [5] },
+          //     {  "bSortable": false, "aTargets": [6] }
+          ],
+          // "order": [[ 1, 'desc' ]] doesn't work...
+          bLengthChange: false,
+          iDisplayLength: 3
+        });
+        $("#new-rips-table").addClass("table table-bordered table-hover");
+        $("#new-rips-table").dataTable().fnSort([[0, 'desc']])
+      }
+    });
+
+  });
   return RipManager.RipsApp.List.View;
 });

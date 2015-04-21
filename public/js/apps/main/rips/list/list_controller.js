@@ -15,16 +15,28 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
           RipManager.mainLayout.mainRegion.show(ripsListLayout);
 
 
-          var loadingView = new LoadingView.Loading();
-          ripsListLayout.ripsStatsGraphRegion.show(loadingView);
+          ripsListLayout.ripsStatsGraphRegion.show(new LoadingView.Loading());
+          ripsListLayout.ripsTableRegion.show(new LoadingView.Loading());
+          ripsListLayout.newRipsTableRegion.show(new LoadingView.Loading());
 
-          var loadingView = new LoadingView.Loading();
-          ripsListLayout.ripsTableRegion.show(loadingView);
-
+          var fetchingNewRips = RipManager.request("rips:getnewrips");
           var fetchingRipsStatsGraph = RipManager.request("rips:stats");
           var fetchingRips = RipManager.request("rips:getrips");
           var fetchingOffers = RipManager.request("offers:getoffers");
 
+          //NEW RIPS
+          $.when(fetchingNewRips).done(function(rips){
+            var newRipsListView = new RipsListView.NewRips({
+              collection: rips
+            });
+
+            try {
+              ripsListLayout.newRipsTableRegion.show(newRipsListView);
+            } catch(e){}
+
+          });
+
+          //TOTAL RIPS GRAPH
           $.when(fetchingRipsStatsGraph).done(function(totalRippedHitsData){
             //create view
             var totalRipsStatsGraph = new RipsListView.ripsStatsGraph({
@@ -37,6 +49,8 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
             } catch(e){}
           });
 
+
+          //LIST RIP EDIT GRID
           $.when(fetchingRips).done(function(rips){
             var ripsListView = new RipsListView.Rips({
                 collection: rips
