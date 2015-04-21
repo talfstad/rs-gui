@@ -103,6 +103,11 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
                 view.showDialog();
               });
             });
+
+            ripsListView.on("childview:rip:report", function(viewTestTodo, args){
+              var id = args.model.attributes.id;
+              RipManager.navigate("rips/" + id, {trigger: true});
+            });
            
             try {
               ripsListLayout.ripsTableRegion.show(ripsListView);

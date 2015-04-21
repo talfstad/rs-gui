@@ -19,7 +19,8 @@ define(["app"], function(RipManager){
         "rips": "rips",
         "offers": "offers",
         "": "dash",
-        ":notfound": "dash"
+        ":notfound": "dash",
+        "rips/:id": "ripReport"
       }
     });
 
@@ -40,10 +41,9 @@ define(["app"], function(RipManager){
       });
     };
     
-
-    var checkAuth = function(callback){
+    var checkAuth = function(callback, args) {
       require(["authentication/authentication_app"], function() {
-        RipManager.execute("authentication:check", callback);
+        RipManager.execute("authentication:check", callback, args);
       });
     };
 
@@ -53,6 +53,14 @@ define(["app"], function(RipManager){
           checkMainViewRendered();
           RipManager.trigger("leftnav:rips");
           RipManager.trigger("rips:list");
+        });
+      },
+
+      ripReport: function(id){
+        require(["apps/main/rips/rips_app", "apps/main/leftnav/leftnav_app"], function(){
+          checkMainViewRendered();
+          RipManager.trigger("leftnav:rips");
+          RipManager.trigger("rips:report", id);
         });
       },
       dash: function(args){
@@ -78,7 +86,10 @@ define(["app"], function(RipManager){
 
     var authEnabledAPI = {
       rips: function(criterion){
-          checkAuth(API.rips);
+        checkAuth(API.rips);
+      },
+      ripReport: function(criterion){
+        checkAuth(API.ripReport, criterion);
       },
       dash: function(criterion){
         checkAuth(API.dash);

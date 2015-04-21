@@ -52,7 +52,7 @@
                   <div class="row">
                     <div class="col-xs-6 text-center" style="border-right: 1px solid #f4f4f4">
                       <div>
-                        <h3 style="color: #000;">0</h3>
+                        <h3 style="margin-top: 0;">0</h3>
                       </div>
                        
                       <div class="knob-label">Total Rips Today</div>
@@ -62,7 +62,7 @@
                       <div class="knob-label">New Domains</div>
                     </div> --><!-- ./col -->
                     <div class="col-xs-4 text-center">
-                       <h3 style="color: #000;">0</h3>
+                       <h3 style="margin-top: 0;">0</h3>
                       <div class="knob-label">New Domains</div>
                     </div><!-- ./col -->
                   </div><!-- /.row -->

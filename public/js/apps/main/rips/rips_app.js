@@ -32,6 +32,15 @@ define(["app"], function(RipManager){
         RipManager.navigate("rips");
       });
     },
+
+    ripReport: function(id){
+      require(["/js/apps/main/rips/report/report_controller.js",
+               "/js/apps/main/leftnav/leftnav_app.js"], function(RipReportController){
+        executeAction(RipReportController.listReport, id);
+        RipManager.execute("set:active:leftnav", "rips");
+      });
+    },
+
     editRipSubmit: function(args){
       require(["apps/main/rips/edit/edit_controller"], function(EditController){
         executeAction(EditController.submitEdit, args);
@@ -43,6 +52,9 @@ define(["app"], function(RipManager){
     checkAuth(API.listRips);
   });
 
+  RipManager.on("rips:report", function(id){
+    checkAuth(API.ripReport, id);
+  });
  
   var authEnabledAPI = {
     listRips: function(criterion){

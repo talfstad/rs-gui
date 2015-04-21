@@ -73,7 +73,8 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
       tagName: "tr",
       
       triggers:{
-        "click td button.btn": "rip:edit"
+        "click td button.rip-edit": "rip:edit",
+        "click td button.rip-report": "rip:report"
       },
 
       events:{
@@ -352,6 +353,7 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
           ],
           // "order": [[ 1, 'desc' ]] doesn't work...
           bLengthChange: false,
+          bFilter: false,
           iDisplayLength: 3
         });
         $("#new-rips-table").addClass("table table-bordered table-hover");
