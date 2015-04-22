@@ -198,8 +198,12 @@ p.featured {
   width: 100% !important;
 }
 
+
 #new-rips-table {
-  width: 150px !important;
+  /*width: 100% !important;
+  table-layout: fixed;
+  word-wrap: break-word;
+  overflow: hidden;*/
 }
 
 .loading {
@@ -217,7 +221,10 @@ p.featured {
   color: #fef966;
 }
 
-
+.new-rips-url-col {
+  max-width: 635px;
+  word-wrap: break-word;
+}
 
 .close {
     color: #fff; 
@@ -237,11 +244,6 @@ p.featured {
   width: 25px;
 }
 
-.new-rips-col {
-  max-width: 635px;
-  word-wrap: break-word;
- 
-}
 
 .new-rips-stats-box {
 

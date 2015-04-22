@@ -343,7 +343,8 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
         $("#new-rips-table").dataTable({
           "deferRender": true,
            "aoColumnDefs": [
-             { "sClass": "new-rips-col", "aTargets": [0] },
+            // { "sWidth":"80%", "sClass": "new-rips-url-col", "aTargets": [0] },
+            // { "sWidth":"20%", "aTargets": [1] }
            ],
           // "order": [[ 1, 'desc' ]] doesn't work...
           bLengthChange: false,
@@ -353,7 +354,7 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
 
         });
         $("#new-rips-table").addClass("table table-bordered table-hover");
-        $("#new-rips-table").dataTable().fnSort([[0, 'desc']])
+        $("#new-rips-table").dataTable().fnSort([[1, 'desc']])
       }
     });
 

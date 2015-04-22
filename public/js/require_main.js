@@ -27,7 +27,8 @@ requirejs.config({
     raphael: 'vendor/raphael-min',
     morris: '../plugins/morris/morris',
     datatablesjquery: '../plugins/datatables/jquery.dataTables',
-    datatablesbootstrap: '../plugins/datatables/dataTables.bootstrap'
+    datatablesbootstrap: '../plugins/datatables/dataTables.bootstrap',
+    // datatablesresponsive: '../plugins/datatables/dataTables.responsive'
   },
 
   shim: {
@@ -38,9 +39,15 @@ requirejs.config({
       deps: ["jquery", "underscore","backbone", "bootstrap"],
       exports: ['BootstrapDialog']
     },
+    datatablesjquery: {
+      deps: ['jquery'],
+    },
     datatablesbootstrap: {
       deps: ['datatablesjquery']
     },
+    // datatablesresponsive: {
+    //   deps: ['datatablesjquery']
+    // },
     treeview: {
       deps: ['jquery']
     },
