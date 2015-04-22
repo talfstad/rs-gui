@@ -78,17 +78,19 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
       },
 
       events:{
-        "rip:edit": "highlightRow"
-      },
-
-      onRender: function(){
-        this.$el.find(".flag-tooltip").tooltip();
+        "rip:edit": "highlightRow",
+        "rip:report": "highlightRow"
       },
 
       initialize: function(){
         this.listenTo(this.model, 'change', this.updateDataTable, this);
         this.listenTo(this, "rip:edit", this.highlightRow); 
+        this.listenTo(this, "rip:report", this.highlightRow); 
         this.listenTo(this, "remove:highlightrow", this.removeHighlightRow);
+      },
+
+      onRender: function(){
+        this.$el.find(".flag-tooltip").tooltip();
       },
 
       getTopFlagsForDisplay: function(){

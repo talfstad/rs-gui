@@ -7,7 +7,9 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
                  "apps/main/offers/list/list_model",
                  "common/loading_view",
                  "apps/main/rips/edit/edit_view",
-                 "apps/main/rips/list/rips_stats_model"], function(getRipsModel, getOffersModel, LoadingView, EditRipView, RipsStatsModel){
+                 "apps/main/rips/list/rips_stats_model",
+                 "apps/main/rips/report/report_dialog_view",
+                 "apps/main/rips/report/report_model"], function(getRipsModel, getOffersModel, LoadingView, EditRipView, RipsStatsModel, ReportRipView){
 
           var ripsListLayout = new RipsListView.RipsListLayout();
           ripsListLayout.render();
@@ -105,8 +107,25 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
             });
 
             ripsListView.on("childview:rip:report", function(viewTestTodo, args){
-              var id = args.model.attributes.id;
-              RipManager.navigate("rips/" + id, {trigger: true});
+              var model = args.model;
+              // RipManager.navigate("rips/" + id, {trigger: true});
+
+              //get graph data!
+              var fetchOverviewGraphData = RipManager.request("report:overviewGraphData", model.id);
+              $.when(fetchOverviewGraphData).done(function(overviewGraphData){
+                //create view
+                var view = new ReportRipView.ReportDialog({
+                  model: model,
+                  overviewGraphData: overviewGraphData
+                });
+
+                view.on("close", function(){
+                  args.view.trigger("remove:highlightrow");
+                });
+
+                view.showDialog();
+               
+              });
             });
            
             try {
