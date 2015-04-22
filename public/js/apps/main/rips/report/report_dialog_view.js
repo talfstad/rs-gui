@@ -316,9 +316,15 @@ define(["app", "tpl!apps/main/rips/report/templates/report_dialog.tpl",
           var markers = [];
           $.each(this.model.attributes.countries, function(idx, country){
             var latlon = me.getCountryLatLonByName(country.name);
+            var middleText = "";
+            if(country.hits > 1){
+              middleText = " Hits in "; 
+            } else {
+              middleText = " Hit in ";
+            }
             markers.push({
               latLng: latlon,
-              name: country.name
+              name: country.hits + middleText + country.name
             });
           });
           
