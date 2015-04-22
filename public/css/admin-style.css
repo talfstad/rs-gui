@@ -198,6 +198,9 @@ p.featured {
   width: 100% !important;
 }
 
+#new-rips-table {
+  width: 150px !important;
+}
 
 .loading {
   font-size: 20px;
@@ -232,4 +235,22 @@ p.featured {
 .rips-grid-flag {
   height: auto;
   width: 25px;
+}
+
+.new-rips-col {
+  max-width: 635px;
+  word-wrap: break-word;
+ 
+}
+
+.new-rips-stats-box {
+
+  min-height: 60px !important;
+}
+
+.new-rips-stats-box > span.info-box-icon {
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  font-size: 30px;
 }

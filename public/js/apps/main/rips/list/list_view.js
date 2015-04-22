@@ -298,13 +298,13 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
       updateDataTable: function(e){
       },
 
-      serializeData: function(){
-        var model = this.model.toJSON();
-        model.admin = RipManager.session.get("admin");
-        model.topFlags = this.getTopFlagsForDisplay();
+      // serializeData: function(){
+      //   var model = this.model.toJSON();
+      //   model.admin = RipManager.session.get("admin");
+      //   model.topFlags = this.getTopFlagsForDisplay();
 
-        return model;
-      }
+      //   return model;
+      // }
     });
 
     //basically useless view for the composite view
@@ -342,19 +342,15 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
     onDomRefresh: function() {
         $("#new-rips-table").dataTable({
           "deferRender": true,
-          "aoColumnDefs": [
-          //     { "sWidth": "80px", "aTargets": [0] },
-          //     { "sWidth": "115px", "aTargets": [1] },
-          //     { "sWidth": "420px", "aTargets": [2] },
-          //     { "sWidth": "280px", "aTargets": [3] },
-          //     { "sWidth": "155px", "aTargets": [4] },
-          //     { "sWidth": "145px", "aTargets": [5] },
-          //     {  "bSortable": false, "aTargets": [6] }
-          ],
+           "aoColumnDefs": [
+             { "sClass": "new-rips-col", "aTargets": [0] },
+           ],
           // "order": [[ 1, 'desc' ]] doesn't work...
           bLengthChange: false,
           bFilter: false,
-          iDisplayLength: 3
+          iDisplayLength: 5,
+
+
         });
         $("#new-rips-table").addClass("table table-bordered table-hover");
         $("#new-rips-table").dataTable().fnSort([[0, 'desc']])
