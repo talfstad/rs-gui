@@ -126,6 +126,8 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
             topFlags.push(country);
         });
 
+        this.model.attributes.countries = formattedCountries;
+
         return topFlags;
         
       },

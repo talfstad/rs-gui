@@ -26,8 +26,11 @@ requirejs.config({
     eve: 'vendor/eve',
     raphael: 'vendor/raphael-min',
     morris: '../plugins/morris/morris',
+    jvectormap: '../plugins/jvectormap/jquery-jvectormap-1.2.2.min',
+    worldmap: '../plugins/jvectormap/jquery-jvectormap-world-mill-en',
     datatablesjquery: '../plugins/datatables/jquery.dataTables',
     datatablesbootstrap: '../plugins/datatables/dataTables.bootstrap',
+
     // datatablesresponsive: '../plugins/datatables/dataTables.responsive'
   },
 
@@ -39,8 +42,14 @@ requirejs.config({
       deps: ["jquery", "underscore","backbone", "bootstrap"],
       exports: ['BootstrapDialog']
     },
+    worldmap: {
+      deps: ['jvectormap']
+    },
     datatablesjquery: {
-      deps: ['jquery'],
+      deps: ['jquery']
+    },
+    jvectormap: {
+      deps: ['jquery']
     },
     datatablesbootstrap: {
       deps: ['datatablesjquery']
