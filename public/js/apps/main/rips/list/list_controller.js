@@ -19,7 +19,12 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
 
           ripsListLayout.ripsStatsGraphRegion.show(new LoadingView.Loading());
           ripsListLayout.ripsTableRegion.show(new LoadingView.Loading());
-          ripsListLayout.newRipsTableRegion.show(new LoadingView.Loading());
+
+          var newRipsGridLayout = new RipsListView.NewRipsListGridLayout();
+          newRipsGridLayout.render();
+          ripsListLayout.newRipsGridRegion.show(newRipsGridLayout);
+
+          newRipsGridLayout.newRipsTableRegion.show(new LoadingView.Loading());
 
           var fetchingNewRips = RipManager.request("rips:getnewrips");
           var fetchingRipsStatsGraph = RipManager.request("rips:stats");
@@ -29,11 +34,16 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
           //NEW RIPS
           $.when(fetchingNewRips).done(function(rips){
             var newRipsListView = new RipsListView.NewRips({
-              collection: rips
+              collection: rips,
+            });
+
+            var numberOfNewRipsView = new RipsListView.NumberOfNewRips({
+              numberOfRips: rips.models.length
             });
 
             try {
-              ripsListLayout.newRipsTableRegion.show(newRipsListView);
+              newRipsGridLayout.numberOfNewRipsRegion.show(numberOfNewRipsView);
+              newRipsGridLayout.newRipsTableRegion.show(newRipsListView);
             } catch(e){}
 
           });

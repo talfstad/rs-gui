@@ -1,0 +1,1 @@
+<h3  class="box-title">You Have <%= numberOfRips %> New <% if(numberOfRips > 1){ %> Rips <% } else { %> Rip <% } %>Today</h3>

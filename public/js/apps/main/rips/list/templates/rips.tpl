@@ -8,7 +8,7 @@
 <section class="content">
   <div class="row">
     <!-- Left col -->
-    <section class="col-xs-7 connectedSortable">                            
+    <section class="col-xs-12 connectedSortable">                            
        <!-- Custom tabs (Charts with tabs)-->
         <div class="nav-tabs-custom">
             <!-- Tabs within a box -->
@@ -20,27 +20,14 @@
         </div><!-- /.nav-tabs-custom -->
     </section>
 
-    <section class="col-xs-5 connectedSortable ui-sortable">
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="box box-primary">
-            <div class="box-header with-border">
-              <h3 class="box-title">New Rips Today</h3>
-            </div><!-- /.box-header -->
-            <div class="box-body table-responsive">
-              <div id="new-rips-table-container">
-                <table id="new-rips-table"></table>
-              </div><!-- /.box-body -->
-            </div><!-- /.box -->
-          </div>
-        </div>
-      </div>
-    </section>
+  </div>
+
+  <div id="new-rips-grid-container" class="row">
   </div>
 
   <div class="row">
     <div class="col-xs-12">
-      <div class="box">
+      <div class="box box-primary">
         <div class="box-header with-border">
           <h3 class="box-title">Edit Rip Replacement Offers and Offer Redirect Rates</h3>
         </div><!-- /.box-header -->

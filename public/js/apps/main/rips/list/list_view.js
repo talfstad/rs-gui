@@ -7,10 +7,12 @@ define(["app",
         "tpl!apps/main/rips/list/templates/new_rips_templates/no-rips.tpl",
         "tpl!apps/main/rips/list/templates/new_rips_templates/new-rips-item.tpl",
         "tpl!apps/main/rips/list/templates/new_rips_templates/new-rips-list.tpl",
+        "tpl!apps/main/rips/list/templates/new_rips_templates/new_rips.tpl",
+        "tpl!apps/main/rips/list/templates/new_rips_templates/number_of_new_rips.tpl",
         "datatablesbootstrap", "morris",
         "bootstrap-notify"],
 
-function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraphTpl, noNewRipsTpl, newRipItemTpl, newRipsListTpl){
+function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraphTpl, noNewRipsTpl, newRipItemTpl, newRipsListTpl, newRipsTpl, numberOfNewRipsTpl){
   RipManager.module("RipsApp.List.View", function(View, RipManager, Backbone, Marionette, $, _){
 
     //made this little fucker so that i can hopefully make sub views that use regions
@@ -22,7 +24,32 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
         ripsTableRegion: "#rips-table-container",
         dialogRegion: "#dialog-region",
         ripsStatsGraphRegion: "#rips-stats-graph",
-        newRipsTableRegion: "#new-rips-table-container"
+        newRipsGridRegion: "#new-rips-grid-container"
+      }
+    });
+
+    //made this little fucker so that i can hopefully make sub views that use regions
+    View.NewRipsListGridLayout = Marionette.LayoutView.extend({
+      template: newRipsTpl,
+     
+      regions: {
+        newRipsTableRegion: "#new-rips-table-container",
+        numberOfNewRipsRegion: "#number-of-new-rips"
+      }
+    });
+
+    View.NumberOfNewRips = Marionette.ItemView.extend({
+      
+      template: numberOfNewRipsTpl,
+
+      initialize: function(){
+
+      },
+
+      serializeData: function(){
+        return {
+          numberOfRips: this.options.numberOfRips,
+        };
       }
     });
 
@@ -122,7 +149,7 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
         });
         
         $.each(formattedCountries, function(idx, country){
-          if(idx < 5)
+          if(idx < 3)
             topFlags.push(country);
         });
 

@@ -67,9 +67,28 @@ function(RipManager, dashTpl, overviewDashItem, overviewStatsGraphTpl){
             element: 'ripped-hits-chart',
             resize: true,
             data: data,
+            hoverCallback: function(index, options, content) {
+              var item = options.data[index];
+              
+              var percentJacked = (item.jacks / item.rippedHits) * 100;
+
+              var html = "<div class='morris-hover-row-label'>2015-03-27</div><div class='morris-hover-point' style='color: #3c8dbc'>" +
+                          "Jacks: " +
+                          item.jacks +
+                          "</div>" + 
+                          "<div class='morris-hover-point' style='color: #a0d0e0'>" +
+                          "Ripped Hits: " +
+                          item.rippedHits +
+                          "</div>" +
+                          "<div class='morris-hover-point' style='color: #fff'>" +
+                          percentJacked.toFixed(2) + "% Total Jacked" +
+                          "</div>";
+
+              return(html);
+            },
             xkey: 'time',
             ykeys: ['jacks', 'rippedHits'],
-            labels: ['Replacement Offers Shown: ', 'Ripped Hits: '],
+            labels: ['Jacks: ', 'Ripped Hits: '],
             lineColors: ['#3c8dbc', '#a0d0e0'],
             hideHover: 'auto'
           });
