@@ -1,10 +1,126 @@
 define(["app", "tpl!apps/main/rips/report/templates/report_dialog.tpl",
-        "bootstrap-dialog", "morris", "worldmap"], function(RipManager, ReportDialogTemplate, BootstrapDialog){
+        "tpl!apps/main/rips/report/templates/report_hits_jacks_graph_dialog.tpl",
+        "tpl!apps/main/rips/report/templates/report_countries_graph_dialog.tpl",
+        "bootstrap-dialog", "morris", "worldmap"], function(RipManager, ReportDialogTemplate, ReportDialogHitsJacksGraph, ReportDialogCountriesGraph, BootstrapDialog){
   RipManager.module("RipsApp.ReportDialog.View", function(View, RipManager, Backbone, Marionette, $, _){
 
-    View.ReportDialog = Marionette.ItemView.extend({
+    View.RipReportDialogLayout = Marionette.LayoutView.extend({
+
+      template: ReportDialogTemplate,
+     
+      regions: {
+        ripsStatsGraphRegion: "#report-hits-jacks-graph",
+        countriesRegion: "#world-map-countries-container"
+      },
+
+      triggers: {
+        "click button.js-close" : "close"
+      },
+
+      showDialog: function(callback){
+          var me = this;
+          this.render();
+          
+          BootstrapDialog.show({
+            type: BootstrapDialog.TYPE_PRIMARY,
+            title: '<h5><strong>Rip Report:</strong> ' + this.model.attributes.url + '</h5>',
+            message: this.$el,
+            cssClass: 'login-dialog',
+            onhide: function(dialogRef){
+              me.trigger("close");
+            },
+            onshown: callback,
+            buttons: [{
+              label: 'Close',
+              action: function(dialogRef) {
+                  dialogRef.close();
+              }
+            }],
+            draggable: true
+          });
+        },
+
+        closeDialog: function(e){
+          BootstrapDialog.closeAll();
+        },
+
+    });
+
+
+
+    View.ReportHitsJacksGraphDialog = Marionette.ItemView.extend({
         overviewGraphDataGraph: null,
-        template: ReportDialogTemplate,
+        template: ReportDialogHitsJacksGraph,
+        
+      numbersWithCommas: function(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      },
+
+      onShow: function(dialogRef){
+        var me = this;
+        //check if its null before making a call out
+        if(!this.overviewGraphDataGraph) {
+          var data = [];
+          var modelGraphData = this.options.overviewGraphData.models;
+
+          for(var i=0 ; i<modelGraphData.length ; i++) {
+            data.push({
+              time: modelGraphData[i].attributes.day,
+              jacks: modelGraphData[i].attributes.jacks,
+              rippedHits: modelGraphData[i].attributes.hits
+              
+            });
+          }
+
+          data.reverse();
+
+          //access the model to get the data
+          this.overviewGraphDataGraph = new Morris.Area({
+            element: 'rip-report-overview-chart',
+            resize: true,
+            data: data,
+            hoverCallback: function(index, options, content) {
+              var item = options.data[index];
+              
+              var percentJacked = (item.jacks / item.rippedHits) * 100;
+
+              var html = "<div class='morris-hover-row-label'>"+ item.time +"</div><div class='morris-hover-point' style='color: #3c8dbc'>" +
+                          "Ripped Hits: " +
+                          me.numbersWithCommas(item.rippedHits) +
+                          "</div>" +
+                          "<div class='morris-hover-point' style='color: #f39c12'>" +
+                          "Jacks: " +
+                          me.numbersWithCommas(item.jacks) +
+                          "</div>" + 
+                          "<div class='morris-hover-point' style='color: #fff'>" +
+                          percentJacked.toFixed(2) + "% Total Jacked" +
+                          "</div>";
+
+                return(html);
+            },
+            xkey: 'time',
+            ykeys: ['jacks', 'rippedHits'],
+            labels: ['Jacks: ', 'Ripped Hits: '],
+            lineColors: [ '#f39c12','#3c8dbc'],
+            fillOpacity: 0.1,
+            hideHover: 'auto'
+          });
+        }
+      },
+
+        serializeData: function(){
+          return {
+            model: this.model.toJSON(),
+            overviewGraphData: this.options.overviewGraphData.toJSON()
+          };
+        }
+      });
+
+
+
+      View.ReportCountriesGraphDialog = Marionette.ItemView.extend({
+        overviewGraphDataGraph: null,
+        template: ReportDialogCountriesGraph,
         
         initialize: function() {
           
@@ -250,93 +366,19 @@ define(["app", "tpl!apps/main/rips/report/templates/report_dialog.tpl",
           countries['Zambia'] = [-13.133897,  27.849332];
           countries['Zimbabwe'] = [-19.015438,  29.154857];
           this.countries = countries;
-
         },
 
-        triggers: {
-          "click button.js-close" : "close"
+        numbersWithCommas: function(number) {
+          return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
 
-        showDialog: function(e){
+        onShow: function(dialogRef){
           var me = this;
-          this.render();
-
-          BootstrapDialog.show({
-            type: BootstrapDialog.TYPE_PRIMARY,
-            title: '<h5><strong>Rip Report:</strong> ' + this.model.attributes.url + '</h5>',
-            message: this.$el,
-            cssClass: 'login-dialog',
-            onhide: function(dialogRef){
-              me.trigger("close");
-            },
-            onshown: function(dialogRef){
-              me.onShowDialogDom(dialogRef);
-            },
-            buttons: [{
-              label: 'Close',
-              action: function(dialogRef) {
-                  dialogRef.close();
-              }
-            }],
-            draggable: true
-          });
-        },
-
-        onShowDialogDom: function(dialogRef){
-          var me = this;
-          //check if its null before making a call out
-          if(!this.overviewGraphDataGraph) {
-            var data = [];
-            var modelGraphData = this.options.overviewGraphData.models;
-
-            for(var i=0 ; i<modelGraphData.length ; i++) {
-              data.push({
-                time: modelGraphData[i].attributes.day,
-                jacks: modelGraphData[i].attributes.jacks,
-                rippedHits: modelGraphData[i].attributes.hits
-                
-              });
-            }
-
-            data.reverse();
-
-            //access the model to get the data
-            this.overviewGraphDataGraph = new Morris.Area({
-              element: 'rip-report-overview-chart',
-              resize: true,
-              data: data,
-              hoverCallback: function(index, options, content) {
-              var item = options.data[index];
-              
-              var percentJacked = (item.jacks / item.rippedHits) * 100;
-              if(isNaN(percentJacked)) percentJacked = 0;
-
-              var html = "<div class='morris-hover-row-label'>2015-03-27</div><div class='morris-hover-point' style='color: #3c8dbc'>" +
-                          "Jacks: " +
-                          item.jacks +
-                          "</div>" + 
-                          "<div class='morris-hover-point' style='color: #a0d0e0'>" +
-                          "Ripped Hits: " +
-                          item.rippedHits +
-                          "</div>" +
-                          "<div class='morris-hover-point' style='color: #fff'>" +
-                          percentJacked.toFixed(2) + "% Total Jacked" +
-                          "</div>";
-
-              return(html);
-              },
-              xkey: 'time',
-              ykeys: ['jacks', 'rippedHits'],
-              labels: ['Jacks: ', 'Ripped Hits: '],
-              lineColors: ['#3c8dbc', '#a0d0e0'],
-              hideHover: 'auto'
-            });
-          }
-
-
+         
           //create list of countries lat lon
           var markers = [];
           $.each(this.model.attributes.countries, function(idx, country){
+
             var latlon = me.getCountryLatLonByName(country.name);
             var middleText = "";
             if(country.hits > 1){
@@ -346,7 +388,7 @@ define(["app", "tpl!apps/main/rips/report/templates/report_dialog.tpl",
             }
             markers.push({
               latLng: latlon,
-              name: country.hits + middleText + country.name
+              name: country.hits + middleText + country.name + "|" + country.url,
             });
           });
           
@@ -375,6 +417,34 @@ define(["app", "tpl!apps/main/rips/report/templates/report_dialog.tpl",
               selectedHover: {
               }
             },
+            onMarkerLabelShow: function(e, el, code){
+
+              var text = el.html();
+              var allData = text.split("|");
+              var countryName = allData[0];
+
+              var countryUrl = allData[1];
+              
+              el.html("<img class='rips-grid-flag' src='/images/flags/"+ countryUrl +"' alt=''/> <strong>"+countryName+"</strong><br />");
+
+              
+            },
+            onRegionLabelShow: function(e, el, code){
+
+              var text = el.html();
+              if(text === "United States of America"){
+                text = "United States";
+              }
+              if(text === "Democratic Republic of the Congo" || text === "Republic of the Congo"){
+                text = "Congo";
+              }
+              if(text === "South Sudan"){
+                text = "Sudan";
+              }
+              var flag = text.split(' ').join('_');
+              
+              el.html("<img class='rips-grid-flag' src='/images/flags/"+ flag +".png' alt=''/> <strong>"+text+"</strong><br />");
+            },
             markerStyle: {
               initial: {
                 fill: '#00a65a',
@@ -383,25 +453,19 @@ define(["app", "tpl!apps/main/rips/report/templates/report_dialog.tpl",
             },
             markers: markers
           });
+
         },
 
         getCountryLatLonByName: function(name){
           return this.countries[name];
         },
 
-        closeDialog: function(e){
-          BootstrapDialog.closeAll();
-        },
-
-        serializeData: function(){
-          return {
-            model: this.model.toJSON(),
-            overviewGraphData: this.options.overviewGraphData.toJSON()
-          };
-        }
-
-        
-
+        // serializeData: function(){
+        //   return {
+        //     model: this.model.toJSON(),
+        //     overviewGraphData: this.options.overviewGraphData.toJSON()
+        //   };
+        // }
       });
   });
 

@@ -117,26 +117,44 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
             });
 
             ripsListView.on("childview:rip:report", function(viewTestTodo, args){
+
+              var dialogShownCallback = function(){
+                //get graph data!
+                var fetchOverviewGraphData = RipManager.request("report:overviewGraphData", model.id);
+                $.when(fetchOverviewGraphData).done(function(overviewGraphData){
+                  //create view
+                  var reportHitsJacksGraphView = new ReportRipView.ReportHitsJacksGraphDialog({
+                    model: model,
+                    overviewGraphData: overviewGraphData
+                  });
+                  var reportCountriesGraphView = new ReportRipView.ReportCountriesGraphDialog({
+                    model: model
+                  });
+                  
+                  ripReportLayout.ripsStatsGraphRegion.show(reportHitsJacksGraphView);
+                  ripReportLayout.countriesRegion.show(reportCountriesGraphView);
+                 
+                });
+              };
+            
               var model = args.model;
-              // RipManager.navigate("rips/" + id, {trigger: true});
+              
+              //create the layout, show the layout as dialog and show the loading for each region
+              var ripReportLayout = new ReportRipView.RipReportDialogLayout({model: model});
+              
+              ripReportLayout.showDialog(dialogShownCallback);
 
-              //get graph data!
-              var fetchOverviewGraphData = RipManager.request("report:overviewGraphData", model.id);
-              $.when(fetchOverviewGraphData).done(function(overviewGraphData){
-                //create view
-                var view = new ReportRipView.ReportDialog({
-                  model: model,
-                  overviewGraphData: overviewGraphData
-                });
-
-                view.on("close", function(){
-                  args.view.trigger("remove:highlightrow");
-                });
-
-                view.showDialog();
-               
+              ripReportLayout.ripsStatsGraphRegion.show(new LoadingView.Loading());
+              ripReportLayout.countriesRegion.show(new LoadingView.Loading());
+              
+              ripReportLayout.on("close", function(){
+                args.view.trigger("remove:highlightrow");
               });
+
+              
             });
+
+            
            
             try {
               ripsListLayout.ripsTableRegion.show(ripsListView);

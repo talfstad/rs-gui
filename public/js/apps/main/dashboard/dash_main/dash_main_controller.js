@@ -14,15 +14,13 @@ define(["app", "apps/main/dashboard/dash_main/dash_view"], function(RipManager, 
 
             RipManager.mainLayout.mainRegion.show(DashLayout);
 
-            //show loading
-            var loadingView = new LoadingView.Loading();
 
-            DashLayout.overviewStat1Region.show(loadingView);
-            DashLayout.overviewStat2Region.show(loadingView);
-            DashLayout.overviewStat3Region.show(loadingView);
-            DashLayout.overviewStat4Region.show(loadingView);
+            // DashLayout.overviewStat1Region.show(new LoadingView.Loading());
+            // DashLayout.overviewStat2Region.show(new LoadingView.Loading());
+            // DashLayout.overviewStat3Region.show(new LoadingView.Loading());
+            // DashLayout.overviewStat4Region.show(new LoadingView.Loading());
 
-            DashLayout.overviewStatsGraph.show(loadingView);
+            DashLayout.overviewStatsGraph.show(new LoadingView.Loading());
 
             //get data
             var fetchingOverviewStats = RipManager.request("dashboard:overviewStats");
@@ -41,7 +39,7 @@ define(["app", "apps/main/dashboard/dash_main/dash_view"], function(RipManager, 
               var dailyRippedHitsView = new DashView.OverviewDailyStatItem({
                 value: model.models[0].attributes.total_daily_ripped_hits,
                 total: model.models[0].attributes.total_ripped_hits + " Total Ripped Hits",
-                color: "bg-aqua",
+                color: "cj-blue",
                 icon: "ion ion-stats-bars",
                 title: "Ripped Hits Today"
               });
@@ -84,6 +82,7 @@ define(["app", "apps/main/dashboard/dash_main/dash_view"], function(RipManager, 
             
             $.when(totalRippedHitsGraph).done(function(totalRippedHitsData){
               $.when(totalJacksGraph).done(function(totalJacksGraphData){
+                
                 //create view
                 var overviewStatsGraph = new DashView.overviewStatsGraph({
                   totalRippedHitsGraph: totalRippedHitsData.models,

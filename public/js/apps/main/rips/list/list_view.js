@@ -78,9 +78,10 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
             data: data,
             xkey: 'time',
             ykeys: ['rips'],
-            labels: ['Rips: '],
-            lineColors: ['#a0d0e0'], //'#3c8dbc', 
-            hideHover: 'auto'
+            labels: ['Rips'],
+            lineColors: ['#3c8dbc'], //'#3c8dbc', 
+            fillOpacity: 0.1,
+            hideHover: 'auto',
           });
         }
       },

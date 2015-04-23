@@ -256,3 +256,8 @@ p.featured {
   line-height: 60px;
   font-size: 30px;
 }
+
+.cj-blue {
+  background-color: #3c8dbc;
+  color: white;
+}

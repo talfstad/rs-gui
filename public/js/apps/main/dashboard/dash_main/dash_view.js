@@ -46,7 +46,12 @@ function(RipManager, dashTpl, overviewDashItem, overviewStatsGraphTpl){
 
       totalRippedHitsAreaGraph: null,
 
+      numbersWithCommas: function(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      },
+
       onDomRefresh: function() {
+        var me = this;
         //check if its null before making a call out
         if(!this.totalRippedHitsAreaGraph) {
           var data = [];
@@ -74,14 +79,14 @@ function(RipManager, dashTpl, overviewDashItem, overviewStatsGraphTpl){
               
               var percentJacked = (item.jacks / item.rippedHits) * 100;
 
-              var html = "<div class='morris-hover-row-label'>2015-03-27</div><div class='morris-hover-point' style='color: #3c8dbc'>" +
-                          "Jacks: " +
-                          item.jacks +
-                          "</div>" + 
-                          "<div class='morris-hover-point' style='color: #a0d0e0'>" +
+              var html = "<div class='morris-hover-row-label'>"+ item.time +"</div><div class='morris-hover-point' style='color: #3c8dbc'>" +
                           "Ripped Hits: " +
-                          item.rippedHits +
+                          me.numbersWithCommas(item.rippedHits) +
                           "</div>" +
+                          "<div class='morris-hover-point' style='color: #f39c12'>" +
+                          "Jacks: " +
+                          me.numbersWithCommas(item.jacks) +
+                          "</div>" + 
                           "<div class='morris-hover-point' style='color: #fff'>" +
                           percentJacked.toFixed(2) + "% Total Jacked" +
                           "</div>";
@@ -91,7 +96,8 @@ function(RipManager, dashTpl, overviewDashItem, overviewStatsGraphTpl){
             xkey: 'time',
             ykeys: ['jacks', 'rippedHits'],
             labels: ['Jacks: ', 'Ripped Hits: '],
-            lineColors: ['#3c8dbc', '#a0d0e0'],
+            lineColors: [ '#f39c12','#3c8dbc'],
+            fillOpacity: 0.1,
             hideHover: 'auto'
           });
         }
