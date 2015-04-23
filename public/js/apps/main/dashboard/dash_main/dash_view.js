@@ -62,6 +62,8 @@ function(RipManager, dashTpl, overviewDashItem, overviewStatsGraphTpl){
             });
           }
 
+          data.reverse();
+
           //access the model to get the data
           this.totalRippedHitsAreaGraph = new Morris.Area({
             element: 'ripped-hits-chart',
