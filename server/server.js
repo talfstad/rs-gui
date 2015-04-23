@@ -556,7 +556,7 @@ app.get('/url_report_for_n_days', checkAuth, function (req, res) {
                             hits_ret_arr[j] = 0;
                         }
                         if(hits_arr[j]) {
-                            hits_ret_arr[j] += Number(jacks_arr[j]);
+                            hits_ret_arr[j] += Number(hits_arr[j]);
                         }
                     };
                     
