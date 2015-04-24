@@ -18,9 +18,9 @@ define(["app"], function(RipManager){
         "dash": "dash",
         "rips": "rips",
         "offers": "offers",
+        "registered": 'registered',
         "": "dash",
-        ":notfound": "dash",
-        "rips/:id": "ripReport"
+        ":notfound": "dash"
       }
     });
 
@@ -76,6 +76,13 @@ define(["app"], function(RipManager){
           RipManager.trigger("leftnav:offers");
           RipManager.trigger("offers:list");
         });
+      },
+      registered: function(args){
+        require(["apps/main/registered/registered_app", "apps/main/leftnav/leftnav_app"], function(){
+          checkMainViewRendered();
+          RipManager.trigger("leftnav:offers");
+          RipManager.trigger("registered:list");
+        });
       }
     };
 
@@ -96,6 +103,9 @@ define(["app"], function(RipManager){
       },
       offers: function(criterion){
         checkAuth(API.offers);
+      },
+      registered: function(criterion){
+        checkAuth(API.registered);
       }
     };
 

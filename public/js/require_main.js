@@ -30,7 +30,7 @@ requirejs.config({
     worldmap: '../plugins/jvectormap/jquery-jvectormap-world-mill-en',
     datatablesjquery: '../plugins/datatables/jquery.dataTables',
     datatablesbootstrap: '../plugins/datatables/dataTables.bootstrap',
-
+    moment: "lib/moment/min/moment.min"
     // datatablesresponsive: '../plugins/datatables/dataTables.responsive'
   },
 

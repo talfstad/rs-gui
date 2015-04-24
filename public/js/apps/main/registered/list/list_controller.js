@@ -14,10 +14,10 @@ define(["app", "apps/main/registered/list/list_view"], function(RipManager, Regi
           registeredListLayout.registeredTableRegion.show(loadingView);
 
           var fetchingRegistered = RipManager.request("registered:getregistered");
-          $.when(fetchingRegistered).done(function(registeredItem){
+          $.when(fetchingRegistered).done(function(registeredCollection){
             
-            var registeredListView = new registeredListLayout.Registered({
-              collection: registeredItem
+            var registeredListView = new RegisteredListView.RegisteredListView({
+              collection: registeredCollection
             });
 
             

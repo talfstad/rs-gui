@@ -25,7 +25,8 @@
     "requirejs-underscore-tpl": "latest",
     "parsleyjs": "~2.0.5",
     "almond": "latest",
-    "json2": "latest"
+    "json2": "latest",
+    "moment": "~2.10.2"
   },
   "devDependencies": {
     "qunit": "latest"

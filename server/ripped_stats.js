@@ -268,7 +268,7 @@ module.exports = function(app, db, checkAuth){
 
                                     var curr_hour = moment().hour();
                                     for (var i = 0; i <= curr_hour; i++) {
-                                        var day_hour = moment().utc().hour(i).startOf('hour');
+                                        var day_hour = moment().local().hour(i).startOf('hour');
                                         hourly_ret_obj[i] = {hour:day_hour, hits:Number(hourly_hits_arr[i]), jacks:Number(hourly_jacks_arr[i])}; 
                                     };
 

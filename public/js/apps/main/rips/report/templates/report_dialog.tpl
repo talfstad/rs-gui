@@ -6,7 +6,7 @@
             <ul class="nav nav-tabs pull-right">
                 <li class="active"><a id="report-last-month" href="#report-hits-jacks-graph" data-toggle="tab">For the Last Month</a></li>
                 <li><a id="report-by-the-hour" href="#rip-report-hourly-chart" data-toggle="tab">Today By The Hour</a></li>
-                <li class="pull-left header"><i class="fa fa-inbox"></i> Total Ripped Hits &amp; Jacks</li>
+                <li class="pull-left header"><i class="fa fa-line-chart"></i> Total Ripped Hits &amp; Jacks</li>
             </ul>
             <div class="tab-content no-padding">
                 <div class="chart tab-pane active" id="report-hits-jacks-graph" style="position: relative; height: 300px;"></div>

@@ -65,7 +65,7 @@ define(["app", "apps/main/dashboard/dash_main/dash_view"], function(RipManager, 
                 total: model.models[0].attributes.total_registered_hits + " Total Registered Hits",
                 color: "bg-green",
                 icon: "ion ion-pie-graph",
-                title: "Registered User Hits Today"
+                title: "Registered Hits Today"
               });
 
               //show
