@@ -1,16 +1,20 @@
 
   <div class="row">
-      <!-- Left col -->
-      <section class="col-lg-12 connectedSortable">                            
-         <!-- Custom tabs (Charts with tabs)-->
-          <div class="nav-tabs-custom">
-              <!-- Tabs within a box -->
-              <h4 class="pull-left header"><i class="fa fa-line-chart"></i> Total Ripped Hits And Jacks for the last Month</h4>
-             
-              <div id="report-hits-jacks-graph">
-              </div>
+      <section class="col-lg-12 connectedSortable">
 
-          </div><!-- /.nav-tabs-custom -->
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs pull-right">
+                <li class="active"><a id="report-last-month" href="#report-hits-jacks-graph" data-toggle="tab">For the Last Month</a></li>
+                <li><a id="report-by-the-hour" href="#rip-report-hourly-chart" data-toggle="tab">Today By The Hour</a></li>
+                <li class="pull-left header"><i class="fa fa-inbox"></i> Total Ripped Hits &amp; Jacks</li>
+            </ul>
+            <div class="tab-content no-padding">
+                <div class="chart tab-pane active" id="report-hits-jacks-graph" style="position: relative; height: 300px;"></div>
+                <div class="chart tab-pane" id="rip-report-hourly-chart" style="width: 100%; position: relative; height: 300px;"></div>
+            </div>
+        </div>
+
+    
       </section>
 
       <section style="margin-top: 35px" class="col-lg-12">
@@ -20,5 +24,5 @@
         </div>
 
       </section>
-  </div>
+
 

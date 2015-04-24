@@ -10,7 +10,7 @@
             </span>
         </span></strong> simply, and right away.
         </h2>
-        <p class="featured lead">Keep tabs on the landers you work so hard to make. ClickJacker will show you exactly who's stolen your landers, and gives you control to redirect their traffic back to your offer.</p>
+        
     </div>
     <div class="row clearfix" id="login-form-container">
         <div class="col-md-3 well well-lg text-center login-container">
@@ -36,3 +36,6 @@
         </div>
     </div>
 </div>
+
+
+{"id":41,"links_list":"http://z6m.go2cloud.org/aff_c?offer_id=68&aff_id=1006&aff_sub=cj25-54","user":"test2@email.com","archive_path":"/home/troy/git/clickjacker/public/archive/test@email.com/71cabfc0-8307-11e4-beb0-7fd314760dd8/jakelanderfinal.zip","uuid":"71cabfc0-8307-11e4-beb0-7fd314760dd8","url":null,"hits":0,"rips":0,"domain":null,"date_created":null,"last_updated":null,"notes":null}

@@ -15,6 +15,7 @@ define(["app"], function(RipManager){
       var links = [
         { name: "Dashboard", url: "dash", icon: "fa fa-dashboard", children: false, navigationTrigger: "dash:list" },
         { name: "Rips", url: "rips", icon: "fa fa-line-chart", children: false, navigationTrigger: "rips:list" },
+        { name: "Registered", url: "registered", icon: "fa fa-check-square", children: false, navigationTrigger: "registered:list" },
         { 
           name: "Offers", 
           url: "offers", 
@@ -25,6 +26,7 @@ define(["app"], function(RipManager){
             offers_new: { name: "New", url: "offers/new", icon: "fa fa-plus-square-o", navigationTrigger: "offers:new" }
           }
         }
+        
       ];
 
       if(!RipManager.session.get("admin")) {

@@ -7,7 +7,9 @@ define(["app", "tpl!apps/main/rips/report/templates/report_dialog.tpl",
     View.RipReportDialogLayout = Marionette.LayoutView.extend({
 
       template: ReportDialogTemplate,
-     
+      reportByHourDrawn: false,
+
+
       regions: {
         ripsStatsGraphRegion: "#report-hits-jacks-graph",
         countriesRegion: "#world-map-countries-container"
@@ -51,39 +53,40 @@ define(["app", "tpl!apps/main/rips/report/templates/report_dialog.tpl",
     View.ReportHitsJacksGraphDialog = Marionette.ItemView.extend({
         overviewGraphDataGraph: null,
         template: ReportDialogHitsJacksGraph,
-        
+      
       numbersWithCommas: function(number) {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       },
 
       onShow: function(dialogRef){
         var me = this;
-        //check if its null before making a call out
-        if(!this.overviewGraphDataGraph) {
-          var data = [];
-          var modelGraphData = this.options.overviewGraphData.models;
 
-          for(var i=0 ; i<modelGraphData.length ; i++) {
-            data.push({
-              time: modelGraphData[i].attributes.day,
-              jacks: modelGraphData[i].attributes.jacks,
-              rippedHits: modelGraphData[i].attributes.hits
-              
+           
+          //ARCHIVED GRAPH STUFF LAST 30 DAYS
+          var archivedHitsJacksData = [];
+          var archivedGraphData = this.options.overviewGraphData.models[0].attributes.daily_stats;
+        
+          for(var i=0 ; i<archivedGraphData.length ; i++) {
+            archivedHitsJacksData.push({
+              time: archivedGraphData[i].day,
+              jacks: archivedGraphData[i].jacks,
+              rippedHits: archivedGraphData[i].hits
             });
           }
+  
+          archivedHitsJacksData.reverse();
 
-          data.reverse();
-
-          //access the model to get the data
           this.overviewGraphDataGraph = new Morris.Area({
             element: 'rip-report-overview-chart',
             resize: true,
-            data: data,
+            data: archivedHitsJacksData,
             hoverCallback: function(index, options, content) {
               var item = options.data[index];
               
               var percentJacked = (item.jacks / item.rippedHits) * 100;
-
+              if(isNaN(percentJacked)) {
+                percentJacked = 0;
+              }
               var html = "<div class='morris-hover-row-label'>"+ item.time +"</div><div class='morris-hover-point' style='color: #3c8dbc'>" +
                           "Ripped Hits: " +
                           me.numbersWithCommas(item.rippedHits) +
@@ -105,7 +108,70 @@ define(["app", "tpl!apps/main/rips/report/templates/report_dialog.tpl",
             fillOpacity: 0.1,
             hideHover: 'auto'
           });
+
+
+        //HOURLY GRAPH STUFF    
+        var hourlyHitsJacksData = [];
+        var hourlyGraphData = this.options.overviewGraphData.models[0].attributes.hourly_stats;
+
+
+        for(var i=0 ; i<hourlyGraphData.length ; i++) {
+          hourlyHitsJacksData.push({
+            time: hourlyGraphData[i].hour,
+            jacks: hourlyGraphData[i].jacks,
+            rippedHits: hourlyGraphData[i].hits
+          });
         }
+
+        // hourlyHitsJacksData.reverse();
+
+        this.hourlyGraph = new Morris.Area({
+          element: 'rip-report-hourly-chart',
+          resize: true,
+          data: hourlyHitsJacksData,
+          hoverCallback: function(index, options, content) {
+            var item = options.data[index];
+            var date = new Date(item.time)
+            var formattedTime = "";
+            if(date.getHours() > 9) {
+              formattedTime = date.getHours() + ":00 Hours";
+            } else {
+              formattedTime = "0" + date.getHours() + ":00 Hours";
+            }
+            var percentJacked = (item.jacks / item.rippedHits) * 100;
+            if(isNaN(percentJacked)) {
+              percentJacked = 0;
+            }
+
+            var html = "<div class='morris-hover-row-label'>"+ formattedTime +"</div><div class='morris-hover-point' style='color: #3c8dbc'>" +
+                        "Ripped Hits: " +
+                        me.numbersWithCommas(item.rippedHits) +
+                        "</div>" +
+                        "<div class='morris-hover-point' style='color: #f39c12'>" +
+                        "Jacks: " +
+                        me.numbersWithCommas(item.jacks) +
+                        "</div>" + 
+                        "<div class='morris-hover-point' style='color: #fff'>" +
+                        percentJacked.toFixed(2) + "% Total Jacked" +
+                        "</div>";
+
+              return(html);
+          },
+          xkey: 'time',
+          ykeys: ['jacks', 'rippedHits'],
+          labels: ['Jacks: ', 'Ripped Hits: '],
+          lineColors: [ '#f39c12','#3c8dbc'],
+          fillOpacity: 0.1,
+          hideHover: 'auto'
+        });
+
+        //HACK to make the morris grid redraw when the hourly tab is shown
+        // need to do this because morris is kind of shitty
+        $('#report-by-the-hour').on('shown.bs.tab', function (e) {
+            me.hourlyGraph.redraw();
+        });
+
+        
       },
 
         serializeData: function(){

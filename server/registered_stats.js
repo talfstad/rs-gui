@@ -21,7 +21,7 @@ module.exports = function(app, db, checkAuth){
                 res.json({error:"Internal server error looking up the registered lander stats."});
             } else {          
                 res.status(200);
-                res.json({rows:docs});
+                res.json(docs);
             }
         });
     });
