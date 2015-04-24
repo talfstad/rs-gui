@@ -24,7 +24,7 @@ app.use(function logErrors(err, req, res, next) {
 });
 
 app.use(methodOverride());
-app.use(logger('dev'));
+// app.use(logger('dev'));
 app.use(bodyParser.json());   
 app.use(bodyParser.urlencoded({ extended: true }));  // parse application/x-www-form-urlencoded
 app.use(bodyParser.json());

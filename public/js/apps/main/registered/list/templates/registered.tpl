@@ -14,7 +14,7 @@
             <!-- Tabs within a box -->
             <ul class="nav nav-tabs pull-right">
                 <li class="active"><a href="#ripped-hits-chart" data-toggle="tab">Registered Hits</a></li> 
-                <li class="pull-left header"><i class="fa fa-line-chart"></i> Total Registered Hits for the last Month</li>
+                <li class="pull-left header"><i class="fa fa-check-square-o"></i> Total Registered Hits for the last Month</li>
             </ul>
             <div id="registered-hits-graph" class="tab-content no-padding"></div>
         </div><!-- /.nav-tabs-custom -->
