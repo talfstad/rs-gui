@@ -3,11 +3,13 @@ define(["app",
         "tpl!apps/main/registered/list/templates/registered-list.tpl",
         "tpl!apps/main/registered/list/templates/no-registered.tpl",
         "tpl!apps/main/registered/list/templates/registered-item.tpl",
+        "tpl!apps/main/registered/list/templates/registered-hits-graph.tpl",
         "moment",
+        "morris",
         "datatablesbootstrap", 
         "bootstrap-dialog"],
 
-function(RipManager, registeredTpl, registeredListTpl, noRegisteredTpl, registeredItemTpl, moment){
+function(RipManager, registeredTpl, registeredListTpl, noRegisteredTpl, registeredItemTpl, registeredHitsGraphTpl, moment){
   RipManager.module("RegisteredApp.List.View", function(View, RipManager, Backbone, Marionette, $, _){
 
     //made this little fucker so that i can hopefully make sub views that use regions
@@ -16,7 +18,43 @@ function(RipManager, registeredTpl, registeredListTpl, noRegisteredTpl, register
       template: registeredTpl,
      
       regions: {
+        registeredGraphRegion: "#registered-hits-graph",
         registeredTableRegion: "#registered-table-container"
+      }
+    });
+
+    View.RegisteredHitsGraph = Marionette.ItemView.extend({
+      template: registeredHitsGraphTpl,
+      
+      onDomRefresh: function() {
+        var data = [];
+        var modelGraphData = this.options.registeredHitsGraph;
+
+        for(var i=0 ; i<modelGraphData.length ; i++) {
+          data.push({
+            time: modelGraphData[i].attributes.day,
+            hits: modelGraphData[i].attributes.hits
+          });
+        }
+
+        //access the model to get the data
+        var registeredHitsGraph = new Morris.Area({
+          element: 'registered-hits-chart',
+          resize: true,
+          data: data,
+          xkey: 'time',
+          ykeys: ['hits'],
+          labels: ['Hits'],
+          lineColors: ['#3c8dbc'], //'#3c8dbc', 
+          fillOpacity: 0.1,
+          hideHover: 'auto',
+        });
+      },
+
+      serializeData: function(){
+        return {
+          registeredHitsGraph: this.options.registeredHitsGraph
+        }
       }
     });
 

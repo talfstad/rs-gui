@@ -24,7 +24,28 @@ define(["app"], function(RipManager){
       model: GetRegistered.Registered
     });
 
+    //General model to use
+    GetRegistered.Model = Backbone.Model.extend({
+      defaults: {}
+    });
+
+    GetRegistered.RegisteredHitsCollection = Backbone.Collection.extend({
+      url: "/registered_hits_for_n_days?n=30",
+      model: GetRegistered.Model
+    });
+
     var API = {
+      getRegisteredHitsGraph: function(args){
+        var registeredHitsGraphData = new GetRegistered.RegisteredHitsCollection();
+        var defer = $.Deferred();
+        registeredHitsGraphData.fetch({
+          success: function(data){
+            defer.resolve(data);
+          }
+        });
+        var promise = defer.promise();
+        return promise;
+      },
       getRegistered: function(){
         var registered = new GetRegistered.RegisteredCollection();
         var defer = $.Deferred();
@@ -38,6 +59,11 @@ define(["app"], function(RipManager){
       }
 
     };
+
+    RipManager.reqres.setHandler("registered:graph", function(args){
+      return API.getRegisteredHitsGraph(args);
+    });
+
 
     RipManager.reqres.setHandler("registered:getregistered", function(){
       return API.getRegistered();

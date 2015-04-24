@@ -19,10 +19,12 @@
             <div id="rips-stats-graph" class="tab-content no-padding"></div>
         </div><!-- /.nav-tabs-custom -->
     </section>
-
   </div>
 
-  <div id="new-rips-grid-container" class="row">
+  <div class="row">
+    <section class="col-xs-12 connectedSortable">  
+      <div id="new-rips-grid-container" class="row"></div>
+    </section>
   </div>
 
   <div class="row">

@@ -10,8 +10,18 @@ define(["app", "apps/main/registered/list/list_view"], function(RipManager, Regi
 
           RipManager.mainLayout.mainRegion.show(registeredListLayout);
 
-          var loadingView = new LoadingView.Loading();
-          registeredListLayout.registeredTableRegion.show(loadingView);
+          registeredListLayout.registeredGraphRegion.show(new LoadingView.Loading());
+          registeredListLayout.registeredTableRegion.show(new LoadingView.Loading());
+
+          var fetchingRegisteredGraphData = RipManager.request("registered:graph");
+          $.when(fetchingRegisteredGraphData).done(function(graphData){
+            
+            var registeredGraphView = new RegisteredListView.RegisteredHitsGraph({
+              registeredHitsGraph: graphData.models
+            });
+
+            registeredListLayout.registeredGraphRegion.show(registeredGraphView);
+          });
 
           var fetchingRegistered = RipManager.request("registered:getregistered");
           $.when(fetchingRegistered).done(function(registeredCollection){

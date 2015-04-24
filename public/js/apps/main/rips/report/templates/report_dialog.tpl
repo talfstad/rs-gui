@@ -17,7 +17,7 @@
     
       </section>
 
-      <section style="margin-top: 35px" class="col-lg-12">
+      <section class="col-lg-12">
         <h4 class="pull-left header"><i class="fa fa-map-marker"></i> Currently Running in <%= countries.length %> Countries</h4>
             
         <div id="world-map-countries-container">     

@@ -3,10 +3,6 @@ define(["app"], function(RipManager){
     GetRips.Rip = Backbone.Model.extend({
       urlRoot: "/update_ripped_url_by_offer_id",
 
-      events: {
-
-      },
-
       defaults: {
         "id": "",
         "links_list": "",

@@ -39,12 +39,7 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
     });
 
     View.NumberOfNewRips = Marionette.ItemView.extend({
-      
       template: numberOfNewRipsTpl,
-
-      initialize: function(){
-
-      },
 
       serializeData: function(){
         return {
