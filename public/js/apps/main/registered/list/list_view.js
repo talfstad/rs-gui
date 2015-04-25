@@ -7,7 +7,7 @@ define(["app",
         "tpl!apps/main/registered/list/templates/unregister.tpl",
         "moment",
         "bootstrap-dialog",
-        "morris", "bootstrap-notify",
+        "morris", "bootstrap-notify", "comma-sort",
         "datatablesbootstrap"],
 
 function(RipManager, registeredTpl, registeredListTpl, noRegisteredTpl, registeredItemTpl, registeredHitsGraphTpl, unregisterDialogTpl, moment, BootstrapDialog){
@@ -26,8 +26,12 @@ function(RipManager, registeredTpl, registeredListTpl, noRegisteredTpl, register
 
     View.RegisteredHitsGraph = Marionette.ItemView.extend({
       template: registeredHitsGraphTpl,
-      
+      numbersWithCommas: function(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      },
+
       onDomRefresh: function() {
+        var me = this;
         var data = [];
         var modelGraphData = this.options.registeredHitsGraph;
 
@@ -38,12 +42,25 @@ function(RipManager, registeredTpl, registeredListTpl, noRegisteredTpl, register
           });
         }
 
+        data.reverse();
+
         //access the model to get the data
         var registeredHitsGraph = new Morris.Area({
           element: 'registered-hits-chart',
           resize: true,
           data: data,
           xkey: 'time',
+          hoverCallback: function(index, options, content) {
+              var item = options.data[index];
+              var date = moment(item.time).format('LL');
+              
+              var html = "<div class='morris-hover-row-label'>"+ date +"</div><div class='morris-hover-point' style='color: #3c8dbc'>" +
+                            "Rips: " + 
+                            me.numbersWithCommas(item.hits) +
+                          "</div>";
+
+                return(html);
+            },
           ykeys: ['hits'],
           labels: ['Hits'],
           lineColors: ['#3c8dbc'], //'#3c8dbc', 
@@ -114,6 +131,14 @@ function(RipManager, registeredTpl, registeredListTpl, noRegisteredTpl, register
         "click td button.unregister": "unregister",
       },
 
+      templateHelpers: function(){
+        return { 
+          numbersWithCommas: function(number) {
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          }
+        };
+      },
+
       initialize: function(){
         this.listenTo(this, "unregister", this.highlightRow); 
         this.listenTo(this, "remove:highlightrow", this.removeHighlightRow);
@@ -179,12 +204,11 @@ function(RipManager, registeredTpl, registeredListTpl, noRegisteredTpl, register
             { 
               fnRender: function ( obj ) {
                 var date = new Date(obj.aData[0]);
-
                 return moment(date).format('LL');
               },
               "aTargets": [0] 
             },
-           
+            { "sType": "numeric-comma", "aTargets": [2]},
             { "bSortable": false, "aTargets": [3] }
           ]
         });

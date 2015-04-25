@@ -30,11 +30,15 @@ requirejs.config({
     worldmap: '../plugins/jvectormap/jquery-jvectormap-world-mill-en',
     datatablesjquery: '../plugins/datatables/jquery.dataTables',
     datatablesbootstrap: '../plugins/datatables/dataTables.bootstrap',
+    'comma-sort': '../plugins/datatables/comma_sort',
     moment: "lib/moment/min/moment.min"
     // datatablesresponsive: '../plugins/datatables/dataTables.responsive'
   },
 
   shim: {
+    'comma-sort': {
+      deps: ['jquery','datatablesbootstrap']
+    },
     "bootstrap-select": {
       deps: ["jquery", "bootstrap"]
     },

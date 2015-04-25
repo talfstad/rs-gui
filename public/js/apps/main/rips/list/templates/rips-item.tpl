@@ -1,9 +1,9 @@
-<td><%= daily_hits %></td>
+<td><%= numbersWithCommas(daily_hits) %></td>
 <td><%= redirect_rate %></td>
 
 <td><a target="_blank" href="<%= full_url %>"><%= url %></a></td>
 <td><a target="_blank" href="<%= replacement_links %>"><%= offer_name %></a></td>
-<td><%= daily_jacks %></td>
+<td><%= numbersWithCommas(daily_jacks) %></td>
 
 <!-- List top 3 countries and give more > if there are more -->
 <td>

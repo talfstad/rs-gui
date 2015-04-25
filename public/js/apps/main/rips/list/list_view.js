@@ -9,10 +9,11 @@ define(["app",
         "tpl!apps/main/rips/list/templates/new_rips_templates/new-rips-list.tpl",
         "tpl!apps/main/rips/list/templates/new_rips_templates/new_rips.tpl",
         "tpl!apps/main/rips/list/templates/new_rips_templates/number_of_new_rips.tpl",
-        "datatablesbootstrap", "morris",
+        "moment",
+        "datatablesbootstrap", "morris", "comma-sort",
         "bootstrap-notify"],
 
-function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraphTpl, noNewRipsTpl, newRipItemTpl, newRipsListTpl, newRipsTpl, numberOfNewRipsTpl){
+function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraphTpl, noNewRipsTpl, newRipItemTpl, newRipsListTpl, newRipsTpl, numberOfNewRipsTpl, moment){
   RipManager.module("RipsApp.List.View", function(View, RipManager, Backbone, Marionette, $, _){
 
     //made this little fucker so that i can hopefully make sub views that use regions
@@ -66,12 +67,25 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
             });
           }
 
+          data.reverse();
+
           //access the model to get the data
           this.totalRipsAreaGraph = new Morris.Area({
             element: 'rips-chart',
             resize: true,
             data: data,
             xkey: 'time',
+            hoverCallback: function(index, options, content) {
+              var item = options.data[index];
+              var date = moment(item.time).format('LL');
+              
+              var html = "<div class='morris-hover-row-label'>"+ date +"</div><div class='morris-hover-point' style='color: #3c8dbc'>" +
+                            "Rips:" + 
+                            item.rips +
+                          "</div>";
+
+                return(html);
+            },
             ykeys: ['rips'],
             labels: ['Rips'],
             lineColors: ['#3c8dbc'], //'#3c8dbc', 
@@ -103,6 +117,14 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
       events:{
         "rip:edit": "highlightRow",
         "rip:report": "highlightRow"
+      },
+
+      templateHelpers: function(){
+        return { 
+          numbersWithCommas: function(number) {
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          }
+        };
       },
 
       initialize: function(){
@@ -303,6 +325,7 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
         $("#rips-table").dataTable({
           "deferRender": true,
           "aoColumnDefs": [
+            { "sType": "numeric-comma", "aTargets": [0,4]},
           //     { "sWidth": "80px", "aTargets": [0] },
           //     { "sWidth": "115px", "aTargets": [1] },
           //     { "sWidth": "420px", "aTargets": [2] },

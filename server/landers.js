@@ -22,7 +22,7 @@ module.exports = function(app, db, checkAuth){
         return urlParser.parse(url).hostname;
     }
 
-    app.post("/register_domain", checkAuth, function(req, res) {    
+    app.post("/register_domain", checkAuth, function(req, res) {
         var url = req.body.url;
         var domain = getDomain(url);
 

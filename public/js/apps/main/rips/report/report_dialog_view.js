@@ -454,7 +454,7 @@ define(["app", "tpl!apps/main/rips/report/templates/report_dialog.tpl",
             }
             markers.push({
               latLng: latlon,
-              name: country.hits + middleText + country.name + "|" + country.url,
+              name: country.hits + "|" + middleText + country.name + "|" + country.url,
             });
           });
           
@@ -487,11 +487,11 @@ define(["app", "tpl!apps/main/rips/report/templates/report_dialog.tpl",
 
               var text = el.html();
               var allData = text.split("|");
-              var countryName = allData[0];
-
-              var countryUrl = allData[1];
+              var countryHits = allData[0];
+              var countryName = allData[1];
+              var countryUrl = allData[2];
               
-              el.html("<img class='rips-grid-flag' src='/images/flags/"+ countryUrl +"' alt=''/> <strong>"+countryName+"</strong><br />");
+              el.html("<img class='rips-grid-flag' src='/images/flags/"+ countryUrl +"' alt=''/> <strong>"+ me.numbersWithCommas(countryHits) + countryName+"</strong><br />");
 
               
             },
