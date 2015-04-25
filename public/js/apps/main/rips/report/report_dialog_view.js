@@ -1,7 +1,7 @@
 define(["app", "tpl!apps/main/rips/report/templates/report_dialog.tpl",
         "tpl!apps/main/rips/report/templates/report_hits_jacks_graph_dialog.tpl",
         "tpl!apps/main/rips/report/templates/report_countries_graph_dialog.tpl",
-        "bootstrap-dialog", "morris", "worldmap"], function(RipManager, ReportDialogTemplate, ReportDialogHitsJacksGraph, ReportDialogCountriesGraph, BootstrapDialog){
+        "bootstrap-dialog", "moment", "morris", "worldmap"], function(RipManager, ReportDialogTemplate, ReportDialogHitsJacksGraph, ReportDialogCountriesGraph, BootstrapDialog, moment){
   RipManager.module("RipsApp.ReportDialog.View", function(View, RipManager, Backbone, Marionette, $, _){
 
     View.RipReportDialogLayout = Marionette.LayoutView.extend({
@@ -82,12 +82,12 @@ define(["app", "tpl!apps/main/rips/report/templates/report_dialog.tpl",
             data: archivedHitsJacksData,
             hoverCallback: function(index, options, content) {
               var item = options.data[index];
-              
+              var date = moment(item.time).format('LL');
               var percentJacked = (item.jacks / item.rippedHits) * 100;
               if(isNaN(percentJacked)) {
                 percentJacked = 0;
               }
-              var html = "<div class='morris-hover-row-label'>"+ item.time +"</div><div class='morris-hover-point' style='color: #3c8dbc'>" +
+              var html = "<div class='morris-hover-row-label'>"+ date +"</div><div class='morris-hover-point' style='color: #3c8dbc'>" +
                           "Ripped Hits: " +
                           me.numbersWithCommas(item.rippedHits) +
                           "</div>" +
@@ -131,19 +131,15 @@ define(["app", "tpl!apps/main/rips/report/templates/report_dialog.tpl",
           data: hourlyHitsJacksData,
           hoverCallback: function(index, options, content) {
             var item = options.data[index];
-            var date = new Date(item.time)
-            var formattedTime = "";
-            if(date.getHours() > 9) {
-              formattedTime = date.getHours() + ":00 Hours";
-            } else {
-              formattedTime = "0" + date.getHours() + ":00 Hours";
-            }
+            
+            var date = moment(item.time).format("HH");
+            
             var percentJacked = (item.jacks / item.rippedHits) * 100;
             if(isNaN(percentJacked)) {
               percentJacked = 0;
             }
 
-            var html = "<div class='morris-hover-row-label'>"+ formattedTime +"</div><div class='morris-hover-point' style='color: #3c8dbc'>" +
+            var html = "<div class='morris-hover-row-label'>"+ date +":00</div><div class='morris-hover-point' style='color: #3c8dbc'>" +
                         "Ripped Hits: " +
                         me.numbersWithCommas(item.rippedHits) +
                         "</div>" +

@@ -16,6 +16,7 @@
     "spin": "latest",
     "underscore": "latest",
     "backbone": "latest",
+    "awesome-bootstrap-checkbox": "latest",
     "backbone.marionette": "latest",
     "backbone.picky": "latest",
     "backbone.syphon": "latest",
