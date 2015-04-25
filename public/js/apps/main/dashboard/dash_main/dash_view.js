@@ -1,7 +1,7 @@
 define(["app", "tpl!apps/main/dashboard/dash_main/templates/dash.tpl", 
   "tpl!apps/main/dashboard/dash_main/templates/overview_dash_item.tpl", 
-  "tpl!apps/main/dashboard/dash_main/templates/overview_stats_graph.tpl", "morris"],
-function(RipManager, dashTpl, overviewDashItem, overviewStatsGraphTpl){
+  "tpl!apps/main/dashboard/dash_main/templates/overview_stats_graph.tpl", "moment", "morris"],
+function(RipManager, dashTpl, overviewDashItem, overviewStatsGraphTpl, moment){
 
   RipManager.module("DashboardApp.List.View", function(View, RipManager, Backbone, Marionette, $, _){
 
@@ -76,10 +76,10 @@ function(RipManager, dashTpl, overviewDashItem, overviewStatsGraphTpl){
             data: data,
             hoverCallback: function(index, options, content) {
               var item = options.data[index];
-              
+              var date = moment(item.time).format('LL');
               var percentJacked = (item.jacks / item.rippedHits) * 100;
 
-              var html = "<div class='morris-hover-row-label'>"+ item.time +"</div><div class='morris-hover-point' style='color: #3c8dbc'>" +
+              var html = "<div class='morris-hover-row-label'>"+ date +"</div><div class='morris-hover-point' style='color: #3c8dbc'>" +
                           "Ripped Hits: " +
                           me.numbersWithCommas(item.rippedHits) +
                           "</div>" +
