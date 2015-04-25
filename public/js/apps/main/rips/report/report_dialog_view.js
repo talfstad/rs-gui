@@ -109,6 +109,12 @@ define(["app", "tpl!apps/main/rips/report/templates/report_dialog.tpl",
             hideHover: 'auto'
           });
 
+        //HACK but a good one ;)
+        $('#report-last-month').on('shown.bs.tab', function (e) {
+            me.overviewGraphDataGraph.redraw();
+        });
+
+
 
         //HOURLY GRAPH STUFF    
         var hourlyHitsJacksData = [];
@@ -166,10 +172,6 @@ define(["app", "tpl!apps/main/rips/report/templates/report_dialog.tpl",
         $('#report-by-the-hour').on('shown.bs.tab', function (e) {
             me.hourlyGraph.redraw();
         });
-        $('#report-last-month').on('shown.bs.tab', function (e) {
-            me.hourlyGraph.redraw();
-        });
-        
       },
 
         serializeData: function(){
