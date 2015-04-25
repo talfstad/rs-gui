@@ -102,13 +102,12 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
                           $.each(toRemove, function(idx,domainModel){
                             rips.remove(domainModel);
                           });
-                          model.save(data, {success: saveRipSuccess, error: saveRipError});
                         }, 
                         error: saveRipError 
                       });
-                      view.closeDialog();
                     }
-
+                      model.save(data, {success: saveRipSuccess, error: saveRipError});
+                      view.closeDialog();
                     
                   } else {
                     //TODO This doesn't contain the actual previous attr right now
