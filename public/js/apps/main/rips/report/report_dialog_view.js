@@ -166,7 +166,9 @@ define(["app", "tpl!apps/main/rips/report/templates/report_dialog.tpl",
         $('#report-by-the-hour').on('shown.bs.tab', function (e) {
             me.hourlyGraph.redraw();
         });
-
+        $('#report-last-month').on('shown.bs.tab', function (e) {
+            me.hourlyGraph.redraw();
+        });
         
       },
 
