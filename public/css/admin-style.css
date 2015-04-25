@@ -121,6 +121,14 @@ p.featured {
   background-color:#ccc;
 }
 
+#registered-table-container .registered-row-edit-highlight td{
+  background-color:#dedede;
+}
+
+#registered-table-container .registered-row-edit-highlight td:hover {
+  background-color:#ccc;
+}
+
 
 /* Used for small scrollbar on notifications */
 [data-notify="progressbar"] {

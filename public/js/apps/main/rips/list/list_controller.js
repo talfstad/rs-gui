@@ -82,7 +82,7 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
               //it sets up some main things for the main app including left nav
               //the main layout, etc. TODO
              
-              ripsListView.on("childview:rip:edit", function(viewTestTodo, args){
+              ripsListView.on("childview:rip:edit", function(childView, args){
 
                 var model = args.model;
 

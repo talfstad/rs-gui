@@ -3,7 +3,7 @@ define(["app", "apps/main/registered/list/list_view"], function(RipManager, Regi
     List.Controller = {
       listRegistered: function(criterion){
         require(["apps/main/registered/list/list_model",
-                 "common/loading_view"], function(getRegisteredModel, LoadingView){
+                 "common/loading_view"], function(GetRegisteredModel, LoadingView){
 
           var registeredListLayout = new RegisteredListView.RegisteredListLayout();
           registeredListLayout.render();
@@ -31,10 +31,41 @@ define(["app", "apps/main/registered/list/list_view"], function(RipManager, Regi
             });
 
             
-            registeredListView.on("childview:unregister", function(childView, model) {
-              //confirm dialog before unregistering domain
+            registeredListView.on("childview:unregister", function(childView, args) {
+              var model = args.model;
 
-              //unregister!
+              var unregisterDialogView = new RegisteredListView.UnregisterDialogView({
+                model: model
+              });
+
+              var saveUnregisterSuccess = function(model, message, other) {
+                registeredListView.trigger("unregister:notify", "Success", "success");
+                //remove all things with this domain
+                var toRemove = registeredCollection.getModelsWithDomain(unregisterDialogView.model.attributes.domain);
+                $.each(toRemove, function(idx,domainModel){
+                  registeredCollection.remove(domainModel);
+                });
+              };
+
+              var saveUnregisterError = function(model, message, other) {
+                registeredListView.trigger("unregister:notify", "Error", "danger");
+              };
+
+              unregisterDialogView.on("unregister:submit", function(data){
+                var unregisterModel = new GetRegisteredModel.Unregister();
+                var data = {};
+                data.url = model.attributes.url;
+                unregisterModel.set(data);
+                unregisterModel.save(data, {success: saveUnregisterSuccess, error: saveUnregisterError});
+                
+                unregisterDialogView.closeDialog();
+              });
+
+              unregisterDialogView.on("close", function(){
+                args.view.trigger("remove:highlightrow");
+              });
+
+                unregisterDialogView.showDialog();
             });
 
             try {

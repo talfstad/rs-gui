@@ -19,9 +19,24 @@ define(["app"], function(RipManager){
       }
     });
 
+    GetRegistered.Unregister = Backbone.Model.extend({
+      url: '/unregister_domain',
+      defaults: {
+        url: ''
+      }
+    });
+
     GetRegistered.RegisteredCollection = Backbone.Collection.extend({
       url: "/lander_info",
-      model: GetRegistered.Registered
+      model: GetRegistered.Registered,
+
+      getModelsWithDomain: function(domain){
+        filtered = this.filter(function(registeredModel) {
+          return registeredModel.get("domain") === domain;
+        });
+      
+        return filtered;
+      }
     });
 
     //General model to use

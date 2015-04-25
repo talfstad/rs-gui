@@ -30,12 +30,15 @@ module.exports = function(app, db, checkAuth){
                 console.log(err);
                 res.status(500);
                 res.json({error:"Error registering domain: " + domain});
+            } else {
+                res.status(200);
+                res.json({succes: "Success"});
             }
         });
 
     });
 
-    app.post("/unregister_domain", checkAuth, function(req, res) {  
+    app.post("/unregister_domain", checkAuth, function(req, res) { 
         var url = req.body.url;
         var domain = getDomain(url);
 
@@ -44,6 +47,9 @@ module.exports = function(app, db, checkAuth){
                 console.log(err);
                 res.status(500);
                 res.json({error:"Error unregistering domain: " + domain});
+            } else {
+                res.status(200);
+                res.json({succes: "Success"});
             }
         });
 
