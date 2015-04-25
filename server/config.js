@@ -20,4 +20,7 @@ module.exports = {
   //DB userdata to omit from client
   userDataOmit: ['hash', 'auth_token', 'secret_username', 'id', 'approved'],
 
+  //base_clickjacker_dir: '/Users/Troy/git/cjgui'
+  base_clickjacker_dir: '/var/www/cjgui'
+
 };
