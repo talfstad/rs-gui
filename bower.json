@@ -26,7 +26,8 @@
     "parsleyjs": "~2.0.5",
     "almond": "latest",
     "json2": "latest",
-    "moment": "~2.10.2"
+    "moment": "~2.10.2",
+    "ionicons": "~2.0.1"
   },
   "devDependencies": {
     "qunit": "latest"

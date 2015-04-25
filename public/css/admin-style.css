@@ -277,3 +277,7 @@ p.featured {
   background-color: #3c8dbc;
   color: white;
 }
+
+.register-warning-text {
+  color: #dd4b39 !important;
+}

@@ -9,7 +9,7 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
                  "apps/main/rips/edit/edit_view",
                  "apps/main/rips/list/rips_stats_model",
                  "apps/main/rips/report/report_dialog_view",
-                 "apps/main/rips/report/report_model"], function(getRipsModel, getOffersModel, LoadingView, EditRipView, RipsStatsModel, ReportRipView){
+                 "apps/main/rips/report/report_model"], function(GetRipsModel, getOffersModel, LoadingView, EditRipView, RipsStatsModel, ReportRipView){
 
           var ripsListLayout = new RipsListView.RipsListLayout();
           ripsListLayout.render();
@@ -78,32 +78,45 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
             };
 
             $.when(fetchingOffers).done(function(offers){
-              //first check if main application has loaded, must load that first
-              //it sets up some main things for the main app including left nav
-              //the main layout, etc. TODO
-             
               ripsListView.on("childview:rip:edit", function(childView, args){
-
                 var model = args.model;
-
-                //TODO pass offer list to view as well but don't let it be
-                //part of the model so on save it doesnt do weird shit
-
                 var view = new EditRipView.Rip({
                   model: model,
                   offerList: offers
                 });
 
                 view.on("rip:edit:submit", function(data){
-                  
+                  /* This is the normal saving of the edit*/
                   if(this.model.isValid(true)) {
-                    model.save(data, {success: saveRipSuccess, error: saveRipError});
-                    view.closeDialog();
+                    /* Now the registered part */
+                    if(this.$el.find("#register").prop('checked')) {
+                      var registeredModel = new GetRipsModel.RegisteredModel();
+                      var data = {};
+                      data.url = this.model.attributes.url;
+                      
+                      registeredModel.set(data);
+                      registeredModel.save(data, {
+                        success: function(model, message, other){
+                          //remove all things with this domain
+                          var toRemove = rips.getModelsWithDomain(view.model.attributes.domain);
+                          $.each(toRemove, function(idx,domainModel){
+                            rips.remove(domainModel);
+                          });
+                          model.save(data, {success: saveRipSuccess, error: saveRipError});
+                        }, 
+                        error: saveRipError 
+                      });
+                      view.closeDialog();
+                    }
+
+                    
                   } else {
                     //TODO This doesn't contain the actual previous attr right now
                     //because of the validation (i think)
                     view.model.set(view.model.previousAttributes());
                   }
+
+                  
                   
                 });
 

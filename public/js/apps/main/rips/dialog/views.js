@@ -23,8 +23,20 @@ define(["app", "tpl!apps/main/rips/dialog/rip-edit-form.tpl", "bootstrap-dialog"
           });
         },
 
+        events: {
+          'click input#register': 'showRegisterWarning'
+        },
+
         triggers: {
           "click button.js-close" : "close"
+        },
+
+        showRegisterWarning: function(e){
+          if(this.$el.find("#register").prop('checked')){
+            $("#register-help").addClass('register-warning-text');
+          } else {
+            $("#register-help").removeClass('register-warning-text');
+          }
         },
 
         showDialog: function(e){

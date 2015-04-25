@@ -209,6 +209,10 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
     childView: View.Rip,
     childViewContainer: "tbody",
 
+    collectionEvents: {
+      'remove': 'removeRowFromDatatables'
+    },
+
     initialize: function(){
       this.listenTo(this, "rip:edit:notify", this.notify); 
       this.listenTo(this.collection, "reset", function(){
@@ -216,6 +220,10 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
           collectionView.$el.append(childView.el);
         }
       });
+    },
+  
+    removeRowFromDatatables: function(model, two, options){
+      $("#rips-table").dataTable().fnDeleteRow(options.index);
     },
 
     notify: function(data, type) {

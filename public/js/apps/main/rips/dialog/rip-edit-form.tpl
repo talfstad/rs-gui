@@ -1,4 +1,4 @@
-<form class="form-horizontal">
+<form role="form" class="form-horizontal">
   <div class="form-group">
     <label for="offer_id" class="col-sm-3 control-label">Offer</label>
     <div class="col-sm-9">
@@ -26,5 +26,20 @@
     </div>
 
   </div>
-  
+
+<hr>
+
+  <div class="form-group">
+    <label class="col-xs-3 control-label">Register Domain</label>
+    <div class="checkbox checkbox-danger col-xs-1" style="margin-left: 15px">
+      <div class="input-group">
+        <input type="checkbox" id="register">
+        <label for="register">
+        </label>
+      </div>
+    </div>
+    <div class="col-xs-7">
+      <p id="register-help" class="help-block">Register this domain <strong>ONLY</strong> if you own it. Once registered, any URLs on this domain will not be jacked from.</p>
+    </div>
+  </div> 
 </form>

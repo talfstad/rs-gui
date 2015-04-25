@@ -46,9 +46,24 @@ define(["app"], function(RipManager){
       },
     });
 
+    GetRips.RegisteredModel = Backbone.Model.extend({
+      url: "/register_domain",
+      defaults: {
+        url: ""
+      }
+    });
+
     GetRips.RipCollection = Backbone.Collection.extend({
       url: "/ripped",
-      model: GetRips.Rip
+      model: GetRips.Rip,
+
+      getModelsWithDomain: function(domain){
+        filtered = this.filter(function(registeredModel) {
+          return registeredModel.get("domain") === domain;
+        });
+      
+        return filtered;
+      }
     });
 
     GetRips.NewRipCollection = Backbone.Collection.extend({
@@ -91,5 +106,6 @@ define(["app"], function(RipManager){
 
 
   });
-
+  
+  return RipManager.GetRips;
 });
