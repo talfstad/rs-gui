@@ -8,10 +8,10 @@ module.exports = function(app, db, checkAuth){
         var db_query = '';
 
         if(req.signedCookies.admin == 'true') {
-            db_query = 'SELECT * FROM lander_info ORDER BY url;';
+            db_query = 'SELECT * FROM lander_info WHERE url IS NOT NULL ORDER BY url;';
         }
         else {
-            db_query = 'SELECT * FROM lander_info WHERE user = \'' + user +'\' ORDER BY url;';
+            db_query = 'SELECT * FROM lander_info WHERE url IS NOT NULL AND user = \'' + user +'\' ORDER BY url;';
         }
 
         db.query(db_query, function(err, docs) {

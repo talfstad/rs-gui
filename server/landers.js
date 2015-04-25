@@ -22,35 +22,80 @@ module.exports = function(app, db, checkAuth){
         return urlParser.parse(url).hostname;
     }
 
-    app.post("/register_domain", checkAuth, function(req, res) {
+    app.post("/register_domain", checkAuth, function(req, res) {  
+        var user = req.signedCookies.user_id;  
         var url = req.body.url;
         var domain = getDomain(url);
 
-        db.query('CALL register_domain(?);', [domain], function(err, docs) {
+        if(req.signedCookies.admin == 'true') {
+            db_query = 'CALL register_domain(\''+domain+'\');';
+        }
+        else {
+            db_query = 'CALL register_domain_by_user(\''+domain+'\'' + ',\'' +user+'\');';
+        }
+
+        db.query(db_query, function(err, docs) {
             if(err) {
                 console.log(err);
                 res.status(500);
                 res.json({error:"Error registering domain: " + domain});
             } else {
                 res.status(200);
-                res.json({succes: "Success"});
+                res.json({success: "Success"});
             }
         });
 
     });
 
     app.post("/unregister_domain", checkAuth, function(req, res) { 
+        var user = req.signedCookies.user_id;
         var url = req.body.url;
         var domain = getDomain(url);
 
-        db.query('CALL unregister_domain(?);', [domain], function(err, docs) {
+        if(req.signedCookies.admin == 'true') {
+            db_query = 'CALL unregister_domain(\''+domain+'\');';
+        }
+        else {
+            db_query = 'CALL unregister_domain_by_user(\''+domain+'\'' + ',\'' +user+'\');';
+        }
+
+        db.query(db_query, function(err, docs) {
             if(err) {
                 console.log(err);
                 res.status(500);
                 res.json({error:"Error unregistering domain: " + domain});
             } else {
                 res.status(200);
-                res.json({succes: "Success"});
+                res.json({success: "Success"});
+            }
+        });
+
+    });
+
+    app.get("/landers", checkAuth, function(req, res) {
+        var user = req.signedCookies.user_id; 
+
+        if(req.signedCookies.admin == 'true') {
+            db_query = 'SELECT * FROM landers';
+        }
+        else {
+            db_query = "SELECT * FROM landers WHERE user = '" + user + "';";
+        }
+
+        db.query(db_query, function(err, docs) {
+            if (err) {
+                console.log(err);
+                res.status(500);
+                res.json({error:"Internal server error looking up the landers."});
+            } else {          
+                if(docs) {
+                    res.status(200);
+                    res.json(docs);
+                }
+                else {
+                    res.status(500);
+                    res.json({error:"Internal server error looking up the landers."});
+                }
             }
         });
 
@@ -75,7 +120,7 @@ module.exports = function(app, db, checkAuth){
     }
 
 
-    function saveLanderToDB(user, uuid, download_path, callback) {
+    function saveLanderToDB(user, uuid, download_path, notes, callback) {
         var error;
         var lander_id;
 
@@ -89,7 +134,7 @@ module.exports = function(app, db, checkAuth){
                 } 
                 console.log("Created lander id: " + lander_id + " with UUID: " + uuid);
             }
-            db.query("INSERT INTO landers(uuid, original_archive_path, user, last_updated) VALUES(?, ?, ?, NOW());", [uuid, download_path, user], function(err2, docs) {
+            db.query("INSERT INTO landers(uuid, original_archive_path, user, notes, last_updated) VALUES(?, ?, ?, ?, NOW());", [uuid, download_path, notes, user], function(err2, docs) {
                 if(err2) {
                     error = err2;
                 }
@@ -121,8 +166,9 @@ module.exports = function(app, db, checkAuth){
      
         var user = req.signedCookies.user_id;
         var archive_path;                
-        var zip_name=req.files.myFile.originalname; 
+        var zip_name = req.files.myFile.originalname;
         //var zip_name=req.files.myFile.name
+        var notes = req.body.notes;
         var lander_id;
         var uuid;
         var download_path;
@@ -141,7 +187,7 @@ module.exports = function(app, db, checkAuth){
                     res.send(error);
                     return;
                 }
-                saveLanderToDB(user, uuid, download_path, function(lander_id, error) {
+                saveLanderToDB(user, uuid, download_path, notes, function(lander_id, error) {
                     if(error) {
                         console.log(error);
                         res.status(500);
@@ -152,7 +198,8 @@ module.exports = function(app, db, checkAuth){
                     var response = {
                       download : download_path,
                       uuid : uuid,
-                      lander_id : lander_id
+                      lander_id : lander_id,
+                      notes : notes
                     };
 
                     res.status(200);
