@@ -15,7 +15,8 @@ define(["app"], function(RipManager){
           $.when(fetchingLoggedInStatus).done(function(statusCollection){
 
             if(statusCollection.length == 1 && statusCollection.at(0).attributes.error) {
-              RipManager.trigger("authentication:login");
+              RipManager.navigate("login", {trigger: true});
+              // RipManager.trigger("authentication:login");
             } else {
               RipManager.session.set({logged_in: true});
               if(statusCollection.models[0].attributes.user.admin) {

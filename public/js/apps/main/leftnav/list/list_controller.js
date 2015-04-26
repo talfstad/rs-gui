@@ -3,6 +3,7 @@ define(["app", "apps/main/leftnav/list/list_view",
         "apps/main/dashboard/dashboard_app",
         "apps/main/offers/offers_app",
         "apps/main/registered/registered_app",
+        "apps/main/landers/landers_app",
         "apps/main/rips/rips_app"], function(RipManager, View, leftNavModel){
   RipManager.module("LeftNavApp.List", function(List, RipManager, Backbone, Marionette, $, _){
     List.Controller = {

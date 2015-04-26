@@ -72,7 +72,7 @@ module.exports = function(app, db, checkAuth){
 
     });
 
-    app.get("/landers", checkAuth, function(req, res) {
+    app.get("/get_landers", checkAuth, function(req, res) {
         var user = req.signedCookies.user_id; 
 
         if(req.signedCookies.admin == 'true') {

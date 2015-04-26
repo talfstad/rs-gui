@@ -18,7 +18,8 @@ define(["app", "authentication/login/login_view", "authentication/session/user_m
                   RipManager.session.set({admin: true});
                 }
                 RipManager.session.set({username: status.models[0].attributes.user.username});
-                RipManager.trigger("main:dash:list");
+                RipManager.navigate("dash", {trigger: true});
+                // RipManager.trigger("main:dash:list");
               }
             });
           });
