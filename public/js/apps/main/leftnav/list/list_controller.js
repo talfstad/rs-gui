@@ -20,8 +20,9 @@ define(["app", "apps/main/leftnav/list/list_view",
             var childModel = children[child];
             RipManager.trigger(childModel.navigationTrigger);
           } else {
-            var trigger = model.get("navigationTrigger");
-            RipManager.trigger(trigger);
+            // var trigger = model.get("navigationTrigger");
+            var url = model.get("url");
+            RipManager.navigate(url, {trigger: true});
           }
         });
 

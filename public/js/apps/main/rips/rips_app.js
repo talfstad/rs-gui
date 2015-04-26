@@ -29,7 +29,6 @@ define(["app"], function(RipManager){
                "apps/main/leftnav/leftnav_app"], function(ListController){
         executeAction(ListController.listRips, args);
         RipManager.execute("set:active:leftnav", "rips");
-        RipManager.navigate("rips");
       });
     },
 

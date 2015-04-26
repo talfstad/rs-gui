@@ -29,7 +29,6 @@ define(["app"], function(RipManager){
                "apps/main/leftnav/leftnav_app"], function(DashMainController){
         RipManager.execute("set:active:leftnav", "dash");
         executeAction(DashMainController.listDash, args);
-        RipManager.navigate("dash");
       });
     }
   };
