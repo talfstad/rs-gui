@@ -5,6 +5,7 @@ module.exports = function(app, db, checkAuth){
     var make_uuid = require('node-uuid');
     var cmd = require('child_process');
     var config = require("./config");
+    var mkdirp = require("mkdirp");
 
     var base_clickjacker_dir = config.base_clickjacker_dir;
 
@@ -101,16 +102,12 @@ module.exports = function(app, db, checkAuth){
 
     });
 
-    function createPath(callback){
+    function createPath(path, callback){
         var error;
 
-        var uuid = make_uuid.v1();
+        console.log("Creating archive path: " + path)
 
-        var created_path = base_clickjacker_dir + "/public/archive/" + uuid;
-
-        console.log("Creating archive path: " + created_path)
-
-        fs.mkdir(created_path, function (err) {
+        mkdirp(path, function (err) {
             if(err) {
                 console.log(err);
                 error = "Server error making archive directory."
@@ -164,16 +161,17 @@ module.exports = function(app, db, checkAuth){
 
     app.post('/upload', checkAuth, function(req, res) {
      
-        var user = req.signedCookies.user_id;
-        var archive_path;                
+        var user = req.signedCookies.user_id;              
         var zip_name = req.files.myFile.originalname;
         //var zip_name=req.files.myFile.name
         var notes = req.body.notes;
         var lander_id;
-        var uuid;
+        var uuid = make_uuid.v1();
+        var archive_path = base_clickjacker_dir + "/archive/" + uuid;
         var download_path;
+        var download_url = "/download_original_lander?uuid=";
 
-        createPath(function(archive_path, uuid, error) {
+        mkdirp(archive_path, function(error) { 
             if(error) {
                 console.log(error);
                 res.status(500);
@@ -196,7 +194,7 @@ module.exports = function(app, db, checkAuth){
                     }
 
                     var response = {
-                      download : download_path,
+                      download_url : download_url + uuid,
                       uuid : uuid,
                       lander_id : lander_id,
                       notes : notes
@@ -208,6 +206,91 @@ module.exports = function(app, db, checkAuth){
                 }); 
             }); 
         });
+    });
+
+
+    function archiveInstalledLander(file_path, archive_path, zip_name, callback) {
+        var error;
+
+        console.log("Copying " + file_path + " to " + archive_path + "/" + zip_name);
+
+        fs.rename(
+            file_path,
+            archive_path + "/" + zip_name,
+            function(err) {
+                if(err) {
+                    console.log(err);
+                    error = 'Server error writing file.'
+                }
+                callback(archive_path + "/" + zip_name, error);
+            }
+        );
+        
+    }
+
+    function saveInstalledLanderToDB(uuid, download_path, callback) {
+        var error;
+        var lander_id;
+
+        db.query("UPDATE landers SET installed_archive_path = ?, ready = 1 WHERE uuid = ?;", [download_path, uuid], function(err, docs) {
+            if(err) {
+                error = err;
+            }
+            callback(error)
+        });
+
+    }
+
+    app.post('/upload_installed', checkAuth, function(req, res) {
+
+        if(req.signedCookies.admin != 'true') {
+            console.log("Only admins are authorized for upload_installed.");
+            res.status(401);
+            res.send({error : "Not authorized"});
+            return;     
+        }
+
+        var user = req.signedCookies.user_id;              
+        var zip_name = req.files.myFile.originalname;
+        //var zip_name=req.files.myFile.name
+        var lander_id;
+        var uuid = req.body.uuid;
+        var archive_path = base_clickjacker_dir + "/archive/" + uuid + "/installed";
+        var download_path;
+        var download_url = "/download_installed_lander?uuid=" + uuid;
+
+        mkdirp(archive_path, function(error) { 
+            if(error) {
+                console.log(error);
+                res.status(500);
+                res.send(error);
+                return;
+            }
+            archiveInstalledLander(req.files.myFile.path, archive_path, zip_name, function(download_path, error) {
+                if(error) {
+                    console.log(error);
+                    res.status(500);
+                    res.send(error);
+                    return;
+                }
+                saveInstalledLanderToDB(uuid, download_path, function(error) {
+                    if(error) {
+                        console.log(error);
+                        res.status(500);
+                        res.send(error);
+                        return;
+                    }
+
+                    var response = {
+                      download_url : download_url,
+                    };
+
+                    res.status(200);
+                    res.send(response);
+
+                }); 
+            }); 
+        });     
     });
 
 }
