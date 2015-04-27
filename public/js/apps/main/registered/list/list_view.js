@@ -55,7 +55,7 @@ function(RipManager, registeredTpl, registeredListTpl, noRegisteredTpl, register
               var date = moment(item.time).format('LL');
               
               var html = "<div class='morris-hover-row-label'>"+ date +"</div><div class='morris-hover-point' style='color: #3c8dbc'>" +
-                            "Rips: " + 
+                            "Registered Hits: " + 
                             me.numbersWithCommas(item.hits) +
                           "</div>";
 

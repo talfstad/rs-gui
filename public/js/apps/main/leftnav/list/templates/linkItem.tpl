@@ -7,7 +7,7 @@
   </a>
   <ul class="treeview-menu">
     <% _.each(children, function(child, child_name) { %>
-      <li><a href="#" data-link="<%= child_name %>"><i class="<%= child.icon %>"></i> <%= child.name %></a></li>
+      <li style="margin-left: 10px;"><a href="#" data-link="<%= child_name %>"><i class="<%= child.icon %>"></i> <%= child.name %></a></li>
     <% }) %>
   </ul>
             
