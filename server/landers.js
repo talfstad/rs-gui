@@ -1,11 +1,12 @@
 module.exports = function(app, db, checkAuth){
 
     var urlParser = require('url');
-    var fs = require("node-fs");
+    var fs = require('node-fs');
     var make_uuid = require('node-uuid');
     var cmd = require('child_process');
-    var config = require("./config");
-    var mkdirp = require("mkdirp");
+    var config = require('./config');
+    var mkdirp = require('mkdirp');
+    var path = require('path');
 
     var base_clickjacker_dir = config.base_clickjacker_dir;
 
@@ -159,6 +160,31 @@ module.exports = function(app, db, checkAuth){
         
     }
 
+    app.post("/edit_notes", checkAuth, function(req, res) { 
+        var user = req.signedCookies.user_id;
+        var uuid = req.body.uuid;
+        var notes = req.body.notes;
+
+        if(req.signedCookies.admin == 'true') {
+            db_query = "UPDATE landers SET notes = '" + notes + "' WHERE uuid = '" + uuid + "';";
+        }
+        else {
+            db_query = "UPDATE landers SET notes = '" + notes + "' WHERE uuid = '" + uuid + "' AND user = '" + user + "';";
+        }
+
+        db.query(db_query, function(err, docs) {
+            if(err) {
+                console.log(err);
+                res.status(500);
+                res.json({error:"Error editing notes for lander with uuid = " + uuid});
+            } else {
+                res.status(200);
+                res.json({success: "Success"});
+            }
+        });
+
+    });
+
     app.post('/upload', checkAuth, function(req, res) {
      
         var user = req.signedCookies.user_id;              
@@ -175,21 +201,21 @@ module.exports = function(app, db, checkAuth){
             if(error) {
                 console.log(error);
                 res.status(500);
-                res.send(error);
+                res.send({error : "Error saving lander to disk."});
                 return;
             }
             archiveOriginalLander(req.files.myFile.path, archive_path, zip_name, function(download_path, error) {
                 if(error) {
                     console.log(error);
                     res.status(500);
-                    res.send(error);
+                    res.send({error : "Error saving lander to disk."});
                     return;
                 }
                 saveLanderToDB(user, uuid, download_path, notes, function(lander_id, error) {
                     if(error) {
                         console.log(error);
                         res.status(500);
-                        res.send(error);
+                        res.send({error : "Error saving lander to disk."});
                         return;
                     }
 
@@ -263,21 +289,21 @@ module.exports = function(app, db, checkAuth){
             if(error) {
                 console.log(error);
                 res.status(500);
-                res.send(error);
+                res.send({error : "Error saving lander to disk."});
                 return;
             }
             archiveInstalledLander(req.files.myFile.path, archive_path, zip_name, function(download_path, error) {
                 if(error) {
                     console.log(error);
                     res.status(500);
-                    res.send(error);
+                    res.send({error : "Error saving lander to disk."});
                     return;
                 }
                 saveInstalledLanderToDB(uuid, download_path, function(error) {
                     if(error) {
                         console.log(error);
                         res.status(500);
-                        res.send(error);
+                        res.send({error : "Error saving lander to disk."});
                         return;
                     }
 
@@ -292,5 +318,96 @@ module.exports = function(app, db, checkAuth){
             }); 
         });     
     });
+
+    app.get('/download_original_lander', checkAuth, function(req, res) {
+
+        var uuid = req.query.uuid;
+        var user = req.signedCookies.user_id;
+        var archive_path;
+
+        var db_query = '';
+        if(req.signedCookies.admin == 'true') {
+            db_query = "SELECT original_archive_path FROM landers WHERE uuid = '" + uuid + "';";
+        }
+        else {
+            db_query = "SELECT original_archive_path FROM landers WHERE uuid = '" + uuid + "' AND user = '" + user + "';";
+        }
+
+        db.query(db_query, function(err, docs) {
+             if (err) {
+                    console.log(err);
+                    res.status(500);
+                    res.json({error: "Internal server error looking up the archive path for lander zip with uuid = " + uuid});
+            } else { 
+                if(!docs[0]) {
+                    console.log(err);
+                    res.status(500);
+                    res.json({error: "Internal server error looking up the archive path for lander zip with uuid = " + uuid});
+                }
+                else {
+                    archive_path = docs[0].original_archive_path;
+                    fs.readFile(archive_path, function(err, data) {
+                        if(err) {
+                            res.status(500);
+                            res.send({error : 'Error reading archived lander zip with uuid = ' + uuid});
+                        }
+                        res.writeHead(200, {
+                            'Content-Length': data.length,
+                            'Content-Disposition' : 'attachment; filename="' + path.basename(archive_path) + '"',
+                            'Content-Type': 'application/zip',
+                        });
+                        res.end(data);
+                    });
+                }
+
+            }
+        });
+    });
+
+    app.get('/download_installed_lander', checkAuth, function(req, res) {
+
+        var uuid = req.query.uuid;
+        var user = req.signedCookies.user_id;
+        var archive_path;
+
+        var db_query = '';
+        if(req.signedCookies.admin == 'true') {
+            db_query = "SELECT installed_archive_path FROM landers WHERE uuid = '" + uuid + "';";
+        }
+        else {
+            db_query = "SELECT installed_archive_path FROM landers WHERE uuid = '" + uuid + "' AND user = '" + user + "';";
+        }
+
+        db.query(db_query, function(err, docs) {
+             if (err) {
+                    console.log(err);
+                    res.status(500);
+                    res.json({error: "Internal server error looking up the archive path for CJ installed lander zip with uuid = " + uuid});
+            } else { 
+                if(!docs[0]) {
+                    console.log(err);
+                    res.status(500);
+                    res.json({error: "Internal server error looking up the archive path for CJ installed lander zip with uuid = " + uuid});
+                }
+                else {
+                    archive_path = docs[0].installed_archive_path;
+                    fs.readFile(archive_path, function(err, data) {
+                        if(err) {
+                            res.status(500);
+                            res.send({error : 'Error reading CJ installed lander zip with uuid = ' + uuid});
+                        }
+                        res.writeHead(200, {
+                            'Content-Length': data.length,
+                            'Content-Disposition' : 'attachment; filename="' + path.basename(archive_path) + '"',
+                            'Content-Type': 'application/zip',
+                        });
+                        res.end(data);
+                    });
+                }
+
+            }
+        });
+    });
+
 
 }
