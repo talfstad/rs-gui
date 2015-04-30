@@ -61,6 +61,7 @@ require('./offers')(app, db, checkAuth);
 require('./ripped_stats')(app, db, checkAuth);
 require('./registered_stats')(app, db, checkAuth);
 require('./landers')(app, db, checkAuth);
+require('./reporting')(app, db, checkAuth);
 
 app.get("*", function(req, res) {
     res.render('index', { csrfToken: req.csrfToken() });
