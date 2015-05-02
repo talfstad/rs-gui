@@ -12,6 +12,7 @@ define(["app", "apps/main/leftnav/list/list_view",
 
 
       listLeftNav: function(){
+        var me = this;
         var links = RipManager.request("leftNav:links"); // get collection for links
         this.leftNavView = new View.LeftNav({collection: links});
 
@@ -23,6 +24,7 @@ define(["app", "apps/main/leftnav/list/list_view",
           } else {
             // var trigger = model.get("navigationTrigger");
             var url = model.get("url");
+            me.setActiveLeftNav(url);
             RipManager.navigate(url, {trigger: true});
           }
         });

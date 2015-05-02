@@ -1,7 +1,7 @@
  <section class="content-header">
     <h1>Landers <small> &mdash; Manage your landers, and add new ones</small></h1>
     <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-upload"></i> Landers</a></li>
+        <li><a href="#"><i class="fa fa-folder-open-o"></i> Landers</a></li>
     </ol>
 </section>
 

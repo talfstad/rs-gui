@@ -7,7 +7,6 @@ define(["app"], function(RipManager){
   var executeAction = function(action, arg){
     RipManager.startSubApp("OffersApp");
     action(arg);
-    RipManager.execute("set:active:header", "offers");
   };
 
   var checkAuth = function(callback, args) {

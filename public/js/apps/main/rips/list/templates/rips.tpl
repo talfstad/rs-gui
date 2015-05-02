@@ -31,7 +31,7 @@
     <div class="col-xs-12">
       <div class="box box-primary">
         <div class="box-header with-border">
-          <h3 class="box-title">Edit Rip Replacement Offers and Offer Redirect Rates</h3>
+          <h3 class="box-title">Edit Daily Rip Replacement Offers and Offer Redirect Rates</h3>
         </div><!-- /.box-header -->
         <div class="box-body table-responsive">
           <div id="rips-table-container" class="box-body">
