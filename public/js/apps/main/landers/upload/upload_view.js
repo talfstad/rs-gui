@@ -61,7 +61,6 @@ define(["app", "tpl!apps/main/landers/upload/upload_lander.tpl",
             {
               label: 'Upload Lander',
               cssClass: 'btn-primary',
-              hotkey: 13, //Enter key
               action: function(e) {
                   me.submitLanderUpload(e);
               }

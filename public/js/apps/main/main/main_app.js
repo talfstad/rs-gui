@@ -20,6 +20,7 @@ define(["app"], function(RipManager){
         "offers": "offers",
         "registered": "registered",
         "landers": "landers",
+        "earnings": "earnings",
         "": "dash",
         ":notfound": "dash"
       }
@@ -91,6 +92,13 @@ define(["app"], function(RipManager){
           RipManager.trigger("leftnav:landers");
           RipManager.trigger("landers:list");
         });
+      },
+      earnings: function(args){
+        require(["apps/main/earnings/earnings_app", "apps/main/leftnav/leftnav_app"], function(){
+          checkMainViewRendered();
+          RipManager.trigger("leftnav:landers");
+          RipManager.trigger("earnings:list");
+        });
       }
     };
 
@@ -117,6 +125,9 @@ define(["app"], function(RipManager){
       },
       landers: function(criterion){
         checkAuth(API.landers);
+      },
+      earnings: function(criterion){
+        checkAuth(API.earnings);
       }
     };
 

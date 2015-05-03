@@ -14,6 +14,7 @@ define(["app"], function(RipManager){
     var initializeLinks = function(){
       var links = [
         { name: "Dashboard", url: "dash", icon: "fa fa-dashboard", children: false, navigationTrigger: "dash:list" },
+
         { name: "Rips", url: "rips", icon: "fa fa-line-chart", children: false, navigationTrigger: "rips:list" },
         { name: "Registered", url: "registered", icon: "fa fa-check-square", children: false, navigationTrigger: "registered:list" },
         {
@@ -23,7 +24,7 @@ define(["app"], function(RipManager){
           navigationTrigger: "offers:list",
           children: {
             // offers_edit: { name: "Edit", url: "offers/edit", icon: "fa fa-edit", navigationTrigger: "offers:list" },
-            offers_new: { name: "New", url: "offers/new", icon: "fa fa-plus-square-o", navigationTrigger: "offers:new" }
+            offers_new: { name: "New", url: "offers/new", icon: "fa fa-cart-plus", navigationTrigger: "offers:new" }
           }
         },
         {
@@ -35,7 +36,8 @@ define(["app"], function(RipManager){
             // offers_edit: { name: "Edit", url: "offers/edit", icon: "fa fa-edit", navigationTrigger: "offers:list" },
             landers_new: { name: "Upload", url: "landers/upload", icon: "fa fa-upload", navigationTrigger: "landers:upload" }
           }
-        }
+        },
+        { name: "Earnings", url: "earnings", icon: "fa fa-diamond", children: false, navigationTrigger: "earnings:list" }
         
       ];
 
