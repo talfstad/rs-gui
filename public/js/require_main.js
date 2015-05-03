@@ -9,7 +9,7 @@ requirejs.config({
     bootstrap: "lib/bootstrap/dist/js/bootstrap.min",
     "bootstrap-notify": "vendor/bootstrap-notify",
     "bootstrap-select": "../plugins/bootstrap-select/distro/js/bootstrap-select",
-    jquery: "lib/jquery/dist/jquery",
+    jquery: ["lib/jquery/dist/jquery", 'jquery'],
     "jquery-ui": "lib/jquery-ui/jquery-ui",
     json2: "lib/json2/json2",
     marionette: "lib/backbone.marionette/lib/backbone.marionette",
@@ -31,8 +31,35 @@ requirejs.config({
     datatablesjquery: '../plugins/datatables/jquery.dataTables',
     datatablesbootstrap: '../plugins/datatables/dataTables.bootstrap',
     'comma-sort': '../plugins/datatables/comma_sort',
-    moment: "lib/moment/min/moment.min"
-    // datatablesresponsive: '../plugins/datatables/dataTables.responsive'
+    moment: "lib/moment/min/moment.min",
+
+
+    /*  <FILE UPLOAD PLUGIN INCLUDES> */
+    'jquery.ui.widget': 'lib/blueimp-file-upload/js/vendor/jquery.ui.widget',
+    'jquery.fileupload': 'lib/blueimp-file-upload/js/jquery.fileupload',
+    'jquery.fileupload-ui': 'lib/blueimp-file-upload/js/jquery.fileupload-ui',
+    'jquery.fileupload-image': 'lib/blueimp-file-upload/js/jquery.fileupload-image',
+    'jquery.fileupload-validate': 'lib/blueimp-file-upload/js/jquery.fileupload-validate',
+    'jquery.fileupload-video': 'lib/blueimp-file-upload/js/jquery.fileupload-video',
+    'jquery.fileupload-audio': 'lib/blueimp-file-upload/js/jquery.fileupload-audio',
+    'jquery.fileupload-process': 'lib/blueimp-file-upload/js/jquery.fileupload-process',
+    'jquery.fileupload-jquery-ui': 'lib/blueimp-file-upload/js/jquery.fileupload-jquery-ui',
+    'jquery.iframe-transport': ['lib/blueimp-file-upload/js/jquery.iframe-transport'],
+    
+    'load-image': 'lib/blueimp-load-image/js/load-image',
+    'load-image-meta': 'lib/blueimp-load-image/js/load-image-meta',
+    'load-image-exif': 'lib/blueimp-load-image/js/load-image-exif',
+    'load-image-ios': 'lib/blueimp-load-image/js/load-image-ios',
+    'canvas-to-blob': 'lib/blueimp-canvas-to-blob/js/canvas-to-blob',
+    'tmpl': 'lib/blueimp-tmpl/js/tmpl'
+    /*  </FILE UPLOAD PLUGIN INCLUDES> */
+
+
+
+
+
+
+
   },
 
   shim: {

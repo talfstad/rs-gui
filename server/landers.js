@@ -160,7 +160,7 @@ module.exports = function(app, db, checkAuth){
         
     }
 
-    app.post("/edit_notes", checkAuth, function(req, res) { 
+    app.post("/edit_notes", checkAuth, function(req, res) {
         var user = req.signedCookies.user_id;
         var uuid = req.body.uuid;
         var notes = req.body.notes;
@@ -187,10 +187,13 @@ module.exports = function(app, db, checkAuth){
 
     app.post('/upload', checkAuth, function(req, res) {
      
-        var user = req.signedCookies.user_id;              
-        var zip_name = req.files.myFile.originalname;
+        var user = req.signedCookies.user_id;    
+        var file = req.files['files[]'];          
+        var zip_name = file.originalname;
         //var zip_name=req.files.myFile.name
         var notes = req.body.notes;
+
+        console.log("notes: " + notes);
         var lander_id;
         var uuid = make_uuid.v1();
         var archive_path = base_clickjacker_dir + "/archive/" + uuid;
@@ -204,7 +207,7 @@ module.exports = function(app, db, checkAuth){
                 res.send({error : "Error saving lander to disk."});
                 return;
             }
-            archiveOriginalLander(req.files.myFile.path, archive_path, zip_name, function(download_path, error) {
+            archiveOriginalLander(file.path, archive_path, zip_name, function(download_path, error) {
                 if(error) {
                     console.log(error);
                     res.status(500);
@@ -223,8 +226,17 @@ module.exports = function(app, db, checkAuth){
                       download_url : download_url + uuid,
                       uuid : uuid,
                       lander_id : lander_id,
-                      notes : notes
+                      notes : notes,
+                      files: [
+                          {
+                            name: file.originalname,
+                            size: file.size,
+                            url: download_url + uuid
+                          }
+                        ]
                     };
+
+                    
 
                     res.status(200);
                     res.send(response);
@@ -350,16 +362,16 @@ module.exports = function(app, db, checkAuth){
                         if(err) {
                             res.status(500);
                             res.send({error : 'Error reading archived lander zip with uuid = ' + uuid});
+                        } else {
+                            res.writeHead(200, {
+                                'Content-Length': data.length,
+                                'Content-Disposition' : 'attachment; filename="' + path.basename(archive_path) + '"',
+                                'Content-Type': 'application/zip',
+                            });
+                            res.end(data);
                         }
-                        res.writeHead(200, {
-                            'Content-Length': data.length,
-                            'Content-Disposition' : 'attachment; filename="' + path.basename(archive_path) + '"',
-                            'Content-Type': 'application/zip',
-                        });
-                        res.end(data);
                     });
                 }
-
             }
         });
     });
@@ -395,13 +407,14 @@ module.exports = function(app, db, checkAuth){
                         if(err) {
                             res.status(500);
                             res.send({error : 'Error reading CJ installed lander zip with uuid = ' + uuid});
+                        } else {
+                            res.writeHead(200, {
+                                'Content-Length': data.length,
+                                'Content-Disposition' : 'attachment; filename="' + path.basename(archive_path) + '"',
+                                'Content-Type': 'application/zip',
+                            });
+                            res.end(data);
                         }
-                        res.writeHead(200, {
-                            'Content-Length': data.length,
-                            'Content-Disposition' : 'attachment; filename="' + path.basename(archive_path) + '"',
-                            'Content-Type': 'application/zip',
-                        });
-                        res.end(data);
                     });
                 }
 

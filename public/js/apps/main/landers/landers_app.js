@@ -23,9 +23,9 @@ define(["app"], function(RipManager){
         RipManager.execute("set:active:leftnav", "landers");
       });
     },
-    addLander: function(args){
-      require(["apps/main/landers/new/new_controller"], function(NewController){
-        executeAction(NewController.addLander, args);
+    uploadLander: function(args){
+      require(["apps/main/landers/upload/upload_controller"], function(UploadController){
+        executeAction(UploadController.uploadLander, args);
       });
     }
   };
@@ -34,8 +34,8 @@ define(["app"], function(RipManager){
     checkAuth(API.listLanders);
   });
 
-  RipManager.on("landers:new", function(){
-    checkAuth(API.addLander);
+  RipManager.on("landers:upload", function(){
+    checkAuth(API.uploadLander);
   });
  
   var authEnabledAPI = {

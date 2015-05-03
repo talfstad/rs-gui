@@ -28,8 +28,8 @@ function(RipManager, landersTpl, landersListTpl, noLandersTpl, landerItemTpl, Bo
         // this.listenTo(this.model, 'change', this.updateDataTable, this);
         this.listenTo(this, "lander:edit", this.highlightRow);
 
-        this.listenTo(this, "lander:delete:confirm", this.deleteLanderConfirm); 
-        this.listenTo(this, "remove:highlightrow", this.removeHighlightRow); 
+        this.listenTo(this, "lander:delete:confirm", this.deleteLanderConfirm);
+        this.listenTo(this, "remove:highlightrow", this.removeHighlightRow);
       },
 
       template: landerItemTpl,

@@ -1,15 +1,20 @@
-define(["app", "tpl!apps/main/offers/new/new_offer.tpl", 
+define(["app", "tpl!apps/main/landers/upload/upload_lander.tpl", 
         "bootstrap-dialog", 
         "backbone.syphon", 
         "backbone-validation", 
-        "datatablesbootstrap",], function(RipManager, OfferEditFormTpl, BootstrapDialog){
-  RipManager.module("OffersApp.NewDialog.View", function(View, RipManager, Backbone, Marionette, $, _){
+        "datatablesbootstrap",
+        'tmpl', 'load-image', 'canvas-to-blob', 'jquery.iframe-transport', 'jquery.fileupload-ui' //file upload shit
+        ], function(RipManager, uploadTpl, BootstrapDialog){
+  RipManager.module("LandersApp.UploadDialog.View", function(View, RipManager, Backbone, Marionette, $, _){
 
-      View.NewDialogForm = Marionette.ItemView.extend({
-        template: OfferEditFormTpl,
+      View.UploadDialogForm = Marionette.ItemView.extend({
+        template: uploadTpl,
+        lander: {},
         
         initialize: function() {
-          this.listenTo(this, "offer:new:notify", this.notify);
+          this.lander.valid = false; //init lander upload to not valid
+
+          this.listenTo(this, "lander:upload:notify", this.notify);
           Backbone.Validation.bind(this,{
             valid: function (view, attr, selector) {
               var $el = view.$('[name=' + attr + ']'), 
@@ -38,9 +43,12 @@ define(["app", "tpl!apps/main/offers/new/new_offer.tpl",
 
           BootstrapDialog.show({
             type: BootstrapDialog.TYPE_PRIMARY,
-            title: '<h5><strong>New Offer</strong></h5>',
+            title: '<h5><strong>Upload a New Lander</strong></h5>',
             message: this.$el,
             cssClass: 'login-dialog',
+            onshown: function(dialogRef){
+              me.initializeFileUpload();
+            },
             onhide: function(dialogRef){
               me.trigger("close");
             },
@@ -51,22 +59,65 @@ define(["app", "tpl!apps/main/offers/new/new_offer.tpl",
               }
             },
             {
-              label: 'Add Offer',
+              label: 'Upload Lander',
               cssClass: 'btn-primary',
               hotkey: 13, //Enter key
-              action: function(dialogRef) {
-                  me.submitOfferNew();
+              action: function(e) {
+                  me.submitLanderUpload(e);
               }
             }],
             draggable: true
           });
         },
 
-        submitOfferNew: function() {
+        initializeFileUpload: function(){
+          var me = this;
+
+          // Initialize the jQuery File Upload widget:
+          $('#fileupload').fileupload({
+              // Uncomment the following to send cross-domain cookies:
+              xhrFields: {withCredentials: true},
+              url: '/upload',
+              autoUpload: false,
+              maxNumberOfFiles: 1,
+              singleFileUploads: true,
+              acceptFileTypes: /(\.|\/)(zip)$/i,
+              done: function(e, data){
+                me.onDoneUploadingLander(e, data);
+              }
+          });
+
+
+          // On file add assigning the name of that file to the variable to pass to the web service
+          $('#fileupload').bind('fileuploadadd', function (e, data) {
+            me.lander = data;
+          });
+
+          $('#fileupload').bind('fileuploadprocessfail', function(e, data){
+            me.lander.valid = false;
+          });
+
+          $('#fileupload').bind('fileuploadprocessdone', function(e, data){
+            me.lander.valid = true;
+          });
+
+          
+        },
+
+        submitLanderUpload: function(e) {
           var data = Backbone.Syphon.serialize(this);
-          data.id = this.model.attributes.id;
-          this.model.set(data);
-          this.trigger("offer:new:submit", data);
+          this.model.set({notes: data.notes});
+          // this.trigger("lander:upload:submit", data);
+          if(this.lander.valid && this.model.isValid(true)){
+            this.lander.formData = {notes: data.notes};
+            this.lander.submit();
+          }
+
+        },
+
+        onDoneUploadingLander: function(e, data){
+          this.closeDialog();
+          this.notify("Success", "success");
         },
 
         closeDialog: function(e){
@@ -84,7 +135,7 @@ define(["app", "tpl!apps/main/offers/new/new_offer.tpl",
           var me = this;
           var notifyOptions = {
             icon: 'glyphicon glyphicon-refresh glyphicon-refresh-animate',
-            title: "Saving Offer: ",
+            title: "Saving Lander: ",
             message: "",
             // url: 'https://github.com/mouse0270/bootstrap-notify',
             //target: '_blank'
@@ -130,26 +181,19 @@ define(["app", "tpl!apps/main/offers/new/new_offer.tpl",
           };
 
           if(type=="danger"){
-            notifyOptions.title = "<strong>Failed to Save Offer</strong> <br />Please Stand by, one of our surfer dude coder guys will investigate this shortly.";
+            notifyOptions.title = "<strong>Failed to Save Lander</strong> <br />Failed to save Lander due to global warming.";
             notifyOptions.icon = "glyphicon glyphicon-warning-sign";
             otherOptions.delay = 0;
-          } 
+          }
 
           var notify = $.notify(notifyOptions,otherOptions);
-
 
           setTimeout(function() {
             notify.update('message', data);
           }, 850);
-
-
         }
-
-        
-        
-
       });
   });
 
-  return RipManager.OffersApp.NewDialog.View;
+  return RipManager.LandersApp.UploadDialog.View;
 });

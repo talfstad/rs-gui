@@ -1,47 +1,47 @@
-define(["app", "apps/main/offers/new/new_view",
-        "apps/main/offers/list/list_controller",
-        "bootstrap-dialog"
-        ], function(RipManager, NewOfferView, ListController){
-  RipManager.module("OffersApp.New", function(New, RipManager, Backbone, Marionette, $, _){
+define(["app", "apps/main/landers/upload/upload_view",
+        "apps/main/landers/list/list_controller",
+        "apps/main/landers/upload/upload_model",
+        "bootstrap-dialog"],
+        function(RipManager, UploadLanderView, ListController, UploadModel){
+  RipManager.module("LandersApp.Upload", function(New, RipManager, Backbone, Marionette, $, _){
     New.Controller = {
-      addOffer: function(){
-        require(["apps/main/offers/list/list_model"], function(OfferModel){
-          var newOffer = new OfferModel.Offer();
+      uploadLander: function(){
+        var uploadModel = new UploadModel.Upload();
 
-          var view = new NewOfferView.NewDialogForm({
-            model: newOffer
-          });
-
-          var addOfferSuccess = function(model, message, other) {
-            RipManager.trigger("offer:new:add", model);
-            view.trigger("offer:new:notify", "Success", "success", model);
-          };
-
-          var addOfferError = function(model, message, other) {
-            view.trigger("offer:new:notify", message.error, "danger");
-            model.set(model.previousAttributes());
-          };
-
-
-          view.on("offer:new:submit", function(data){
-            //client side validation
-            if(this.model.isValid(true)) {
-              this.model.save(data, {success: addOfferSuccess, error: addOfferError});
-              view.closeDialog();
-            } else {
-              //TODO This doesn't contain the actual previous attr right now
-              //because of the validation (i think)
-              view.model.set(view.model.previousAttributes());
-            }
-            
-          });
-
-          //show dialog with view TODO
-          view.showDialog();
+        var view = new UploadLanderView.UploadDialogForm({
+          model: uploadModel
         });
+
+        var uploadLanderSuccess = function(model, message, other) {
+          RipManager.trigger("lander:upload:add", model);
+          view.trigger("lander:upload:notify", "Success", "success", model);
+        };
+
+        var uploadLanderError = function(model, message, other) {
+          view.trigger("lander:upload:notify", message.error, "danger");
+          model.set(model.previousAttributes());
+        };
+
+
+        view.on("lander:upload:submit", function(data){
+          //client side validation
+          if(this.model.isValid(true)) {
+            this.model.save(data, {success: uploadLanderSuccess, error: uploadLanderError});
+            view.closeDialog();
+          } else {
+            //TODO This doesn't contain the actual previous attr right now
+            //because of the validation (i think)
+            view.model.set(view.model.previousAttributes());
+          }
+          
+        });
+
+        //show dialog with view TODO
+        view.showDialog();
+        
       },
     };
   });
 
-  return RipManager.OffersApp.New.Controller;
+  return RipManager.LandersApp.Upload.Controller;
 });

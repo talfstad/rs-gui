@@ -28,7 +28,8 @@
     "almond": "latest",
     "json2": "latest",
     "moment": "~2.10.2",
-    "ionicons": "~2.0.1"
+    "ionicons": "~2.0.1",
+    "blueimp-file-upload": "latest"
   },
   "devDependencies": {
     "qunit": "latest"
