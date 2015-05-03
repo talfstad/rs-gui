@@ -21,6 +21,8 @@ module.exports = {
   userDataOmit: ['hash', 'auth_token', 'secret_username', 'id', 'approved'],
 
   //base_clickjacker_dir: '/Users/Troy/git/cjgui'
+  //base_clickjacker_dir: '/Users/alfstad/Desktop/cjguiMarionette/test/notworking/cjgui'
+  
   base_clickjacker_dir: '/var/www/cjgui'
 
 };
