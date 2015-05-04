@@ -6,6 +6,19 @@
 </section>
 
 <section class="content">
+
+    <!-- Small boxes (Stat box) -->
+  <div class="row">
+    <div id="earnings-stat-1" class="col-md-3 col-sm-6 col-xs-12"></div><!-- /.col -->
+
+    <div id="earnings-stat-2" class="col-md-3 col-sm-6 col-xs-12"></div><!-- /.col -->
+
+    <div id="earnings-stat-3" class="col-md-3 col-sm-6 col-xs-12"></div><!-- /.col -->
+
+    <div id="earnings-stat-4" class="col-md-3 col-sm-6 col-xs-12"></div><!-- /.col -->
+  </div><!-- /.row -->
+
+
   <div class="row">
     <!-- Left col -->
     <section class="col-xs-12 connectedSortable">                      

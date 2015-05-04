@@ -4,12 +4,13 @@ define(["app",
         "tpl!apps/main/earnings/list/templates/no-earnings.tpl",
         "tpl!apps/main/earnings/list/templates/earnings-item.tpl",
         "tpl!apps/main/earnings/list/templates/earnings-graph.tpl",
+        "tpl!apps/main/earnings/list/templates/overview_box_item.tpl",
         "moment",
         "bootstrap-dialog",
         "morris", "bootstrap-notify", "comma-sort",
         "datatablesbootstrap"],
 
-function(RipManager, earningsTpl, earningsListTpl, noEarningsTpl, earningsItemTpl, earningsGraphTpl, moment, BootstrapDialog){
+function(RipManager, earningsTpl, earningsListTpl, noEarningsTpl, earningsItemTpl, earningsGraphTpl, overviewBoxItem, moment, BootstrapDialog){
   RipManager.module("EarningsApp.List.View", function(View, RipManager, Backbone, Marionette, $, _){
 
     //made this little fucker so that i can hopefully make sub views that use regions
@@ -18,10 +19,28 @@ function(RipManager, earningsTpl, earningsListTpl, noEarningsTpl, earningsItemTp
       template: earningsTpl,
      
       regions: {
+        overviewStat1Region: "#earnings-stat-1",
+        overviewStat2Region: "#earnings-stat-2",
+        overviewStat3Region: "#earnings-stat-3",
+        overviewStat4Region: "#earnings-stat-4",
         earningsGraphRegion: "#earnings-graph",
         earningsTableRegion: "#earnings-table-container"
       }
     });
+
+    View.OverviewDailyStatItem = Marionette.ItemView.extend({
+      template: overviewBoxItem,
+
+      initialize: function (attrs) {
+        this.options = attrs;
+      },
+      
+      serializeData: function(){
+        return this.options;
+      }
+
+    });
+
 
     View.EarningsGraph = Marionette.ItemView.extend({
       template: earningsGraphTpl,
@@ -31,38 +50,34 @@ function(RipManager, earningsTpl, earningsListTpl, noEarningsTpl, earningsItemTp
 
       onDomRefresh: function() {
         var me = this;
-        var data = [];
-        var modelGraphData = this.options.earningsGraph;
-
-        for(var i=0 ; i<modelGraphData.length ; i++) {
-          data.push({
-            time: modelGraphData[i].attributes.day,
-            hits: modelGraphData[i].attributes.hits
-          });
-        }
-
-        data.reverse();
+        var data = this.options.earningsGraph;
 
         //access the model to get the data
         var earningsGraph = new Morris.Area({
           element: 'earnings-chart',
           resize: true,
           data: data,
-          xkey: 'time',
-          hoverCallback: function(index, options, content) {
-              var item = options.data[index];
-              var date = moment(item.time).format('LL');
-              
-              var html = "<div class='morris-hover-row-label'>"+ date +"</div><div class='morris-hover-point' style='color: #3c8dbc'>" +
-                            "Earnings: " + 
-                            me.numbersWithCommas(item.hits) +
-                          "</div>";
+          hoverCallback: function(index, options, default_content, row) {
+              var date = moment(row.day).format('LL');
 
-                return(html);
+              var html = "<div class='morris-hover-row-label'>"+ date +"</div><div class='morris-hover-point' style='color: #00a65a'>" +
+                          "Payout: $" +
+                          me.numbersWithCommas(row.payout) +
+                          "</div>" +
+
+                          "<div class='morris-hover-point' style='color: #0073b7'>" +
+                          
+                          "Conversions: " +
+                          me.numbersWithCommas(row.conversions) +
+                          "</div>";
+                         
+
+              return(html);
             },
-          ykeys: ['hits'],
-          labels: ['Hits'],
-          lineColors: ['#3c8dbc'], //'#3c8dbc', 
+          xkey: 'day',
+          ykeys: ['conversions', 'payout'],
+          labels: ['Conversions', 'Payout'],
+          lineColors: ['#0073b7', '#00a65a'], //'#3c8dbc', 
           fillOpacity: 0.1,
           hideHover: 'auto',
         });

@@ -29,7 +29,8 @@
     "json2": "latest",
     "moment": "~2.10.2",
     "ionicons": "~2.0.1",
-    "blueimp-file-upload": "latest"
+    "blueimp-file-upload": "latest",
+    "daterangepicker": "~1.1.1"
   },
   "devDependencies": {
     "qunit": "latest"
