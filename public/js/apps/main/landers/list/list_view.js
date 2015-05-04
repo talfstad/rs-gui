@@ -5,10 +5,11 @@ define(["app",
         "tpl!apps/main/landers/list/templates/lander-item.tpl",
         "bootstrap-dialog",
         "moment",
+        "tpl!apps/main/landers/list/templates/edit-notes-dialog.tpl",
         "datatablesbootstrap",
         "bootstrap-notify"],
 
-function(RipManager, landersTpl, landersListTpl, noLandersTpl, landerItemTpl, BootstrapDialog, moment){
+function(RipManager, landersTpl, landersListTpl, noLandersTpl, landerItemTpl, BootstrapDialog, moment, editNotesDialogTpl){
   RipManager.module("LandersApp.List.View", function(View, RipManager, Backbone, Marionette, $, _){
 
     //made this little fucker so that i can hopefully make sub views that use regions
@@ -23,10 +24,57 @@ function(RipManager, landersTpl, landersListTpl, noLandersTpl, landerItemTpl, Bo
     });
 
 
+    View.EditNotesView = Marionette.ItemView.extend({
+      template: editNotesDialogTpl,
+
+      triggers: {
+        "click button.js-close" : "close"
+      },
+
+      showDialog: function(e){
+        var me = this;
+        this.render();
+
+        BootstrapDialog.show({
+          type: BootstrapDialog.TYPE_PRIMARY,
+          title: '<h5><strong>Edit Lander Notes</strong></h5>',
+          message: this.$el,
+          cssClass: 'login-dialog',
+          onhide: function(dialogRef){
+            me.trigger("close");
+          },
+          buttons: [{
+            label: 'Close',
+            action: function(dialogRef) {
+                dialogRef.close();
+            }
+          },
+          {
+            label: 'Submit Notes',
+            cssClass: 'btn-primary',
+            hotkey: 13, //Enter key
+            action: function(dialogRef) {
+                me.submitNotes();
+            }
+          }],
+          draggable: true
+        });
+      },
+
+      submitNotes: function() {
+        this.trigger("notes:edit:submit");
+      },
+
+      closeDialog: function(e){
+        BootstrapDialog.closeAll();
+      }
+    });
+
+
     View.Lander = Marionette.ItemView.extend({
       initialize: function() {
         // this.listenTo(this.model, 'change', this.updateDataTable, this);
-        this.listenTo(this, "lander:edit", this.highlightRow);
+        this.listenTo(this, "notes:edit", this.highlightRow);
 
         this.listenTo(this, "lander:delete:confirm", this.deleteLanderConfirm);
         this.listenTo(this, "remove:highlightrow", this.removeHighlightRow);
@@ -36,7 +84,7 @@ function(RipManager, landersTpl, landersListTpl, noLandersTpl, landerItemTpl, Bo
       tagName: "tr",
 
       triggers: {
-        "click td button.lander-edit": "lander:edit"
+        "click button.notes": "notes:edit"
       },
 
       modelEvents: {
@@ -44,7 +92,7 @@ function(RipManager, landersTpl, landersListTpl, noLandersTpl, landerItemTpl, Bo
       },
 
       events: {
-        "lander:edit": "highlightRow",
+        "notes:edit": "highlightRow",
       },
 
       templateHelpers: {

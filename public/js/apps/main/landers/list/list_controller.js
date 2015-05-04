@@ -36,10 +36,35 @@ define(["app", "apps/main/landers/list/list_view"], function(RipManager, Landers
               model.set(model.previousAttributes());
             };
             
-            landersListView.on("childview:landers:delete", function(childView, model) {
-              //show a are you sure? dialog, on OK call destroy()
-              model.destroy();
+            landersListView.on("childview:notes:edit", function(childView, args) {
+              var model = args.model;
+              var view = new LandersListView.EditNotesView({
+                model: model
+              });
+
+              view.on("notes:edit:submit", function(data){
+                
+                if(this.model.isValid(true)) {
+                  model.save(data, {success: saveOfferSuccess, error: saveOfferError});
+                  view.closeDialog();
+                } else {
+                  //TODO This doesn't contain the actual previous attr right now
+                  //because of the validation (i think)
+                  view.model.set(view.model.previousAttributes());
+                }
+                
+              });
+
+
+              view.on("close", function(){
+                args.view.trigger("remove:highlightrow");
+              });
+
+              view.showDialog();
+
             });
+         
+
 
             try {
               landersListLayout.landersTableRegion.show(landersListView);
