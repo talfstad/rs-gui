@@ -1,4 +1,8 @@
-<td style="width: 65px"><% if(ready) { %>  <small class="label pull-right bg-green">READY</small> <% } else { %> <small class="label pull-right bg-yellow">NOT READY</small> <% } %> </td>
+<td style="width: 65px">
+  <%  if(ready === 0) { %>  <small class="label pull-right bg-red">NOT READY</small> <% } 
+      if(ready === 1) { %>  <small class="label pull-right bg-yellow">INSTALLED</small> <% } 
+      if(ready === 2) { %>  <small class="label pull-right bg-green">ACTIVE</small> <% } %> 
+</td>
 <td style="width: 105px"><%= last_updated %></td>
 <td>
   <span><%= user %></span>

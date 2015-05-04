@@ -136,13 +136,13 @@ function(RipManager, earningsTpl, earningsListTpl, noEarningsTpl, earningsItemTp
               "aTargets": [0]
             },
             
-            { "sType": "numeric-comma", "aTargets": [2,3,4,5,6,7]},
+            { "sType": "numeric-comma", "aTargets": [2,3,4,5]},
             
             {
               fnRender: function(obj){
                 return "$" + obj.aData[obj.iDataColumn];
               },
-              "aTargets": [6,7]
+              "aTargets": [5]
             }
 
           ]
