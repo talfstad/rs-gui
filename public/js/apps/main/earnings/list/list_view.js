@@ -6,7 +6,7 @@ define(["app",
         "tpl!apps/main/earnings/list/templates/earnings-graph.tpl",
         "tpl!apps/main/earnings/list/templates/overview_box_item.tpl",
         "moment",
-        "bootstrap-dialog",
+        "bootstrap-dialog", 'daterangepicker',
         "morris", "bootstrap-notify", "comma-sort",
         "datatablesbootstrap"],
 
@@ -17,6 +17,11 @@ function(RipManager, earningsTpl, earningsListTpl, noEarningsTpl, earningsItemTp
     View.EarningsListLayout = Marionette.LayoutView.extend({
       className: "right-side",
       template: earningsTpl,
+      nDays: 0,
+      
+      initialize: function(options){
+        this.nDays = options.nDays.n;
+      },
      
       regions: {
         overviewStat1Region: "#earnings-stat-1",
@@ -25,6 +30,51 @@ function(RipManager, earningsTpl, earningsListTpl, noEarningsTpl, earningsItemTp
         overviewStat4Region: "#earnings-stat-4",
         earningsGraphRegion: "#earnings-graph",
         earningsTableRegion: "#earnings-table-container"
+      },
+
+      onDomRefresh: function(){
+        $('#earnings-daterange span').html(moment().subtract(this.nDays, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+ 
+        $('#earnings-daterange').daterangepicker({
+            format: 'MM/DD/YYYY',
+            startDate: moment().subtract(this.nDays, 'days'),
+            endDate: moment(),
+            minDate: '01/01/2012',
+            maxDate: '12/31/2015',
+            dateLimit: { days: 30 },
+            showDropdowns: true,
+            showWeekNumbers: true,
+            timePicker: false,
+            timePickerIncrement: 1,
+            timePicker12Hour: true,
+            ranges: {
+               'Today': [moment(), moment()],
+               'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+               'This Month': [moment().subtract(30, 'days'), moment()]
+            },
+            opens: 'left',
+            drops: 'down',
+            buttonClasses: ['btn', 'btn-sm'],
+            applyClass: 'btn-primary',
+            cancelClass: 'btn-default',
+            separator: ' to ',
+            locale: {
+                applyLabel: 'Submit',
+                cancelLabel: 'Cancel',
+                fromLabel: 'From',
+                toLabel: 'To',
+                customRangeLabel: 'Custom',
+                daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
+                monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                firstDay: 1
+            }
+        }, function(start, end, label) {
+            console.log(start.toISOString(), end.toISOString(), label);
+            $('#earnings-daterange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            var nDays = (end-start)/(1000*60*60*24);
+            //where we reset collection with different n
+            RipManager.trigger("earnings:update", nDays);
+        });
       }
     });
 

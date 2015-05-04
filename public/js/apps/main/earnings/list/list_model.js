@@ -16,7 +16,9 @@ define(["app"], function(RipManager){
     });
 
     GetEarnings.EarningsCollection = Backbone.Collection.extend({
-      url: "/reporting_for_n_days?n=30",
+      initialize: function(models, options) {
+        this.url = '/reporting_for_n_days?n=' + options.n;
+      },
       model: GetEarnings.Earnings,
     });
 
@@ -37,8 +39,8 @@ define(["app"], function(RipManager){
         var promise = defer.promise();
         return promise;
       },
-      getEarnings: function(){
-        var earnings = new GetEarnings.EarningsCollection();
+      getEarnings: function(nDays){
+        var earnings = new GetEarnings.EarningsCollection([], nDays);
         var defer = $.Deferred();
         earnings.fetch({
           success: function(data){
@@ -56,8 +58,8 @@ define(["app"], function(RipManager){
     });
 
 
-    RipManager.reqres.setHandler("earnings:getearnings", function(){
-      return API.getEarnings();
+    RipManager.reqres.setHandler("earnings:getearnings", function(nDays){
+      return API.getEarnings(nDays);
     });
    
   });

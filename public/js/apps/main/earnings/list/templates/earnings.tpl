@@ -1,7 +1,22 @@
  <section class="content-header">
     <h1>Earnings <small> &mdash; Overview and Management of the Money you're Making</small></h1>
-    <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-diamond"></i> Earnings</a></li>
+    
+
+    <div style="float: right;
+  margin-top: 0px;
+  font-size: 12px;
+  padding: 7px 5px;
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  border-radius: 2px;">
+      <div id="earnings-daterange" style="font-size: 1.2em; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+        <span></span> <b class="caret"></b>
+      </div>
+    </div>
+    <ol class="breadcrumb" style="right: 230px">
+        <li><a href="#"><i class="fa fa-diamond"></i> Select a Date Range: </a></li>
     </ol>
 </section>
 
@@ -27,7 +42,7 @@
             <!-- Tabs within a box -->
             <ul class="nav nav-tabs pull-right">
                 <li class="active"><a href="#earnings-chart" data-toggle="tab">Overview of Earnings Graph</a></li> 
-                <li class="pull-left header"><i class="fa fa-diamond"></i> Total Earnings for the last 30 Days</li>
+                <li class="pull-left header"><i class="fa fa-diamond"></i> Total Earnings for the Selected Time Range</li>
             </ul>
             <div id="earnings-graph" class="tab-content no-padding"></div>
         </div><!-- /.nav-tabs-custom -->
@@ -39,7 +54,7 @@
     <div class="col-xs-12">
       <div class="box box-primary">
         <div class="box-header with-border">
-          <h3 class="box-title">List of your Earnings</h3>
+          <h3 class="box-title">List of your Earnings for the Selected Time Range</h3>
         </div><!-- /.box-header -->
         <div class="box-body table-responsive">
           <div id="earnings-table-container" class="box-body">

@@ -12,7 +12,7 @@ module.exports = function(app, db, checkAuth){
 
         var day = moment().subtract(days, 'day').format('YYYY-MM-DD');
 
-        if(days > 0) {
+        if(days >= 0) {
             db.query("SELECT * FROM reporting WHERE day >= ?", [day], function(err, docs) {
                 if (err) {
                     console.log(err);

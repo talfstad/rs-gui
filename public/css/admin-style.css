@@ -31,7 +31,11 @@ svg {
   background-color: #3af !important;
 }
 
-
+.ranges li:last-child { display: none; }
+.daterangepicker_start_input, .daterangepicker_end_input {
+        display: none;
+}
+.range_inputs { display: none;}
 
 
 /* Word Rotate */

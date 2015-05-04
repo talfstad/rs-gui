@@ -26,12 +26,17 @@ define(["app"], function(RipManager){
   };
 
   RipManager.on("earnings:list", function(){
-    checkAuth(API.listEarnings);
+    checkAuth(API.listEarnings, {n:0});
   });
+
+  RipManager.on("earnings:update", function(nDays){
+    checkAuth(API.listEarnings, {n:nDays});
+  });
+
 
   var authEnabledAPI = {
     listEarnings: function(criterion){
-      checkAuth(API.listEarnings);
+      checkAuth(API.listEarnings, {n:0});
     }
   };
 });

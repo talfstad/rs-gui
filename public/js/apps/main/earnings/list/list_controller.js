@@ -1,13 +1,13 @@
-define(["app", "apps/main/earnings/list/list_view", 'moment'], function(RipManager, EarningsListView, moment){
+define(["app", "apps/main/earnings/list/list_view", 'moment',"apps/main/earnings/list/list_model",
+                 "common/loading_view"], function(RipManager, EarningsListView, moment,GetEarningsModel, LoadingView){
   RipManager.module("EarningsApp.List", function(List, RipManager, Backbone, Marionette, $, _){
+
     List.Controller = {
       
-      listEarnings: function(criterion){
-        var me =
-        require(["apps/main/earnings/list/list_model",
-                 "common/loading_view"], function(GetEarningsModel, LoadingView){
-
-          var earningsListLayout = new EarningsListView.EarningsListLayout();
+      listEarnings: function(nDays){
+        var me = this;
+        
+          var earningsListLayout = new EarningsListView.EarningsListLayout({nDays: nDays});
           earningsListLayout.render();
 
           RipManager.mainLayout.mainRegion.show(earningsListLayout);
@@ -20,7 +20,7 @@ define(["app", "apps/main/earnings/list/list_view", 'moment'], function(RipManag
             return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           };
 
-          var fetchingEarnings = RipManager.request("earnings:getearnings");
+          var fetchingEarnings = RipManager.request("earnings:getearnings", nDays);
           $.when(fetchingEarnings).done(function(earningsCollection){
             var totalClicks = 0,
                 missedLeadsTotal = 0,
@@ -31,7 +31,7 @@ define(["app", "apps/main/earnings/list/list_view", 'moment'], function(RipManag
                 currentDay = earningsCollection.models[0].attributes.day,
                 payoutForDay = 0,
                 conversionsForDay = 0;
-
+            var collectionLength = earningsCollection.models.length;
             $.each(earningsCollection.models, function(idx, model){
               totalClicks += model.attributes.clicks;
               missedLeadsTotal += model.attributes.missed_leads;
@@ -54,6 +54,13 @@ define(["app", "apps/main/earnings/list/list_view", 'moment'], function(RipManag
                 currentDay = model.attributes.day;
                 payoutForDay = model.attributes.payout;
                 conversionsForDay = model.attributes.conversions;
+              }
+              if(collectionLength -1 === idx) {
+                graphData.push({
+                  day: currentDay,
+                  payout: payoutForDay,
+                  conversions: conversionsForDay
+                });
               }
             });
 
@@ -114,7 +121,7 @@ define(["app", "apps/main/earnings/list/list_view", 'moment'], function(RipManag
             } catch(e){}
             
           });
-        });
+       
       }
     }
   });

@@ -50,13 +50,13 @@ requirejs.config({
     'load-image-meta': 'lib/blueimp-load-image/js/load-image-meta',
     'load-image-exif': 'lib/blueimp-load-image/js/load-image-exif',
     'load-image-ios': 'lib/blueimp-load-image/js/load-image-ios',
-    'canvas-to-blob': 'lib/blueimp-canvas-to-blob/js/canvas-to-blob',
-    'tmpl': 'lib/blueimp-tmpl/js/tmpl'
+    'canvas-to-blob': 'lib/blueimp-canvas-to-blob/js/ canvas-to-blob',
+    'tmpl': 'lib/blueimp-tmpl/js/tmpl',
     /*  </FILE UPLOAD PLUGIN INCLUDES> */
 
-
-
-
+    /* <Daterangepicker> */
+     'daterangepicker': '../plugins/daterangepicker/daterangepicker'
+    /* </Daterangepicker> */
 
 
 
