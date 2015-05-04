@@ -12,7 +12,7 @@ define(["app", "apps/main/earnings/list/list_view", 'moment',"apps/main/earnings
 
           RipManager.mainLayout.mainRegion.show(earningsListLayout);
 
-          // earningsListLayout.earningsGraphRegion.show(new LoadingView.Loading());
+          earningsListLayout.earningsGraphRegion.show(new LoadingView.Loading());
           earningsListLayout.earningsTableRegion.show(new LoadingView.Loading());
 
 
@@ -92,14 +92,14 @@ define(["app", "apps/main/earnings/list/list_view", 'moment',"apps/main/earnings
             var totalConversions = new EarningsListView.OverviewDailyStatItem({
               value: numbersWithCommas(conversionsTotal),
               color: "bg-blue",
-              icon: "ion ion-social-usd",
+              icon: "fa fa-diamond",
               title: "Total Conversions"
             });
 
             var totalPayout = new EarningsListView.OverviewDailyStatItem({
               value: '$'+numbersWithCommas(payoutTotal),
               color: "bg-green",
-              icon: "fa fa-diamond",
+              icon: "ion ion-social-usd",
               title: "Total Payout"
             });
 
