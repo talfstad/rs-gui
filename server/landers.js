@@ -132,7 +132,7 @@ module.exports = function(app, db, checkAuth){
                 } 
                 console.log("Created lander id: " + lander_id + " with UUID: " + uuid);
             }
-            db.query("INSERT INTO landers(uuid, original_archive_path, user, notes, last_updated) VALUES(?, ?, ?, ?, NOW());", [uuid, download_path, notes, user], function(err2, docs) {
+            db.query("INSERT INTO landers(uuid, original_archive_path, user, notes, last_updated) VALUES(?, ?, ?, ?, NOW());", [uuid, download_path, user, notes], function(err2, docs) {
                 if(err2) {
                     error = err2;
                 }
