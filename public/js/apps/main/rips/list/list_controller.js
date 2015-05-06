@@ -85,7 +85,7 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
                   offerList: offers
                 });
 
-                view.on("rip:edit:submit", function(data){
+                view.on("rip:edit:submit", function(){
                   /* This is the normal saving of the edit*/
                   if(this.model.isValid(true)) {
                     /* Now the registered part */

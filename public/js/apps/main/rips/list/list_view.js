@@ -138,14 +138,6 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
         this.$el.find(".flag-tooltip").tooltip();
       },
 
-      // templateHelpers: function() {
-      //   return {
-      //     numbersWithCommas: function(number) {
-      //       return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      //     }
-      //   };
-      // },
-
       getTopFlagsForDisplay: function(){
         var me = this;
         var start = 0;

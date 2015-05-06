@@ -1,9 +1,9 @@
-define(["app", "apps/main/landers/list/list_view"], function(RipManager, LandersListView){
+define(["app", "apps/main/landers/list/list_view", "backbone.syphon"], function(RipManager, LandersListView){
   RipManager.module("LandersApp.List", function(List, RipManager, Backbone, Marionette, $, _){
     List.Controller = {
       listLanders: function(criterion){
-        require(["apps/main/landers/list/list_model",
-                 "common/loading_view"], function(getLanderssModel, LoadingView){
+        require(["apps/main/landers/list/list_model", "apps/main/landers/upload/upload_model",
+                 "common/loading_view"], function(getLanderssModel, uploadModel, LoadingView){
 
           var landersListLayout = new LandersListView.LandersListLayout();
           landersListLayout.render();
@@ -42,16 +42,20 @@ define(["app", "apps/main/landers/list/list_view"], function(RipManager, Landers
                 model: model
               });
 
-              view.on("notes:edit:submit", function(data){
+              view.on("notes:edit:submit", function(){
+                var data = Backbone.Syphon.serialize(this);
+
+                //create a new model, with the new data submit it with correct uuid
+                model.set({notes: data.notes});
                 
-                if(this.model.isValid(true)) {
-                  model.save(data, {success: saveOfferSuccess, error: saveOfferError});
+                if(model.isValid(true)) {
+                  model.save(data, {success: saveLanderSuccess, error: saveLanderError});
                   view.closeDialog();
                 } else {
-                  //TODO This doesn't contain the actual previous attr right now
-                  //because of the validation (i think)
-                  view.model.set(view.model.previousAttributes());
+                  model.set(model.previousAttributes());
                 }
+                
+
                 
               });
 

@@ -7,6 +7,7 @@ define(["app"], function(RipManager){
   RipManager.module("LandersApp.Upload.Model", function(Model, RipManager, Backbone, Marionette, $, _){
 
     Model.Upload = Backbone.Model.extend({
+      url: "/edit_notes",
       defaults: {
         notes: ""
       },

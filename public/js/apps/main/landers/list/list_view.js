@@ -7,7 +7,7 @@ define(["app",
         "moment",
         "tpl!apps/main/landers/list/templates/edit-notes-dialog.tpl",
         "datatablesbootstrap",
-        "bootstrap-notify"],
+        "bootstrap-notify", "backbone-validation"],
 
 function(RipManager, landersTpl, landersListTpl, noLandersTpl, landerItemTpl, BootstrapDialog, moment, editNotesDialogTpl){
   RipManager.module("LandersApp.List.View", function(View, RipManager, Backbone, Marionette, $, _){
@@ -30,6 +30,25 @@ function(RipManager, landersTpl, landersListTpl, noLandersTpl, landerItemTpl, Bo
       triggers: {
         "click button.js-close" : "close"
       },
+
+      initialize: function() {
+          Backbone.Validation.bind(this,{
+            valid: function (view, attr, selector) {
+              var $el = view.$('[name=' + attr + ']'), 
+              $group = $el.closest('.form-group');
+          
+              $group.removeClass('has-error');
+              $group.find('.help-block').html('').addClass('hidden');
+            },
+            invalid: function (view, attr, error, selector) {
+              var $el = view.$('[name=' + attr + ']'), 
+              $group = $el.closest('.form-group');
+          
+              $group.addClass('has-error');
+              $group.find('.help-block').html(error).removeClass('hidden');
+            }
+          });
+        },
 
       showDialog: function(e){
         var me = this;
@@ -73,9 +92,8 @@ function(RipManager, landersTpl, landersListTpl, noLandersTpl, landerItemTpl, Bo
 
     View.Lander = Marionette.ItemView.extend({
       initialize: function() {
-        // this.listenTo(this.model, 'change', this.updateDataTable, this);
+        this.listenTo(this.model, 'change', this.updateDataTable, this);
         this.listenTo(this, "notes:edit", this.highlightRow);
-
         this.listenTo(this, "lander:delete:confirm", this.deleteLanderConfirm);
         this.listenTo(this, "remove:highlightrow", this.removeHighlightRow);
       },
@@ -99,25 +117,23 @@ function(RipManager, landersTpl, landersListTpl, noLandersTpl, landerItemTpl, Bo
          admin: RipManager.session.get("admin")
       },
 
-     
-
       highlightRow: function(e){
         //highlight the current row
-        this.$el.addClass("landers-row-edit-highlight");
+        this.$el.addClass("lander-row-edit-highlight");
       },
 
       removeHighlightRow: function(e){
         //when dialog closed remove highlight
-        this.$el.removeClass("landers-row-edit-highlight");
+        this.$el.removeClass("lander-row-edit-highlight");
       },
 
       updateDataTable: function(model, collection, options) {
-        var dt = $("#landers-table").dataTable();
-        // // update the grid with latest data
-        // $("#landers-table").dataTable().fnUpdate(model.attributes.name, this._index, 0, false); //offer name
-        // $("#landers-table").dataTable().fnUpdate("<a href='"+ model.attributes.offer_link + "'>" + model.attributes.offer_link + "</a>", this._index, 1, false); //offer link
-        // $("#landers-table").dataTable().fnUpdate("<a href='"+ model.attributes.website + "'>" + model.attributes.website + "</a>", this._index, 2, false); //admin URL
-        // $("#landers-table").dataTable().fnUpdate(this.model.attributes.login, this._index, 3, false); //admin login username
+         $("#landers-table").dataTable().fnUpdate(
+         "<span>" + model.attributes.notes + "</span>" +
+         "<button type='button' class='notes pull-right btn btn-default btn-xs' style='color: #333'>" +
+          "<span class='fa fa-pencil-square-o' aria-hidden='true'></span> Edit Notes" +
+        "</button>", 
+        this._index, 2, false); //notes
       }
 
       
@@ -143,9 +159,9 @@ function(RipManager, landersTpl, landersListTpl, noLandersTpl, landerItemTpl, Bo
 
 
       initialize: function(){
-        this.listenTo(this, "lander:edit:notify", this.notify); 
-        this.listenTo(this, "lander:new:add", this.addLanderToDataTable);
-        this.listenTo(this, "lander:grid:resort", this.gridResort);
+        this.listenTo(this, "landers:edit:notify", this.notify); 
+        this.listenTo(this, "landers:new:add", this.addLanderToDataTable);
+        this.listenTo(this, "landers:grid:resort", this.gridResort);
         this.listenTo(this.collection, "reset", function(){
           this.attachHtml = function(collectionView, childView, index){
             collectionView.$el.append(childView.el);

@@ -2,28 +2,20 @@ define(["app"], function(RipManager){
   RipManager.module("GetLanders", function(GetLanders, RipManager, Backbone, Marionette, $, _){
 
     GetLanders.Lander = Backbone.Model.extend({
-      urlRoot: "/update_lander",
+      urlRoot: "/edit_notes",
 
       events: {
 
       },
 
       defaults: {
+        notes: ""
       },
 
       validation: {
-        // name: {
-        //   required: true
-        // },
-        // offer_link: {
-        //     required: true
-        // },
-        // website: {
-        //     required: true
-        // },
-        // login: {
-        //     required: true
-        // }
+        notes: {
+          required: true
+        }
       }
 
     });

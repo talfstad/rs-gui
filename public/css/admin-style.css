@@ -133,6 +133,14 @@ p.featured {
   background-color:#ccc;
 }
 
+#landers-table-container .lander-row-edit-highlight td{
+  background-color:#dedede;
+}
+
+#landers-table-container .lander-row-edit-highlight td:hover {
+  background-color:#ccc;
+}
+
 
 /* Used for small scrollbar on notifications */
 [data-notify="progressbar"] {
