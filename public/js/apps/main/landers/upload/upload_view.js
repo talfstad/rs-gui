@@ -117,6 +117,7 @@ define(["app", "tpl!apps/main/landers/upload/upload_lander.tpl",
         onDoneUploadingLander: function(e, data){
           this.closeDialog();
           this.notify("Success", "success");
+          RipManager.trigger("lander:upload:submit", data.response().result);
         },
 
         closeDialog: function(e){

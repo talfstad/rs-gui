@@ -19,9 +19,15 @@ define(["app", "apps/main/landers/list/list_view", "backbone.syphon"], function(
               collection: landers
             });
 
-
             //add new landers into the grid
-            RipManager.on("landers:new:add", function(model){
+            RipManager.on("lander:upload:submit", function(model){
+              //add date_created, user, remove files
+              model.date_created = new Date().toString();
+              model.last_updated = new Date().toString();
+              model.user = RipManager.session.attributes.user;
+              model.ready = 0;
+              delete model['files'];
+
               landers.add(model);
               landers.trigger("reset");
               landersListView.trigger("landers:new:add");

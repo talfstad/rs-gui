@@ -19,6 +19,7 @@ define(["app", "authentication/login/login_view", "authentication/session/user_m
                 loginView.trigger("login:invalid");
               } else {
                 RipManager.session.set({
+                  user: statusCollection.models[0].attributes.user.user,
                   logged_in: true,
                   username: status.models[0].attributes.user.username
                 });

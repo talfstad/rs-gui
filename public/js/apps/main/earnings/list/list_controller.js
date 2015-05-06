@@ -55,6 +55,7 @@ define(["app", "apps/main/earnings/list/list_view", 'moment',"apps/main/earnings
                 payoutForDay = model.attributes.payout;
                 conversionsForDay = model.attributes.conversions;
               }
+              
               if(collectionLength -1 === idx) {
                 graphData.push({
                   day: currentDay,
@@ -62,6 +63,7 @@ define(["app", "apps/main/earnings/list/list_view", 'moment',"apps/main/earnings
                   conversions: conversionsForDay
                 });
               }
+
             });
 
 

@@ -21,22 +21,7 @@ define(["app", "apps/main/landers/upload/upload_view",
           view.trigger("lander:upload:notify", message.error, "danger");
           model.set(model.previousAttributes());
         };
-
-
-        view.on("lander:upload:submit", function(data){
-          //client side validation
-          if(this.model.isValid(true)) {
-            this.model.save(data, {success: uploadLanderSuccess, error: uploadLanderError});
-            view.closeDialog();
-          } else {
-            //TODO This doesn't contain the actual previous attr right now
-            //because of the validation (i think)
-            view.model.set(view.model.previousAttributes());
-          }
-          
-        });
-
-        //show dialog with view TODO
+        
         view.showDialog();
         
       },

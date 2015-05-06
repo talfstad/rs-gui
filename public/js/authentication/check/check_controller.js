@@ -19,6 +19,7 @@ define(["app"], function(RipManager){
               RipManager.trigger("authentication:login");
             } else {
               RipManager.session.set({
+                user: statusCollection.models[0].attributes.user.user,
                 logged_in: true,
                 username: statusCollection.models[0].attributes.user.username
               });
