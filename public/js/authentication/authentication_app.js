@@ -73,6 +73,10 @@ define(["app"], function(RipManager){
       check(callback, args);
     });
 
+    RipManager.on("authentication:check", function(callback, args){
+      check(callback, args);
+    });
+
 
     var authEnabledAPI = {
       login: function(criterion){

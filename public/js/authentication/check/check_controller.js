@@ -18,11 +18,14 @@ define(["app"], function(RipManager){
               // RipManager.navigate("login", {trigger: true});
               RipManager.trigger("authentication:login");
             } else {
-              RipManager.session.set({logged_in: true});
+              RipManager.session.set({
+                logged_in: true,
+                username: statusCollection.models[0].attributes.user.username
+              });
+
               if(statusCollection.models[0].attributes.user.admin) {
                 RipManager.session.set({admin: true});
               }
-              RipManager.session.set({username: statusCollection.models[0].attributes.user.username});
               callback(args);
             }
           });

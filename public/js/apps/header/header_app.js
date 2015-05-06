@@ -2,16 +2,16 @@ define(["app", "apps/header/list/list_controller"], function(RipManager, ListCon
   RipManager.module("HeaderApp", function(Header, RipManager, Backbone, Marionette, $, _){
 
     var executeAction = function(action, arg){
-      RipManager.startSubApp("OffersApp");
+      RipManager.startSubApp("HeaderApp");
       action(arg);
-      RipManager.execute("set:active:header", "offers");
+      // RipManager.execute("set:active:header", "offers");
     };
 
-    var checkAuth = function(callback, args) {
-      require(["authentication/authentication_app"], function() {
-        RipManager.execute("authentication:check", callback, args);
-      });
-    };
+    // var checkAuth = function(callback, args) {
+    //   require(["authentication/authentication_app"], function() {
+    //     RipManager.trigger("authentication:check", callback, args);
+    //   });
+    // };
 
 
     var API = {
@@ -25,7 +25,7 @@ define(["app", "apps/header/list/list_controller"], function(RipManager, ListCon
     // });
 
     Header.on("start", function(){
-      checkAuth(API.listHeader);
+      API.listHeader();
     });
   });
 

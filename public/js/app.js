@@ -60,11 +60,6 @@ define(["marionette", "authentication/session/user_model"], function(Marionette,
           }
         });
 
-
-        if(RipManager.getCurrentRoute() === ""){
-          RipManager.trigger("main:load");
-        }
-      
       });
     }
   });

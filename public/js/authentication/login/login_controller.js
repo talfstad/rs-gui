@@ -4,6 +4,11 @@ define(["app", "authentication/login/login_view", "authentication/session/user_m
       
       login: function(id){
         require(["entities/authentication", "apps/main/main/main_app"], function(){
+
+          //if header isn't loaded, load it
+          // RipManager.session.set({username: null});
+          // if(RipManager.)
+
           var loginView = new View.Login({user: "", pass: ""});
 
           loginView.on("login:submit", function(args){
@@ -13,11 +18,13 @@ define(["app", "authentication/login/login_view", "authentication/session/user_m
               if(status.models[0].attributes.error){
                 loginView.trigger("login:invalid");
               } else {
-                RipManager.session.set({logged_in: true});
+                RipManager.session.set({
+                  logged_in: true,
+                  username: status.models[0].attributes.user.username
+                });
                 if(status.models[0].attributes.user.admin) {
                   RipManager.session.set({admin: true});
                 }
-                RipManager.session.set({username: status.models[0].attributes.user.username});
                 RipManager.navigate("dash", {trigger: true});
                 // RipManager.trigger("main:dash:list");
               }
