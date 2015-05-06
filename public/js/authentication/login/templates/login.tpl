@@ -20,8 +20,7 @@
                
                     <div class="form-group">
                         <div class="controls">
-                            <input class="form-control" type="text" id="login-username-input" name="username" placeholder="Email"
-                                required data-parsley-type="email">
+                            <input class="form-control" type="text" id="login-username-input" name="username" placeholder="Email">
                         </div>
                     </div>
                     <div class="form-group mb20">

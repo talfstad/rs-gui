@@ -101,36 +101,38 @@ function(RipManager, earningsTpl, earningsListTpl, noEarningsTpl, earningsItemTp
       onDomRefresh: function() {
         var me = this;
         var data = this.options.earningsGraph;
+        try {
+          //access the model to get the data
+          var earningsGraph = new Morris.Area({
+            element: 'earnings-chart',
+            resize: true,
+            data: data,
+            hoverCallback: function(index, options, default_content, row) {
+                var date = moment(row.day).format('LL');
 
-        //access the model to get the data
-        var earningsGraph = new Morris.Area({
-          element: 'earnings-chart',
-          resize: true,
-          data: data,
-          hoverCallback: function(index, options, default_content, row) {
-              var date = moment(row.day).format('LL');
+                var html = "<div class='morris-hover-row-label'>"+ date +"</div><div class='morris-hover-point' style='color: #00a65a'>" +
+                            "Payout: $" +
+                            me.numbersWithCommas(row.payout) +
+                            "</div>" +
 
-              var html = "<div class='morris-hover-row-label'>"+ date +"</div><div class='morris-hover-point' style='color: #00a65a'>" +
-                          "Payout: $" +
-                          me.numbersWithCommas(row.payout) +
-                          "</div>" +
+                            "<div class='morris-hover-point' style='color: #0073b7'>" +
+                            
+                            "Conversions: " +
+                            me.numbersWithCommas(row.conversions) +
+                            "</div>";
+                           
 
-                          "<div class='morris-hover-point' style='color: #0073b7'>" +
-                          
-                          "Conversions: " +
-                          me.numbersWithCommas(row.conversions) +
-                          "</div>";
-                         
-
-              return(html);
-            },
-          xkey: 'day',
-          ykeys: ['conversions', 'payout'],
-          labels: ['Conversions', 'Payout'],
-          lineColors: ['#0073b7', '#00a65a'], //'#3c8dbc', 
-          fillOpacity: 0.1,
-          hideHover: 'auto',
-        });
+                return(html);
+              },
+            xkey: 'day',
+            ykeys: ['conversions', 'payout'],
+            labels: ['Conversions', 'Payout'],
+            lineColors: ['#0073b7', '#00a65a'], //'#3c8dbc', 
+            fillOpacity: 0.1,
+            hideHover: 'auto',
+          });
+        } catch(e){}
+        
       },
 
       serializeData: function(){

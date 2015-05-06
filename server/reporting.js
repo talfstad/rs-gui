@@ -21,7 +21,7 @@ module.exports = function(app, db, checkAuth){
                 } else {       
                     if(!docs[0]) {
                         console.log(err);
-                        res.status(500);
+                        res.status(200);
                         res.json({error: "Internal server error looking up the the reporting stats."});
                     } else {
                         res.status(200);

@@ -271,7 +271,7 @@ function(RipManager, landersTpl, landersListTpl, noLandersTpl, landerItemTpl, Bo
         });
 
         $("#landers-table").addClass("table table-bordered table-hover");
-        $("#landers-table").dataTable().fnSort([[1, 'desc']])
+        // $("#landers-table").dataTable().fnSort([[1, 'desc']])
       }
     });
   });

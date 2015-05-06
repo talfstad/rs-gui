@@ -412,7 +412,7 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
 
         });
         $("#new-rips-table").addClass("table table-bordered table-hover");
-        $("#new-rips-table").dataTable().fnSort([[1, 'desc']])
+        // $("#new-rips-table").dataTable().fnSort([[1, 'desc']])
       }
     });
 

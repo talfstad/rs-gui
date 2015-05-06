@@ -1,4 +1,4 @@
-<td>Currently</td>
+
 <td>No</td>
 <td>Offers</td>
 <td>To</td>
