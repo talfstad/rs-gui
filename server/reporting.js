@@ -13,6 +13,9 @@ module.exports = function(app, db, checkAuth){
         var ret_obj = [];
 
         var day = moment().subtract(days, 'day').format('YYYY-MM-DD');
+        console.log(day);
+
+        var db_query;
                         
         if(req.signedCookies.admin == 'true') {
             db_query = "SELECT * FROM reporting WHERE day >= '" + day + "';"; 
@@ -23,8 +26,6 @@ module.exports = function(app, db, checkAuth){
 
         update_reporting(req, function(error) {
 
-        if(days >= 0) {
-            db.query("SELECT * FROM reporting WHERE day >= ? AND user= ?", [day, user], function(err, docs) {
             if(error) {
                 console.log(error);
                 res.status(500);
@@ -33,7 +34,7 @@ module.exports = function(app, db, checkAuth){
             }
 
             if(days >= 0) {
-                db.query("SELECT * FROM reporting WHERE day >= ?;", [day], function(err, docs) {
+                db.query(db_query, function(err, docs) {
                     if (err) {
                         console.log(err);
                         res.status(500);
