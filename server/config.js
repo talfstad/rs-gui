@@ -14,7 +14,8 @@ module.exports = {
     host : 'localhost',
     user : 'root',
     password : 'derekisfat',
-    database : 'domains_dev'
+    database : 'domains_dev',
+    multipleStatements: true
   },
 
   //DB userdata to omit from client
@@ -23,6 +24,10 @@ module.exports = {
   //base_clickjacker_dir: '/Users/Troy/git/cjgui'
   //base_clickjacker_dir: '/Users/alfstad/Desktop/cjguiMarionette/test/notworking/cjgui'
   
-  base_clickjacker_dir: '/var/www/cjgui'
+  base_clickjacker_dir: '/var/www/cjgui',
+
+  api_key_map: {
+    admin : '321ccbdbe5133ef3df9d3bf1db18580153c0e5a70844b193cfa4e40c3194f623'
+  }
 
 };

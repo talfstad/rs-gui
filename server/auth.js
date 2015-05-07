@@ -73,29 +73,29 @@ module.exports = function(app, db, checkAuth){
                     i=0; //start over
                 }
             }
-        });
-
-        db.query("INSERT INTO users(user, hash, approved, secret_username, auth_token) VALUES (?, ?, ?, ?, ?)",
-                [req.body.username, bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8)), 0, secretUsername, bcrypt.genSaltSync(8)], function(err, rows) {
-            if(err) {
-                console.log(err);
-                res.json({ error: "Username has been taken.", field: "username" }); 
-            } else {
-                // Retrieve the inserted user data
-                db.query("SELECT * FROM users WHERE user = ?", [ req.body.username ], function(err, rows) {
-                    if(rows.length == 1) {
-                        var row = rows[0];
-                        // Set the user cookies and return the cleansed user data
-                        res.cookie('user_id', row.user, { signed: true, maxAge: config.cookieMaxAge  });
-                        res.cookie('auth_token', row.auth_token, { signed: true, maxAge: config.cookieMaxAge  });
-                        res.cookie('admin', 'false', { signed: true, maxAge: config.cookieMaxAge  });
-                        res.json({ user: _.omit(row, config.userDataOmit) });   
-                    } else {
-                        console.log(err, rows);
-                        res.json({ error: "Error while trying to register user." }); 
-                    }
-                });
-            }
+        
+            db.query("INSERT INTO users(user, hash, approved, secret_username, auth_token) VALUES (?, ?, ?, ?, ?)",
+                    [req.body.username, bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8)), 0, secretUsername, bcrypt.genSaltSync(8)], function(err, rows) {
+                if(err) {
+                    console.log(err);
+                    res.json({ error: "Username has been taken.", field: "username" }); 
+                } else {
+                    // Retrieve the inserted user data
+                    db.query("SELECT * FROM users WHERE user = ?", [ req.body.username ], function(err, rows) {
+                        if(rows.length == 1) {
+                            var row = rows[0];
+                            // Set the user cookies and return the cleansed user data
+                            res.cookie('user_id', row.user, { signed: true, maxAge: config.cookieMaxAge  });
+                            res.cookie('auth_token', row.auth_token, { signed: true, maxAge: config.cookieMaxAge  });
+                            res.cookie('admin', 'false', { signed: true, maxAge: config.cookieMaxAge  });
+                            res.json({ user: _.omit(row, config.userDataOmit) });   
+                        } else {
+                            console.log(err, rows);
+                            res.json({ error: "Error while trying to register user." }); 
+                        }
+                    });
+                }
+            });
         });
       
     });
