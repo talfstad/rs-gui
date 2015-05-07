@@ -13,7 +13,6 @@ module.exports = function(app, db, checkAuth){
         var ret_obj = [];
 
         var day = moment().subtract(days, 'day').format('YYYY-MM-DD');
-        console.log(day);
 
         var db_query;
                         
