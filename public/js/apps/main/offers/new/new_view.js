@@ -58,7 +58,7 @@ define(["app", "tpl!apps/main/offers/new/new_offer.tpl",
             {
               label: 'Add Offer',
               cssClass: 'btn-primary',
-              hotkey: 13, //Enter key
+              // hotkey: 13, //Enter key
               action: function(dialogRef) {
                   me.submitOfferNew();
               }

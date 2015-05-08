@@ -120,10 +120,10 @@ module.exports = function(app, db, checkAuth){
         var db_query = '';
 
         if(req.signedCookies.admin == 'true') {
-            db_query = 'SELECT * FROM offers;';
+            db_query = 'SELECT offers.*, users.username from offers INNER JOIN users ON offers.user = users.user;';
         }
         else {
-            db_query = 'SELECT * FROM offers WHERE USER = \''+user+'\';';
+            db_query = 'SELECT offers.*, users.username from offers INNER JOIN users ON offers.user = users.user WHERE offers.user = \''+user+'\';';
         }
 
         db.query(db_query, function(err, docs) {
@@ -179,11 +179,22 @@ module.exports = function(app, db, checkAuth){
         db.query('INSERT INTO offers (name, offer_link, user, website, login) VALUES (?,?,?,?,?);', [name, offer_link, user, website, login], function(err, docs) {
             if(err) {
                 console.log(err);
-                res.status(500);
+                res.status(200);
                 res.json({error:"Error adding new offer."});
             } else {
-                res.status(200);
-                res.json({id: docs.insertId});
+                db.query('SELECT username FROM users WHERE user = \''+user+'\';', function(err, usernameDocs){
+                    if(err){
+                        console.log(err);
+                        res.status(200);
+                        res.json({error: "Error adding new offer!"});
+                    } else {
+                        res.status(200);
+                        res.json({
+                            id: docs.insertId, 
+                            username: usernameDocs[0].username
+                        });
+                    }
+                });
             }
         });
     });
