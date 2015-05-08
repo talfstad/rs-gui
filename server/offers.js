@@ -69,7 +69,7 @@ module.exports = function(app, db, checkAuth){
     });
 
     app.put("/update_ripped_url_by_offer_id/:ripped_id", checkAuth, function(req, res) {
-        var ripped_id = req.body.ripped_id;
+        var ripped_id = req.body.id;
         var user = req.signedCookies.user_id;
         var offer_id = req.body.offer_id;
         var redirect_rate = req.body.redirect_rate;
