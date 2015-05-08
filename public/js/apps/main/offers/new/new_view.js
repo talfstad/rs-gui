@@ -2,12 +2,17 @@ define(["app", "tpl!apps/main/offers/new/new_offer.tpl",
         "bootstrap-dialog", 
         "backbone.syphon", 
         "backbone-validation", 
-        "datatablesbootstrap",], function(RipManager, OfferEditFormTpl, BootstrapDialog){
+        "datatablesbootstrap",
+        "bootstrap-select"], function(RipManager, OfferEditFormTpl, BootstrapDialog){
   RipManager.module("OffersApp.NewDialog.View", function(View, RipManager, Backbone, Marionette, $, _){
 
       View.NewDialogForm = Marionette.ItemView.extend({
         template: OfferEditFormTpl,
         
+        triggers: {
+          "click button.js-close" : "close"
+        },
+
         initialize: function() {
           this.listenTo(this, "offer:new:notify", this.notify);
           Backbone.Validation.bind(this,{
@@ -28,8 +33,8 @@ define(["app", "tpl!apps/main/offers/new/new_offer.tpl",
           });
         },
 
-        triggers: {
-          "click button.js-close" : "close"
+        onRender: function() {
+          this.$el.find(".user-select").selectpicker('render');
         },
 
         showDialog: function(e){
@@ -143,6 +148,13 @@ define(["app", "tpl!apps/main/offers/new/new_offer.tpl",
           }, 850);
 
 
+        },
+
+        serializeData: function(){
+          return {
+            model: this.model.toJSON(),
+            userList: this.options.userList.toJSON()
+          };
         }
 
         

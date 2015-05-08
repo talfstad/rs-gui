@@ -1,20 +1,23 @@
-define(["app"], function(RipManager){
+define(["app", 
+  "apps/main/main/main_controller",
+  "apps/main/leftnav/leftnav_app",
+  "authentication/authentication_app",
+  "apps/main/rips/rips_app",
+  "apps/main/dashboard/dashboard_app",
+  "apps/main/offers/offers_app",
+  "apps/main/registered/registered_app",
+  "apps/main/landers/landers_app",
+  "apps/main/earnings/earnings_app"], 
+
+  function(RipManager, MainController){
+
   RipManager.module("MainApp", function(MainApp, RipManager, Backbone, Marionette, $, _){
     MainApp.startWithParent = false;
-
-    // MainApp.onStart = function(){
-    //   console.log("starting MainApp");
-    // };
-
-    // MainApp.onStop = function(){
-    //   console.log("stopping MainApp");
-    // };
   });
 
   RipManager.module("Routers.MainApp", function(RipsAppRouter, RipManager, Backbone, Marionette, $, _){
     RipsAppRouter.Router = Marionette.AppRouter.extend({
       appRoutes: {
-        // "rips(/filter/criterion::criterion)": "listDash",
         "dash": "dash",
         "rips": "rips",
         "offers": "offers",
@@ -33,72 +36,52 @@ define(["app"], function(RipManager){
 
         
     var checkMainViewRendered = function() {
-      require(["apps/main/main/main_controller"], function(MainController){
-        if(RipManager.mainLayout == undefined) {
+      if(RipManager.mainLayout == undefined) {
+        executeAction(MainController.loadMainApp);
+      } else {
+        if(RipManager.mainLayout.leftNavRegion == undefined)
           executeAction(MainController.loadMainApp);
-        } else {
-          if(RipManager.mainLayout.leftNavRegion == undefined)
-            executeAction(MainController.loadMainApp);
-        }
-      });
+      }
     };
     
     var checkAuth = function(callback, args) {
-      require(["authentication/authentication_app"], function() {
-        RipManager.execute("authentication:check", callback, args);
-      });
+      RipManager.execute("authentication:check", callback, args);
     };
 
     var API = {
       rips: function(args){
-        require(["apps/main/rips/rips_app", "apps/main/leftnav/leftnav_app"], function(){
-          checkMainViewRendered();
-          RipManager.trigger("leftnav:rips");
-          RipManager.trigger("rips:list");
-        });
+        checkMainViewRendered();
+        RipManager.trigger("rips:list");
       },
 
       ripReport: function(id){
-        require(["apps/main/rips/rips_app", "apps/main/leftnav/leftnav_app"], function(){
-          checkMainViewRendered();
-          RipManager.trigger("leftnav:rips");
-          RipManager.trigger("rips:report", id);
-        });
+        checkMainViewRendered();
+        RipManager.trigger("rips:report", id);
       },
       dash: function(args){
-        require(["apps/main/dashboard/dashboard_app", "apps/main/leftnav/leftnav_app"], function(){
-          checkMainViewRendered();
-          RipManager.trigger("leftnav:rips");
-          RipManager.trigger("dash:list");
-        });
+        checkMainViewRendered();
+        RipManager.trigger("dash:list");
+        RipManager.navigate("dash");
       },
       offers: function(args){
-        require(["apps/main/offers/offers_app", "apps/main/leftnav/leftnav_app"], function(){
-          checkMainViewRendered();
-          RipManager.trigger("leftnav:offers");
-          RipManager.trigger("offers:list");
-        });
+        checkMainViewRendered();
+        RipManager.trigger("offers:list");
+        RipManager.navigate("offers");
       },
       registered: function(args){
-        require(["apps/main/registered/registered_app", "apps/main/leftnav/leftnav_app"], function(){
-          checkMainViewRendered();
-          RipManager.trigger("leftnav:offers");
-          RipManager.trigger("registered:list");
-        });
+        checkMainViewRendered();
+        RipManager.trigger("registered:list");
+        RipManager.navigate("registered");
       },
       landers: function(args){
-        require(["apps/main/landers/landers_app", "apps/main/leftnav/leftnav_app"], function(){
-          checkMainViewRendered();
-          RipManager.trigger("leftnav:landers");
-          RipManager.trigger("landers:list");
-        });
+        checkMainViewRendered();
+        RipManager.trigger("landers:list");
+        RipManager.navigate("landers");
       },
       earnings: function(args){
-        require(["apps/main/earnings/earnings_app", "apps/main/leftnav/leftnav_app"], function(){
-          checkMainViewRendered();
-          RipManager.trigger("leftnav:landers");
-          RipManager.trigger("earnings:list");
-        });
+        checkMainViewRendered();
+        RipManager.trigger("earnings:list");
+        RipManager.navigate("earnings");
       }
     };
 

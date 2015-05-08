@@ -1,4 +1,8 @@
-define(["app"], function(RipManager){
+define(["app", 
+        "apps/main/registered/list/list_controller",
+        "apps/main/leftnav/leftnav_app",
+        "authentication/authentication_app"], 
+      function(RipManager, ListController){
   RipManager.module("RegisteredApp", function(RegisteredApp, RipManager, Backbone, Marionette, $, _){
     RegisteredApp.startWithParent = false;
 
@@ -10,18 +14,13 @@ define(["app"], function(RipManager){
   };
 
   var checkAuth = function(callback, args) {
-    require(["authentication/authentication_app"], function() {
-      RipManager.execute("authentication:check", callback, args);
-    });
+    RipManager.execute("authentication:check", callback, args);
   };
 
   var API = {
     listRegistered: function(args){
-      require(["apps/main/registered/list/list_controller",
-               "apps/main/leftnav/leftnav_app"], function(ListController){
-        executeAction(ListController.listRegistered, args);
-        RipManager.execute("set:active:leftnav", "registered");
-      });
+      executeAction(ListController.listRegistered, args);
+      RipManager.execute("set:active:leftnav", "registered");
     }
   };
 

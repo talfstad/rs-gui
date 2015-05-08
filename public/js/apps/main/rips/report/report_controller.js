@@ -1,4 +1,4 @@
-define(["app", "/js/apps/main/rips/report/report_view.js"], function(RipManager, RipReportView){
+define(["app", "apps/main/rips/report/report_view"], function(RipManager, RipReportView){
 
   RipManager.module("RipsApp.ListReport", function(RipReport, RipManager, Backbone, Marionette, $, _){
     RipReport.Controller = {

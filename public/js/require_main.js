@@ -9,7 +9,7 @@ requirejs.config({
     bootstrap: "lib/bootstrap/dist/js/bootstrap.min",
     "bootstrap-notify": "vendor/bootstrap-notify",
     "bootstrap-select": "../plugins/bootstrap-select/distro/js/bootstrap-select",
-    jquery: ["lib/jquery/dist/jquery", 'jquery'],
+    jquery: "lib/jquery/dist/jquery",
     "jquery-ui": "lib/jquery-ui/jquery-ui",
     json2: "lib/json2/json2",
     marionette: "lib/backbone.marionette/lib/backbone.marionette",
@@ -44,7 +44,7 @@ requirejs.config({
     'jquery.fileupload-audio': 'lib/blueimp-file-upload/js/jquery.fileupload-audio',
     'jquery.fileupload-process': 'lib/blueimp-file-upload/js/jquery.fileupload-process',
     'jquery.fileupload-jquery-ui': 'lib/blueimp-file-upload/js/jquery.fileupload-jquery-ui',
-    'jquery.iframe-transport': ['lib/blueimp-file-upload/js/jquery.iframe-transport'],
+    'jquery.iframe-transport': 'lib/blueimp-file-upload/js/jquery.iframe-transport',
     
     'load-image': 'lib/blueimp-load-image/js/load-image',
     'load-image-meta': 'lib/blueimp-load-image/js/load-image-meta',

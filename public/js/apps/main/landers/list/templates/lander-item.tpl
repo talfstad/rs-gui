@@ -5,7 +5,7 @@
 </td>
 <td style="width: 105px"><%= last_updated %></td>
 <td>
-  <span><%= notes %></span>
+  <span>User: <% if(admin) { %> <%= user %> <% } %> | <%= notes %></span>
   <button type="button" class="notes pull-right btn btn-default btn-xs" style="color: #333">
     <span class="fa fa-pencil-square-o" aria-hidden="true"></span> Edit Notes
   </button>

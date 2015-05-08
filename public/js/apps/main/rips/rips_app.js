@@ -32,8 +32,8 @@ define(["app"], function(RipManager){
     },
 
     ripReport: function(id){
-      require(["/js/apps/main/rips/report/report_controller.js",
-               "/js/apps/main/leftnav/leftnav_app.js"], function(RipReportController){
+      require(["apps/main/rips/report/report_controller",
+               "apps/main/leftnav/leftnav_app.js"], function(RipReportController){
         executeAction(RipReportController.listReport, id);
         RipManager.execute("set:active:leftnav", "rips");
       });

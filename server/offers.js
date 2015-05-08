@@ -1,5 +1,35 @@
 module.exports = function(app, db, checkAuth){
 
+/*
+    /userList: 
+        Returns a list of users to be used when an offer
+        is being created.
+*/
+    app.get("/userlist", checkAuth, function(req, res){
+        if(req.signedCookies.admin == 'true'){
+          db_query = 'SELECT id, user, username FROM users WHERE approved="1";';
+          db.query(db_query, function(err, docs) {
+            if (err) {
+              console.log(err);
+              res.status(500);
+              res.json({error:"Internal server error looking up the offers list."});
+            } else {          
+              if(docs) {
+                res.status(200);
+                res.json(docs);
+              } else {
+                res.status(500);
+                res.json({error:"Internal server error looking up the offers list."});
+              }
+            }
+          });
+        } else {
+            res.status(200);
+            res.json({error: 'You cannot haz our dataz becuze you are notz special'});
+            return;
+        }
+    });
+
     app.put("/update_ripped_url/:id", checkAuth, function(req, res) {
         var id = req.body.id;
         var user = req.signedCookies.user_id;
@@ -115,7 +145,7 @@ module.exports = function(app, db, checkAuth){
     });
 
     app.post("/update_offer", checkAuth, function(req, res) {
-        var user = req.signedCookies.user_id;
+        var user = req.body.user_id; //this is the offer owner
         var offer_link = req.body.offer_link;
         var name = req.body.name;
         var website = req.body.website;

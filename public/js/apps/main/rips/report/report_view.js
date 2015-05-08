@@ -1,6 +1,6 @@
 define(["app",
-        "tpl!/js/apps/main/rips/report/templates/rip_report.tpl",
-        "tpl!/js/apps/main/rips/report/templates/overview_stats_graph.tpl",
+        "tpl!apps/main/rips/report/templates/rip_report.tpl",
+        "tpl!apps/main/rips/report/templates/overview_stats_graph.tpl",
         "datatablesbootstrap", "morris",
         "bootstrap-notify"],
 

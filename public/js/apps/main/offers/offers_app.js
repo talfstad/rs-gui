@@ -23,11 +23,6 @@ define(["app"], function(RipManager){
         RipManager.execute("set:active:leftnav", "offers");
       });
     },
-    // editOfferSubmit: function(args){
-    //   require(["apps/main/offers/edit/edit_controller"], function(EditController){
-    //     executeAction(EditController.submitEdit, args);
-    //   });
-    // },
     addOffer: function(args){
       require(["apps/main/offers/new/new_controller"], function(NewController){
         executeAction(NewController.addOffer, args);

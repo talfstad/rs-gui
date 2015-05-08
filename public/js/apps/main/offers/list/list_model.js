@@ -4,7 +4,6 @@ define(["app"], function(RipManager){
       urlRoot: ""
     });
 
-
     GetOffers.Offer = Backbone.Model.extend({
       urlRoot: "/update_offer",
 
