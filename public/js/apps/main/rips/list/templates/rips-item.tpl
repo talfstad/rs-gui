@@ -11,6 +11,7 @@
     <img class="flag-tooltip rips-grid-flag" src="/images/flags/<%= flag.url %>" alt="<%= flag.hits %> Daily Hit<% if(flag.hits > 1){ %>s<% } %> in <%= flag.name %>" title="<%= flag.hits %> Daily Hit<% if(flag.hits > 1){ %>s<% } %> in <%= flag.name %>"/>
 <% }) %>
 </td>
+<td> <%= username %></td>
 <td>
   <% if(admin) { %>
     <button type="button" class="rip-edit btn btn-default btn-xs" style="color: #333">

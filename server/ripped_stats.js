@@ -329,7 +329,7 @@ module.exports = function(app, db, checkAuth){
         db.query(db_query, function(err, docs) {
             if (err) {
                 console.log(err);
-                res.status(500);
+                res.status(200);
                 res.json({error:"Internal server error looking up the ripped stats."});
             } else {          
                 if(docs[0]) {
@@ -337,7 +337,7 @@ module.exports = function(app, db, checkAuth){
                     res.json(docs[0]);
                 }
                 else {
-                    res.status(500);
+                    res.status(200);
                     res.json({error:"Internal server error looking up the ripped stats."});
                 }
             }

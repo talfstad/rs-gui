@@ -324,7 +324,7 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
           //     { "sWidth": "280px", "aTargets": [3] },
           //     { "sWidth": "155px", "aTargets": [4] },
           //     { "sWidth": "145px", "aTargets": [5] },
-              {  "bSortable": false, "aTargets": [6] }
+              {  "bSortable": false, "aTargets": [7] }
           ],
           // "order": [[ 1, 'desc' ]] doesn't work...
           // iDisplayLength: 25

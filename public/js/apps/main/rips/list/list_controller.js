@@ -80,9 +80,10 @@ define(["app", "apps/main/rips/list/list_view"], function(RipManager, RipsListVi
             $.when(fetchingOffers).done(function(offers){
               ripsListView.on("childview:rip:edit", function(childView, args){
                 var model = args.model;
+                var offersForUser = new getOffersModel.OfferCollection(offers.onlyForUser(model.attributes.user));
                 var view = new EditRipView.Rip({
                   model: model,
-                  offerList: offers
+                  offerList: offersForUser
                 });
 
                 view.on("rip:edit:submit", function(){

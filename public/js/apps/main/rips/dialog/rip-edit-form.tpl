@@ -1,4 +1,11 @@
 <form role="form" class="form-horizontal">
+
+  <div class="form-group" style="position: relative; bottom: 16px">
+    <div class="bg-info col-sm-12" style="text-align: center; padding: 10px 0 10px">
+        <span>This Rip is owned by: <strong><%= model.username %></strong>. </span>
+    </div>
+  </div>
+
   <div class="form-group">
     <label for="offer_id" class="col-sm-3 control-label">Offer</label>
     <div class="col-sm-9">
@@ -10,7 +17,7 @@
       </select>
     </div>
     <div class="col-sm-offset-3 col-sm-9">
-      <p class="help-block">Please enter your replacement offer link.</p>
+      <p class="help-block">Please select a replacement offer. All offers in this list are owned by <br> <%= model.username %>.</p>
     </div>
   </div>
   <div class="form-group">
