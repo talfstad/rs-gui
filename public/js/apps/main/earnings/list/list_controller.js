@@ -29,7 +29,7 @@ define(["app", "apps/main/earnings/list/list_view", 'moment',"apps/main/earnings
 
             var graphData = new Array(),
                 currentDay = earningsCollection.models[0].attributes.day,
-                payoutForDay = 0,
+                clicksForDay = 0,
                 conversionsForDay = 0;
             var collectionLength = earningsCollection.models.length;
             $.each(earningsCollection.models, function(idx, model){
@@ -40,26 +40,26 @@ define(["app", "apps/main/earnings/list/list_view", 'moment',"apps/main/earnings
 
               if(moment(currentDay).format('LL') === moment(model.attributes.day).format('LL')) {
                 //keep totaling for day
-                payoutForDay += model.attributes.payout;
+                clicksForDay += model.attributes.clicks;
                 conversionsForDay += model.attributes.conversions;
               } else {
                 //add it to day
                 graphData.push({
                   day: currentDay,
-                  payout: payoutForDay,
+                  clicks: clicksForDay,
                   conversions: conversionsForDay
                 });
 
                 //reset for next day
                 currentDay = model.attributes.day;
-                payoutForDay = model.attributes.payout;
+                clicksForDay = model.attributes.clicks;
                 conversionsForDay = model.attributes.conversions;
               }
               
               if(collectionLength -1 === idx) {
                 graphData.push({
                   day: currentDay,
-                  payout: payoutForDay,
+                  clicks: clicksForDay,
                   conversions: conversionsForDay
                 });
               }

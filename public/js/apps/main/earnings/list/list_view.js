@@ -109,24 +109,30 @@ function(RipManager, earningsTpl, earningsListTpl, noEarningsTpl, earningsItemTp
             data: data,
             hoverCallback: function(index, options, default_content, row) {
                 var date = moment(row.day).format('LL');
+                var conversionRate = ((row.conversions/row.clicks) * 100).toFixed(2);
 
                 var html = "<div class='morris-hover-row-label'>"+ date +"</div><div class='morris-hover-point' style='color: #00a65a'>" +
-                            "Payout: $" +
-                            me.numbersWithCommas(row.payout) +
+                            "Clicks: " +
+                            me.numbersWithCommas(row.clicks) +
                             "</div>" +
 
                             "<div class='morris-hover-point' style='color: #0073b7'>" +
                             
                             "Conversions: " +
                             me.numbersWithCommas(row.conversions) +
-                            "</div>";
+                            "</div>" +
+                             "<div class='morris-hover-point'>" +
+                            
+                            "Conversion Rate: " +
+                            me.numbersWithCommas(conversionRate) +
+                            "% </div>";
                            
 
                 return(html);
               },
             xkey: 'day',
-            ykeys: ['conversions', 'payout'],
-            labels: ['Conversions', 'Payout'],
+            ykeys: ['conversions', 'clicks'],
+            labels: ['Conversions', 'Clicks'],
             lineColors: ['#0073b7', '#00a65a'], //'#3c8dbc', 
             fillOpacity: 0.1,
             hideHover: 'auto',

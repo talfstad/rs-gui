@@ -42,7 +42,7 @@
             <!-- Tabs within a box -->
             <ul class="nav nav-tabs pull-right">
                 <li class="active"><a href="#earnings-chart" data-toggle="tab">Overview of Earnings Graph</a></li> 
-                <li class="pull-left header"><i class="fa fa-diamond"></i> Total Earnings for the Selected Time Range</li>
+                <li class="pull-left header"><i class="fa fa-diamond"></i> Total Clicks and Conversions</li>
             </ul>
             <div id="earnings-graph" class="tab-content no-padding"></div>
         </div><!-- /.nav-tabs-custom -->
@@ -54,7 +54,7 @@
     <div class="col-xs-12">
       <div class="box box-primary">
         <div class="box-header with-border">
-          <h3 class="box-title">List of your Earnings for the Selected Time Range</h3>
+          <h3 class="box-title">List of your Earnings</h3>
         </div><!-- /.box-header -->
         <div class="box-body table-responsive">
           <div id="earnings-table-container" class="box-body">

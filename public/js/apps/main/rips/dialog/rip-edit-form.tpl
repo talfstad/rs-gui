@@ -2,7 +2,7 @@
 
   <div class="form-group" style="position: relative; bottom: 16px">
     <div class="bg-info col-sm-12" style="text-align: center; padding: 10px 0 10px">
-        <span>This Rip is owned by: <strong><%= model.username %></strong>. </span>
+        <span>This Rip is Owned by: <strong><%= model.username %></strong>. </span>
     </div>
   </div>
 
