@@ -121,6 +121,11 @@ function(RipManager, earningsTpl, earningsListTpl, noEarningsTpl, earningsItemTp
                             "Conversions: " +
                             me.numbersWithCommas(row.conversions) +
                             "</div>" +
+                            "<div class='morris-hover-point'>" +
+                            
+                            "Payout: $" +
+                            me.numbersWithCommas(row.payout) +
+                            "</div>" +
                              "<div class='morris-hover-point'>" +
                             
                             "Conversion Rate: " +

@@ -27,7 +27,7 @@ module.exports = function(app, db, checkAuth){
 
             if(error) {
                 console.log(error);
-                res.status(500);
+                res.status(200);
                 res.send({error : "Error updating reports."});
                 return;
             }
@@ -36,7 +36,7 @@ module.exports = function(app, db, checkAuth){
                 db.query(db_query, function(err, docs) {
                     if (err) {
                         console.log(err);
-                        res.status(500);
+                        res.status(200);
                         res.json({error: "Internal server error looking up the the reporting stats."});
                     } else {       
                         if(!docs[0]) {
@@ -50,7 +50,7 @@ module.exports = function(app, db, checkAuth){
                     }
                 });
             } else {
-                res.status(400);
+                res.status(200);
                 res.json({error: "Days must be greater than or equal to 0."});
             }
         });
