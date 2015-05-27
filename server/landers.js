@@ -7,6 +7,23 @@ module.exports = function(app, db, checkAuth){
     var config = require('./config');
     var mkdirp = require('mkdirp');
     var path = require('path');
+    var s3 = require('s3');
+
+    var s3_client = s3.createClient({
+        maxAsyncS3: 20,     // this is the default
+        s3RetryCount: 3,    // this is the default
+        s3RetryDelay: 1000, // this is the default
+        multipartUploadThreshold: 20971520, // this is the default (20 MB)
+        multipartUploadSize: 15728640, // this is the default (15 MB)
+        s3Options: {
+            accessKeyId: "AKIAI466DJECC35NREIA",
+            secretAccessKey: "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",
+            // any other options are passed to new AWS.S3()
+            // See: http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Config.html#constructor-property
+        },
+    });
+
+    var bucket_name = "buildcavelanders";
 
     var base_clickjacker_dir = config.base_clickjacker_dir;
 
@@ -118,7 +135,7 @@ module.exports = function(app, db, checkAuth){
     }
 
 
-    function saveLanderToDB(user, uuid, download_path, notes, callback) {
+    function saveLanderToDB(user, uuid, download_url, notes, callback) {
         var error;
         var lander_id;
 
@@ -132,7 +149,7 @@ module.exports = function(app, db, checkAuth){
                 } 
                 console.log("Created lander id: " + lander_id + " with UUID: " + uuid);
             }
-            db.query("INSERT INTO landers(uuid, original_archive_path, user, notes, last_updated) VALUES(?, ?, ?, ?, NOW());", [uuid, download_path, user, notes], function(err2, docs) {
+            db.query("INSERT INTO landers(uuid, original_url, user, notes, last_updated) VALUES(?, ?, ?, ?, NOW());", [uuid, download_url, user, notes], function(err2, docs) {
                 if(err2) {
                     error = err2;
                 }
@@ -141,22 +158,43 @@ module.exports = function(app, db, checkAuth){
         });
     }
 
-    function archiveOriginalLander(file_path, archive_path, zip_name, callback) {
+    function archiveLander(file_path, bucket_path, zip_name, callback) {
         var error;
 
-        console.log("Copying " + file_path + " to " + archive_path + "/" + zip_name);
+        var download_url = "https://s3-us-west-2.amazonaws.com/" + bucket_name + "/" + bucket_path;
 
-        fs.rename(
-            file_path,
-            archive_path + "/" + zip_name,
-            function(err) {
-                if(err) {
-                    console.log(err);
-                    error = 'Server error writing file.'
-                }
-                callback(archive_path + "/" + zip_name, error);
-            }
-        );
+        var bucket_params = {
+          localFile: file_path,
+
+          s3Params: {
+            Bucket: bucket_name,
+            Key: bucket_path,
+            ACL: "public-read"
+            // other options supported by putObject, except Body and ContentLength.
+            // See: http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property
+          },
+        };
+
+        //console.log("Copying " + file_path + " to " + archive_path + "/" + zip_name);
+        console.log("Uploading to s3 bucket: " + bucket_name + "/" + bucket_path)
+
+        var uploader = s3_client.uploadFile(bucket_params);
+
+        uploader.on('error', function(err) {
+            error = "Unable to upload:" + err.stack;
+            callback(download_url, error)
+            return;
+        });
+
+        uploader.on('progress', function() {
+          //console.log("Upload Progress: ", uploader.progressMd5Amount, uploader.progressAmount, uploader.progressTotal);
+        });
+
+        uploader.on('end', function() {
+          console.log("Done uploading.");
+          callback(download_url, error);
+          return;
+        });
         
     }
 
@@ -193,84 +231,48 @@ module.exports = function(app, db, checkAuth){
         //var zip_name=req.files.myFile.name
         var notes = req.body.notes;
 
-        console.log("notes: " + notes);
         var lander_id;
-        var uuid = make_uuid.v1();
-        var archive_path = base_clickjacker_dir + "/archive/" + uuid;
+        var uuid = make_uuid.v4();
+        var secret_uuid = make_uuid.v4();
+        var archive_path = "original/" + user + "/" + uuid + "/" + secret_uuid + "/" + zip_name;
         var download_path;
-        var download_url = "/download_original_lander?uuid=";
+        var download_url;
 
-        mkdirp(archive_path, function(error) { 
+        archiveLander(file.path, archive_path, zip_name, function(download_url, error) {
             if(error) {
                 console.log(error);
                 res.status(500);
-                res.send({error : "Error saving lander to disk."});
+                res.send({error : "Error saving lander to S3."});
                 return;
             }
-            archiveOriginalLander(file.path, archive_path, zip_name, function(download_path, error) {
+            saveLanderToDB(user, uuid, download_url, notes, function(lander_id, error) {
                 if(error) {
                     console.log(error);
                     res.status(500);
-                    res.send({error : "Error saving lander to disk."});
+                    res.send({error : "Error saving lander to S3."});
                     return;
                 }
-                saveLanderToDB(user, uuid, download_path, notes, function(lander_id, error) {
-                    if(error) {
-                        console.log(error);
-                        res.status(500);
-                        res.send({error : "Error saving lander to disk."});
-                        return;
-                    }
 
-                    var response = {
-                      download_url : download_url + uuid,
-                      uuid : uuid,
-                      lander_id : lander_id,
-                      notes : notes,
-                      files: [
-                          {
-                            name: file.originalname,
-                            size: file.size,
-                            url: download_url + uuid
-                          }
-                        ]
-                    };
+                var response = {
+                  download_url : download_url,
+                  uuid : uuid,
+                  lander_id : lander_id,
+                  notes : notes,
+                };
+                
+                res.status(200);
+                res.send(response);
 
-                    
-
-                    res.status(200);
-                    res.send(response);
-
-                }); 
             }); 
-        });
+        }); 
+
     });
 
-
-    function archiveInstalledLander(file_path, archive_path, zip_name, callback) {
-        var error;
-
-        console.log("Copying " + file_path + " to " + archive_path + "/" + zip_name);
-
-        fs.rename(
-            file_path,
-            archive_path + "/" + zip_name,
-            function(err) {
-                if(err) {
-                    console.log(err);
-                    error = 'Server error writing file.'
-                }
-                callback(archive_path + "/" + zip_name, error);
-            }
-        );
-        
-    }
-
-    function saveInstalledLanderToDB(uuid, download_path, callback) {
+    function saveInstalledLanderToDB(uuid, download_url, callback) {
         var error;
         var lander_id;
 
-        db.query("UPDATE landers SET installed_archive_path = ?, ready = 1 WHERE uuid = ?;", [download_path, uuid], function(err, docs) {
+        db.query("UPDATE landers SET installed_url = ?, ready = 1 WHERE uuid = ?;", [download_url, uuid], function(err, docs) {
             if(err) {
                 error = err;
             }
@@ -290,137 +292,47 @@ module.exports = function(app, db, checkAuth){
 
         var user = req.signedCookies.user_id;              
         var zip_name = req.files.myFile.originalname;
-        //var zip_name=req.files.myFile.name
         var lander_id;
         var uuid = req.body.uuid;
-        var archive_path = base_clickjacker_dir + "/archive/" + uuid + "/installed";
+        var secret_uuid = make_uuid.v4();
+        var archive_path = "installed/" + user + "/" + uuid + "/" + secret_uuid + "/" + zip_name;
         var download_path;
-        var download_url = "/download_installed_lander?uuid=" + uuid;
+        var download_url;
 
-        mkdirp(archive_path, function(error) { 
+        archiveLander(file.path, archive_path, zip_name, function(download_url, error) {
             if(error) {
                 console.log(error);
                 res.status(500);
-                res.send({error : "Error saving lander to disk."});
+                res.send({error : "Error saving lander to S3."});
                 return;
             }
-            archiveInstalledLander(req.files.myFile.path, archive_path, zip_name, function(download_path, error) {
+            saveInstalledLanderToDB(uuid, download_url, function(error) {
                 if(error) {
                     console.log(error);
                     res.status(500);
-                    res.send({error : "Error saving lander to disk."});
+                    res.send({error : "Error saving lander to S3."});
                     return;
                 }
-                saveInstalledLanderToDB(uuid, download_path, function(error) {
-                    if(error) {
-                        console.log(error);
-                        res.status(500);
-                        res.send({error : "Error saving lander to disk."});
-                        return;
-                    }
 
-                    var response = {
-                      download_url : download_url,
-                    };
+                var response = {
+                  download_url : download_url,
+                  uuid : uuid,
+                  lander_id : lander_id,
+                  notes : notes,
+                  files: [
+                      {
+                        name: file.originalname,
+                        size: file.size,
+                        url: download_url
+                      }
+                    ]
+                };
+                
+                res.status(200);
+                res.send(response);
 
-                    res.status(200);
-                    res.send(response);
-
-                }); 
             }); 
-        });     
+        });    
     });
-
-    app.get('/download_original_lander', checkAuth, function(req, res) {
-
-        var uuid = req.query.uuid;
-        var user = req.signedCookies.user_id;
-        var archive_path;
-
-        var db_query = '';
-        if(req.signedCookies.admin == 'true') {
-            db_query = "SELECT original_archive_path FROM landers WHERE uuid = '" + uuid + "';";
-        }
-        else {
-            db_query = "SELECT original_archive_path FROM landers WHERE uuid = '" + uuid + "' AND user = '" + user + "';";
-        }
-
-        db.query(db_query, function(err, docs) {
-             if (err) {
-                    console.log(err);
-                    res.status(500);
-                    res.json({error: "Internal server error looking up the archive path for lander zip with uuid = " + uuid});
-            } else { 
-                if(!docs[0]) {
-                    console.log(err);
-                    res.status(500);
-                    res.json({error: "Internal server error looking up the archive path for lander zip with uuid = " + uuid});
-                }
-                else {
-                    archive_path = docs[0].original_archive_path;
-                    fs.readFile(archive_path, function(err, data) {
-                        if(err) {
-                            res.status(500);
-                            res.send({error : 'Error reading archived lander zip with uuid = ' + uuid});
-                        } else {
-                            res.writeHead(200, {
-                                'Content-Length': data.length,
-                                'Content-Disposition' : 'attachment; filename="' + path.basename(archive_path) + '"',
-                                'Content-Type': 'application/zip',
-                            });
-                            res.end(data);
-                        }
-                    });
-                }
-            }
-        });
-    });
-
-    app.get('/download_installed_lander', checkAuth, function(req, res) {
-
-        var uuid = req.query.uuid;
-        var user = req.signedCookies.user_id;
-        var archive_path;
-
-        var db_query = '';
-        if(req.signedCookies.admin == 'true') {
-            db_query = "SELECT installed_archive_path FROM landers WHERE uuid = '" + uuid + "';";
-        }
-        else {
-            db_query = "SELECT installed_archive_path FROM landers WHERE uuid = '" + uuid + "' AND user = '" + user + "';";
-        }
-
-        db.query(db_query, function(err, docs) {
-             if (err) {
-                    console.log(err);
-                    res.status(500);
-                    res.json({error: "Internal server error looking up the archive path for CJ installed lander zip with uuid = " + uuid});
-            } else { 
-                if(!docs[0]) {
-                    console.log(err);
-                    res.status(500);
-                    res.json({error: "Internal server error looking up the archive path for CJ installed lander zip with uuid = " + uuid});
-                }
-                else {
-                    archive_path = docs[0].installed_archive_path;
-                    fs.readFile(archive_path, function(err, data) {
-                        if(err) {
-                            res.status(500);
-                            res.send({error : 'Error reading CJ installed lander zip with uuid = ' + uuid});
-                        } else {
-                            res.writeHead(200, {
-                                'Content-Length': data.length,
-                                'Content-Disposition' : 'attachment; filename="' + path.basename(archive_path) + '"',
-                                'Content-Type': 'application/zip',
-                            });
-                            res.end(data);
-                        }
-                    });
-                }
-
-            }
-        });
-    });
-
 
 }

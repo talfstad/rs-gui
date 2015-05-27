@@ -63,19 +63,58 @@ module.exports = function(app, db, checkAuth){
             user = 'admin';
         }
 
-        var api_key = config.api_key_map[user];
-
+        var api_key;
+        var url;
         var day = moment().subtract(1, 'day').format('YYYY-MM-DD');
 
-        var url = "https://api.hasoffers.com/Apiv3/json\
+        var db_query = "";
+
+        if(user != 'admin') {
+            api_key = config.api_key_map[user];
+
+            url = "https://api.hasoffers.com/Apiv3/json\
 ?NetworkId=z6m&Target=Affiliate_Report&Method=getStats\
 &api_key="+api_key+"\
 &fields%5B%5D=Stat.date&fields%5B%5D=Stat.conversions&fields%5B%5D=Stat.clicks&fields%5B%5D=Stat.offer_id&fields%5B%5D=Stat.payout\
 &groups%5B%5D=Stat.date&groups%5B%5D=Stat.offer_id\
 &data_start="+day+"&data_end="+moment().format('YYYY-MM-DD');
 
-        var db_query = "";
+            insert_collection_from_url(url, user, function(error) {
+                callback(error);
+            });
+        }
+        else {
+            var inserted = 0;
+            for (var user_key in config.api_key_map) {
+                
+                api_key = config.api_key_map[user_key];
 
+                url = "https://api.hasoffers.com/Apiv3/json\
+?NetworkId=z6m&Target=Affiliate_Report&Method=getStats\
+&api_key="+api_key+"\
+&fields%5B%5D=Stat.date&fields%5B%5D=Stat.conversions&fields%5B%5D=Stat.clicks&fields%5B%5D=Stat.offer_id&fields%5B%5D=Stat.payout\
+&groups%5B%5D=Stat.date&groups%5B%5D=Stat.offer_id\
+&data_start="+day+"&data_end="+moment().format('YYYY-MM-DD');
+
+                insert_collection_from_url(url, user_key, function(error) {
+                    if (error) {
+                        callback(error);
+                        return;
+                    }
+
+                    inserted++;
+                    if (inserted == Object.keys(config.api_key_map).length) {
+                        callback();
+                    }
+
+                });
+
+            }
+        }
+    }
+
+    function insert_collection_from_url(url, user, callback) {
+        var db_query = "";
         request(url, function (error, response, body) {
             if (!error && response.statusCode == 200) {
 

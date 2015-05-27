@@ -24,7 +24,7 @@ app.use(function logErrors(err, req, res, next) {
 });
 
 app.use(methodOverride());
-// app.use(logger('dev'));
+//app.use(logger('dev'));
 app.use(bodyParser.json({limit: '20mb'}));   
 app.use(bodyParser.urlencoded({limit: '20mb', extended: true }));  // parse application/x-www-form-urlencoded
 app.use(multer());

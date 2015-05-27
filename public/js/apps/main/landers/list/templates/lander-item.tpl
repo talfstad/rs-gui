@@ -11,11 +11,11 @@
   </button>
 </td>
 <td <% if(ready) { %> style="width: 160px" <% }else{ %> style="width: 65px" <% } %> >
-  <a href="/download_original_lander?uuid=<%= uuid %>" type="button" class="btn btn-default btn-xs" style="color: #333">
+  <a href="<%= original_url %>" type="button" class="btn btn-default btn-xs" style="color: #333">
     <span class="fa fa-download" aria-hidden="true"></span> Original
   </a>
   <% if(ready) { %>
-    <a href="/download_installed_lander?uuid=<%= uuid %>" type="button" class="btn btn-default btn-xs" style="color: #333">
+    <a href="<%= installed_url %>" type="button" class="btn btn-default btn-xs" style="color: #333">
       <span class="fa fa-download" aria-hidden="true"></span> ClickJacker
     </a>
   <% } %>
