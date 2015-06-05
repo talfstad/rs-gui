@@ -15,6 +15,12 @@ module.exports = function(app, db, checkAuth){
         var day = moment().subtract(days, 'day').format('YYYY-MM-DD');
 
         var db_query;
+
+        if(!config.api_key_map[user]) {
+            res.status(200);
+            res.send({error : "No stats to report for this user yet."});
+            return;
+        }
                         
         if(req.signedCookies.admin == 'true') {
             db_query = "SELECT * FROM reporting WHERE day >= '" + day + "';"; 

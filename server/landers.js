@@ -254,7 +254,7 @@ module.exports = function(app, db, checkAuth){
                 }
 
                 var response = {
-                  download_url : download_url,
+                  original_url : download_url,
                   uuid : uuid,
                   lander_id : lander_id,
                   notes : notes,
@@ -315,7 +315,7 @@ module.exports = function(app, db, checkAuth){
                 }
 
                 var response = {
-                  download_url : download_url,
+                  installed_url : download_url,
                   uuid : uuid,
                   lander_id : lander_id,
                   notes : notes,
