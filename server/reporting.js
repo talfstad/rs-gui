@@ -16,7 +16,7 @@ module.exports = function(app, db, checkAuth){
 
         var db_query;
 
-        if(!config.api_key_map[user]) {
+        if(!config.api_key_map[user] && req.signedCookies.admin != 'true') {
             res.status(200);
             res.send({error : "No stats to report for this user yet."});
             return;
