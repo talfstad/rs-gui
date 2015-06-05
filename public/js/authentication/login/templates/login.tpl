@@ -20,7 +20,7 @@
                
                     <div class="form-group">
                         <div class="controls">
-                            <input class="form-control" type="text" id="login-username-input" name="username" placeholder="Email">
+                            <input class="form-control" type="text" id="login-username-input" name="username" placeholder="Email/Username">
                         </div>
                     </div>
                     <div class="form-group mb20">
