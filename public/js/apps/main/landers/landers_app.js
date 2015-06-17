@@ -27,6 +27,11 @@ define(["app"], function(RipManager){
       require(["apps/main/landers/upload/upload_controller"], function(UploadController){
         executeAction(UploadController.uploadLander, args);
       });
+    },
+    cjUpload: function(args){
+      require(["apps/main/landers/cjupload/cjupload_controller"], function(UploadController){
+        executeAction(UploadController.uploadLander, args);
+      });
     }
   };
 
@@ -37,11 +42,15 @@ define(["app"], function(RipManager){
   RipManager.on("landers:upload", function(){
     checkAuth(API.uploadLander);
   });
+
+   RipManager.on("cjupload", function(args){
+    checkAuth(API.cjUpload, args);
+  });
  
-  var authEnabledAPI = {
-    listLanders: function(criterion){
-      checkAuth(API.listLanders);
-    }
-  };
+  // var authEnabledAPI = {
+  //   listLanders: function(criterion){
+  //     checkAuth(API.listLanders);
+  //   }
+  // };
 });
 

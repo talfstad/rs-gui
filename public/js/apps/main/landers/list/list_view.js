@@ -94,6 +94,7 @@ function(RipManager, landersTpl, landersListTpl, noLandersTpl, landerItemTpl, Bo
       initialize: function() {
         this.listenTo(this.model, 'change', this.updateDataTable, this);
         this.listenTo(this, "notes:edit", this.highlightRow);
+        this.listenTo(this, "cjupload", this.highlightRow);
         this.listenTo(this, "lander:delete:confirm", this.deleteLanderConfirm);
         this.listenTo(this, "remove:highlightrow", this.removeHighlightRow);
       },
@@ -102,7 +103,8 @@ function(RipManager, landersTpl, landersListTpl, noLandersTpl, landerItemTpl, Bo
       tagName: "tr",
 
       triggers: {
-        "click button.notes": "notes:edit"
+        "click button.notes": "notes:edit",
+        "click button.cjupload": "cjupload"
       },
 
       modelEvents: {
@@ -111,6 +113,7 @@ function(RipManager, landersTpl, landersListTpl, noLandersTpl, landerItemTpl, Bo
 
       events: {
         "notes:edit": "highlightRow",
+        "cjupload": "highlightRow"
       },
 
       templateHelpers: {
@@ -160,13 +163,13 @@ function(RipManager, landersTpl, landersListTpl, noLandersTpl, landerItemTpl, Bo
 
       initialize: function(){
         this.listenTo(this, "landers:edit:notify", this.notify); 
-        this.listenTo(this, "landers:new:add", this.addLanderToDataTable);
+        // this.listenTo(this, "landers:new:add", this.addLanderToDataTable);
         this.listenTo(this, "landers:grid:resort", this.gridResort);
-        this.listenTo(this.collection, "reset", function(){
-          this.attachHtml = function(collectionView, childView, index){
-            collectionView.$el.append(childView.el);
-          }
-        });
+        // this.listenTo(this.collection, "reset", function(){
+        //   this.attachHtml = function(collectionView, childView, index){
+        //     collectionView.$el.append(childView.el);
+        //   }
+        // });
       },
 
        addLanderToDataTable: function() {
@@ -262,16 +265,12 @@ function(RipManager, landersTpl, landersListTpl, noLandersTpl, landerItemTpl, Bo
               },
               "aTargets": [1] 
             },
-          //   { "sWidth": "120px", "aTargets": [0] },
-          //   { "sWidth": "400px", "aTargets": [1] },
-          //   { "sWidth": "100px", "aTargets": [2] },
-          //   { "sWidth": "150px", "aTargets": [3] },
-            { "bSortable": false, "aTargets": [3] }
+            { "bSortable": false, "aTargets": [3, 4] }
            ]
         });
 
         $("#landers-table").addClass("table table-bordered table-hover");
-        // $("#landers-table").dataTable().fnSort([[1, 'desc']])
+        $("#landers-table").dataTable().fnSort([[1, 'desc']])
       }
     });
   });

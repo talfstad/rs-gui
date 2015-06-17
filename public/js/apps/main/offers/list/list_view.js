@@ -139,7 +139,7 @@ function(RipManager, offersTpl, offersListTpl, noOffersTpl, offerItemTpl, Bootst
 
       initialize: function(){
         this.listenTo(this, "offer:edit:notify", this.notify); 
-                this.listenTo(this, "offer:new:add", this.addOfferToDataTable);
+    // this.listenTo(this, "offer:new:add", this.addOfferToDataTable);
         this.listenTo(this, "offer:grid:resort", this.gridResort);
         this.listenTo(this.collection, "reset", function(){
           this.attachHtml = function(collectionView, childView, index){

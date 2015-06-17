@@ -111,7 +111,7 @@ function(RipManager, earningsTpl, earningsListTpl, noEarningsTpl, earningsItemTp
                 var date = moment(row.day).format('LL');
                 var conversionRate = ((row.conversions/row.clicks) * 100).toFixed(2);
 
-                var html = "<div class='morris-hover-row-label'>"+ date +"</div><div class='morris-hover-point' style='color: #00a65a'>" +
+                var html = "<div class='morris-hover-row-label'>"+ date +"</div><div class='morris-hover-point' style='color: #f39c12'>" +
                             "Clicks: " +
                             me.numbersWithCommas(row.clicks) +
                             "</div>" +
@@ -138,7 +138,7 @@ function(RipManager, earningsTpl, earningsListTpl, noEarningsTpl, earningsItemTp
             xkey: 'day',
             ykeys: ['conversions', 'clicks'],
             labels: ['Conversions', 'Clicks'],
-            lineColors: ['#0073b7', '#00a65a'], //'#3c8dbc', 
+            lineColors: ['#0073b7', '#f39c12'], //'#3c8dbc', 
             fillOpacity: 0.1,
             hideHover: 'auto',
           });

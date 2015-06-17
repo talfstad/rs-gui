@@ -20,3 +20,8 @@
     </a>
   <% } %>
 </td>
+<td>
+  <button type="button" class="cjupload btn btn-default btn-xs" style="color: #333">
+    <span class="fa fa-upload" aria-hidden="true"></span> Upload ClickJacker
+  </button>
+</td>
