@@ -3,4 +3,4 @@
 <td><%= missed_leads %></td>
 <td><%= clicks %></td>
 <td><%= conversions %></td>
-<td><%= payout %></td>
+<td><%= payout + missed_leads_payout %></td>

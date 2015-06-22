@@ -13,6 +13,10 @@ define(["app", "tpl!apps/main/offers/new/new_offer.tpl",
           "click button.js-close" : "close"
         },
 
+        templateHelpers: {
+          admin: RipManager.session.get("admin")
+        },
+
         initialize: function() {
           this.listenTo(this, "offer:new:notify", this.notify);
           Backbone.Validation.bind(this,{

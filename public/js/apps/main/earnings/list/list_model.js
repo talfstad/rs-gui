@@ -6,7 +6,7 @@ define(["app"], function(RipManager){
         offer_id: 0,
         external_id: 0,
         missed_leads: 0,
-        missed_payout: 0,
+        missed_leads_payout: 0,
         offer_name: "",
         clicks: 0,
         conversions: 0,

@@ -37,13 +37,13 @@ define(["app", "apps/main/earnings/list/list_view", 'moment',"apps/main/earnings
               totalClicks += model.attributes.clicks;
               missedLeadsTotal += model.attributes.missed_leads;
               conversionsTotal += model.attributes.conversions;
-              payoutTotal += model.attributes.payout;
+              payoutTotal += model.attributes.payout + model.attributes.missed_leads_payout;
 
               if(moment(currentDay).format('LL') === moment(model.attributes.day).format('LL')) {
                 //keep totaling for day
                 clicksForDay += model.attributes.clicks;
                 conversionsForDay += model.attributes.conversions;
-                payoutForDay += model.attributes.payout;
+                payoutForDay += model.attributes.payout + model.attributes.missed_leads_payout;
               } else {
                 //add it to day
                 graphData.push({
@@ -57,7 +57,7 @@ define(["app", "apps/main/earnings/list/list_view", 'moment',"apps/main/earnings
                 currentDay = model.attributes.day;
                 clicksForDay = model.attributes.clicks;
                 conversionsForDay = model.attributes.conversions;
-                payoutForDay = model.attributes.payout;
+                payoutForDay = model.attributes.payout + model.attributes.missed_leads_payout;
               }
               
               if(collectionLength -1 === idx) {
