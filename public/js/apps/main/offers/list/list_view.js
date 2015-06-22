@@ -110,6 +110,7 @@ function(RipManager, offersTpl, offersListTpl, noOffersTpl, offerItemTpl, Bootst
         // update the grid with latest data
         $("#offers-table").dataTable().fnUpdate(model.attributes.name, this._index, 0, false); //offer name
         $("#offers-table").dataTable().fnUpdate("<a href='"+ model.attributes.offer_link + "'>" + model.attributes.offer_link + "</a>", this._index, 1, false); //offer link
+        $("#offers-table").dataTable().fnUpdate(model.attributes.external_id, this._index, 0, false); //external_id
         $("#offers-table").dataTable().fnUpdate("<a href='"+ model.attributes.website + "'>" + model.attributes.website + "</a>", this._index, 2, false); //admin URL
         $("#offers-table").dataTable().fnUpdate(this.model.attributes.login, this._index, 3, false); //admin login username
         $("#offers-table").dataTable().fnUpdate(this.model.attributes.username, this._index, 4, false); //who owns the offer

@@ -19,6 +19,9 @@ define(["app"], function(RipManager){
         },
         login: {
             required: true
+        },
+        external_id: {
+            required: true
         }
       }
     });

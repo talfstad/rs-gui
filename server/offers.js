@@ -150,6 +150,7 @@ module.exports = function(app, db, checkAuth){
         var name = req.body.name;
         var website = req.body.website;
         var login = req.body.login;
+        var external_id = req.body.external_id;
 
         if(!offer_link) {
             var err = "No offer link given.";
@@ -167,6 +168,14 @@ module.exports = function(app, db, checkAuth){
             return;
         }
 
+        if(!external_id) {
+            var err = "No offer external id given.";
+            console.log(err);
+            res.status(400);
+            res.json({error:err});
+            return;
+        }
+
         if(!website) {
             website = '';
         }
@@ -176,7 +185,7 @@ module.exports = function(app, db, checkAuth){
         }
 
         var id = null;
-        db.query('INSERT INTO offers (name, offer_link, user, website, login) VALUES (?,?,?,?,?);', [name, offer_link, user, website, login], function(err, docs) {
+        db.query('INSERT INTO offers (name, offer_link, user, website, login, external_id) VALUES (?,?,?,?,?,?);', [name, offer_link, user, website, login, external_id], function(err, docs) {
             if(err) {
                 console.log(err);
                 res.status(200);

@@ -1,5 +1,6 @@
 <td><%= name %></td>
 <td><a target="_blank" href="<%= offer_link %>"> <%= offer_link %> </a></td>
+<td><%= external_id %></td>
 <td><% if(admin) { %><a target="_blank" href="<%= website %>"> <%= website %> </a>  <% } %> </td>
 <td><% if(admin) { %> <%= login %> <% } %></td>
 <td> <%= username %> </td>

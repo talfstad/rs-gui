@@ -20,19 +20,31 @@
   </div>
 
   <div class="form-group">
-    <label for="offer_id" class="col-sm-3 control-label">User</label>
+    <label for="external_id" class="col-sm-3 control-label">Offer Id</label>
     <div class="col-sm-9">
-      </select>
-       <select name="user_id" class="user-select" data-size="5" data-width="auto" data-live-search="false">
-        <% _.each(userList, function(user){ %>
-          <option value="<%= user.user %>"><%= user.username %></option>
-        <% }); %>
-      </select>
+      <input type="text" class="form-control" id="external_id" name="external_id" value="">
     </div>
     <div class="col-sm-offset-3 col-sm-9">
-      <p class="help-block">Select the user that this offer belongs to.</p>
+      <p class="help-block">For instance, the offer id in hasoffers.</p>
     </div>
   </div>
+
+  <% if(admin) { %> 
+      <div class="form-group">
+        <label for="user" class="col-sm-3 control-label">User</label>
+        <div class="col-sm-9">
+          </select>
+           <select name="user_id" class="user-select" data-size="5" data-width="auto" data-live-search="false">
+            <% _.each(userList, function(user){ %>
+              <option value="<%= user.user %>"><%= user.username %></option>
+            <% }); %>
+          </select>
+        </div>
+        <div class="col-sm-offset-3 col-sm-9">
+          <p class="help-block">Select the user that this offer belongs to.</p>
+        </div>
+      </div>
+  <% } %>
 
 <hr>
 
@@ -54,5 +66,6 @@
     <div class="col-sm-offset-3 col-sm-9">
       <p class="help-block">Username for Admin URL. Check with someone for the password.</p>
     </div>
-  </div>  
+  </div>
+
 </form>
