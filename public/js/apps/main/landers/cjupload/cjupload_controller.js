@@ -11,7 +11,7 @@ define(["app", "apps/main/landers/cjupload/cjupload_view",
           args = itemArgs.args;
         }
 
-        var uploadModel = new UploadModel.Upload();
+        var uploadModel = itemArgs.childView.model;
 
         var view = new UploadLanderView.UploadDialogForm({
           model: uploadModel

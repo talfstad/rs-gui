@@ -14,7 +14,7 @@ define(["app"], function(RipManager){
 
       validation: {
         notes: {
-          required: true
+          required: false
         }
       }
 

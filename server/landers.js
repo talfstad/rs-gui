@@ -291,9 +291,12 @@ module.exports = function(app, db, checkAuth){
         }
 
         var user = req.signedCookies.user_id;              
-        var zip_name = req.files.myFile.originalname;
+        var file = req.files['files[]'];          
+        var zip_name = file.originalname;
         var lander_id;
         var uuid = req.body.uuid;
+        var notes = req.body.notes;
+        var original_url = req.body.original_url;
         var secret_uuid = make_uuid.v4();
         var archive_path = "installed/" + user + "/" + uuid + "/" + secret_uuid + "/" + zip_name;
         var download_path;
@@ -316,16 +319,10 @@ module.exports = function(app, db, checkAuth){
 
                 var response = {
                   installed_url : download_url,
+                  original_url : original_url,
                   uuid : uuid,
                   lander_id : lander_id,
-                  notes : notes,
-                  files: [
-                      {
-                        name: file.originalname,
-                        size: file.size,
-                        url: download_url
-                      }
-                    ]
+                  notes : notes
                 };
                 
                 res.status(200);

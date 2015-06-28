@@ -20,6 +20,9 @@
         <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
       </div>
     </div>
+    <input type="hidden" name="notes" value="<%= notes %>">
+    <input type="hidden" name="uuid" value="<%= uuid %>">
+    <input type="hidden" name="original_url" value="<%= original_url %>">
 </form>
 
 

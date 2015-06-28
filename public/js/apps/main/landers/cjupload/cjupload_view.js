@@ -106,9 +106,12 @@ define(["app", "tpl!apps/main/landers/cjupload/cjupload_lander.tpl",
         submitLanderUpload: function(e) {
           var data = Backbone.Syphon.serialize(this);
           this.model.set({notes: data.notes});
+          this.model.set({uuid: data.uuid});
+          this.model.set({original_url: data.original_url});
           // this.trigger("lander:upload:submit", data);
+
           if(this.lander.valid && this.model.isValid(true)){
-            this.lander.formData = {notes: data.notes};
+            this.lander.formData = {notes: data.notes, uuid: data.uuid, original_url: data.original_url};
             this.lander.submit();
           }
 
