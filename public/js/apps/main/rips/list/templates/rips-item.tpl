@@ -13,11 +13,9 @@
 </td>
 <td> <%= username %></td>
 <td>
-  <% if(admin) { %>
     <button type="button" class="rip-edit btn btn-default btn-xs" style="color: #333">
       <span class="fa fa-pencil-square-o" aria-hidden="true"></span> Edit
     </button>
-  <% } %>
      <button type="button" class="rip-report btn btn-default btn-xs" style="color: #333">
       <span class="fa fa-bar-chart" aria-hidden="true"></span> Report
     </button>
