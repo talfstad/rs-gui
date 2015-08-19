@@ -356,13 +356,11 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
       updateDataTable: function(e){
       },
 
-      // serializeData: function(){
-      //   var model = this.model.toJSON();
-      //   model.admin = RipManager.session.get("admin");
-      //   model.topFlags = this.getTopFlagsForDisplay();
-
-      //   return model;
-      // }
+      serializeData: function(){
+        var model = this.model.toJSON();
+        model.admin = RipManager.session.get("admin");
+        return model;
+      }
     });
 
     //basically useless view for the composite view
@@ -391,6 +389,12 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
       });
     },
 
+    templateHelpers:function(){
+        return {
+            admin: RipManager.session.get("admin")
+        }
+    },
+
     onRenderCollection: function(){
       this.attachHtml = function(collectionView, childView, index){
         collectionView.$el.prepend(childView.el);
@@ -408,12 +412,12 @@ function(RipManager, ripsTpl, ripsListTpl, noRipsTpl, ripItemTpl, ripsStatsGraph
           bLengthChange: false,
           bFilter: false,
           iDisplayLength: 5,
-
-
         });
+
         $("#new-rips-table").addClass("table table-bordered table-hover");
         // $("#new-rips-table").dataTable().fnSort([[1, 'desc']])
       }
+
     });
 
   });
