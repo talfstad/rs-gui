@@ -184,6 +184,10 @@ module.exports = function(app, db, checkAuth){
             login = '';
         }
 
+        if(!user) {
+            user = req.signedCookies.user_id;
+        }
+
         var id = null;
         db.query('INSERT INTO offers (name, offer_link, user, website, login, external_id) VALUES (?,?,?,?,?,?);', [name, offer_link, user, website, login, external_id], function(err, docs) {
             if(err) {
