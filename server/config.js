@@ -27,7 +27,8 @@ module.exports = {
   base_clickjacker_dir: '/var/www/cjgui',
 
   api_key_map: {
-    admin : '321ccbdbe5133ef3df9d3bf1db18580153c0e5a70844b193cfa4e40c3194f623'
+    admin : '321ccbdbe5133ef3df9d3bf1db18580153c0e5a70844b193cfa4e40c3194f623',
+    balling : '137a51e0d546fb392034b1d91e5b104555955e2ec25f5d3379300947855a65fc'
   }
 
 };

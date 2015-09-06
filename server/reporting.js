@@ -136,17 +136,21 @@ module.exports = function(app, db, checkAuth){
 
                     db_query += "CALL insert_offer_report(" + offer_id + ",'" + date + "'," + clicks + "," + conversions + "," + payout + ",'"+ user +"');";
                 }
-
-                db.query(db_query, function(err, docs) {
-                    if(err) {
-                        console.log(err);
-                        error = err;
-                        callback(error);
-                        
-                    } else {
-                        callback(error);
-                    }
-                });
+                if(db_query) {
+                    db.query(db_query, function(err, docs) {
+                        if(err) {
+                            console.log(err);
+                            error = err;
+                            callback(error);
+                            
+                        } else {
+                            callback(error);
+                        }
+                    });
+                }
+                else {
+                   callback(); 
+                }
             }
             else {
                 callback(error);
