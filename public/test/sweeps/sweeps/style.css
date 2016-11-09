@@ -1,0 +1,322 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: helvetica, arial, sans-serif;
+  background-color: #dedede;
+}
+
+p { 
+  margin: 0;
+  line-height: 17px;
+}
+
+#nav {
+  background-color: #3b5998;
+  width: 100%;
+  height: 44px;
+}
+
+#news-feed {
+  float: left;
+  background: #243c6d url("images/icons.png") no-repeat 5px 0px; /* decrease second number by 45 to go to next icons */
+  min-width: 50px;
+  height: 100%;
+}
+
+#menu {
+  float: right;
+  background: url("images/icons.png") no-repeat 0 -135px; /* decrease second number by 45 to go to next icons */
+  width: 50px;
+  height: 100%;
+}
+
+#people-viewing {
+  padding: 5px;
+  margin: 10px 0 0 20px;
+  
+  background-color: #627aad;
+  float: left;
+  color: #ffffff;
+  -webkit-transform: translate(-0.5px, -0.5px);
+  -webkit-writing-mode: horizontal-tb;
+  border-radius: 5px;
+  font-size: .9em;
+}
+
+#headline {
+  height: 30px;
+  background-color: #feff9f;
+  border-top: 1px solid rgba(0, 0, 0, .07);
+}
+
+#headline .icon {
+  float: left;
+  width: 35px; height: 100%;
+  background:  url("images/icons.png") no-repeat 0px -1079px;
+}
+
+#headline .label {
+  margin-top: 6px;
+  float: left;
+  font-size: 12px;
+  line-height: 16px;
+  color: #141823;
+}
+
+#headline .label .users-playing {
+  float: left;
+}
+
+#headline .label .claim-now {
+  display: none;
+  text-decoration: underline;
+  margin-left: 25px;
+  color: #000;
+  float: left;
+}
+
+div#menu, div#news-feed, div.image, div.name, div.icon, div.view-more-comments, div.content.comment {
+    position: relative;
+}
+
+div#menu a, div#news-feed a, div.image a, div.name a, div.icon a, div.view-more-comments a, div.content.comment a {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    text-decoration: none; /* No underlines on the link */
+    z-index: 10; /* Places the link above everything else in the div */
+    background-color: #FFF; /* Fix to make div clickable in IE */
+    opacity: 0; /* Fix to make div clickable in IE */
+    filter: alpha(opacity=1); /* Fix to make div clickable in IE */
+}
+
+
+.post {
+  float: left;
+  width: 100%;
+  margin-top: 7px;
+  background-color: #fff;
+}
+
+.post > .likes {
+  padding-bottom: 5px;
+  height: 25px;
+  border-bottom: 1px solid rgba(0, 0, 0, .07);
+}
+
+.post > .likes > .text {
+  float: left;
+  margin-top: 7px;
+  margin-left: 10px;
+  font-size: 14px;
+  line-height: 17px;
+  width: 280px;
+}
+
+.post > .likes > .arrow {
+  margin: 10px 0 0 0;
+  float: right;
+  background: url("images/arrow-down.png") no-repeat 0 0;
+  background-size: 45% 37%;
+  height: 100%;
+  width: 25px;
+}
+
+.post > .content {
+  max-height: 340px;
+  margin: 10px 15px 0 10px;
+}
+
+.comment {
+  border-top: 1px solid #eee;
+  padding-top: 8px;
+  float: left;
+  width: 100%;
+  /*height: 40px !important;*/
+}
+
+.post > .content > .content-header > .image {
+  float: left;
+  background: url("images/flaglogo.png") no-repeat 0 0;
+  background-size: 100%;
+  width: 40px;
+  height: 40px;
+}
+
+.post > .content > .content-header > .name {
+  float: left;
+  margin-left: 5px;
+  font-size: .9em;
+  width: 75%;
+
+}
+
+.post > .content > .content-header > .name > .sub-name {
+  margin-top: 3px;
+  font-size: 12px;
+  display: block;
+  color: #9197a3;
+}
+
+.post > .content > .content-body {
+  margin-top: 10px;
+  float: left;
+  width: 100%;
+  font-size: 14px;
+}
+
+.globe {
+  width: 10px;
+  opacity: .3;
+  height: auto;
+  margin-left: 1px;
+}
+
+
+.image-container {
+  height: 230px;
+  width: 300px;
+  float: left;
+  margin-top: 10px;
+  border: 1px solid #dedede;
+  border-radius: 4px;
+  position: relative;
+}
+
+div.image-container a {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    text-decoration: none; /* No underlines on the link */
+    z-index: 10; /* Places the link above everything else in the div */
+    background-color: #FFF; /* Fix to make div clickable in IE */
+    opacity: 0; /* Fix to make div clickable in IE */
+    filter: alpha(opacity=1); /* Fix to make div clickable in IE */
+}
+
+.image-container .image img{
+  width: 480px;
+  height: 180px;
+  /*background: url("iphone2small.jpg") no-repeat 0 0;*/
+}
+
+.comment-image {
+  float: left;
+ 
+}
+
+.image-container .caption {
+  border-top: 1px solid #eee;
+  float: left;
+  margin-top: 5px;
+  margin-left: 5px;
+  width: 290px;
+  font-size: 14px;
+  line-height: 17px;
+}
+
+.caption .caption-text {
+  margin-top: 10px;
+  float: left;
+}
+
+.image-container .caption-small {
+  margin-top: 3px;
+  font-size: 12px;
+  line-height: 12px;
+  display: block;
+  color: #9197a3;
+}
+
+.image-container .caption-button {
+  float: left;
+  margin-top: 10px;
+  margin-left: 20px;
+}
+
+button {
+  background-image: -webkit-linear-gradient(rgba(255, 255, 255, .9), rgba(255, 255, 255, .5));
+  border: none;
+  box-shadow: .5px .5px 1px #888888;
+  -webkit-border-radius: 3px;
+  -webkit-box-sizing: border-box;
+  font-weight: bold;
+  position: relative;
+  -webkit-user-select: none;
+  z-index: 0;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, .75);
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    border-bottom-color: rgb(0, 0, 0);
+    color: rgb(78, 86, 101);
+    font-size: 12px;
+    width: 60px;
+    height: 35px;
+    letter-spacing: .5px;
+}
+
+.feature-image {
+  font-family: 'Myriad Set Pro', 'Lucida Grande';
+}
+
+.view-more-comments img {
+  float: left;
+  margin-top: 4px;
+  margin-right: 10px;
+  width: 15px;
+}
+.view-more-comments {
+  margin-bottom: 15px;
+  color: #576b95;
+  font-size: 14px;
+  margin-left: 10px;
+}
+
+.hashtag {
+  color: #576b95;
+}
+
+.view-more-comments button {
+  width: 90%;
+  float: none;
+  display: block;
+  margin: 0 auto;
+}
+
+.claim-footer {
+  margin-top: 5px;
+  padding-top: 15px;
+  background-color: #fff;
+}
+
+.last{
+  padding-bottom: 10px;
+}
+
+.thumbsupicon {
+  text-align: left;
+  background-position: right;
+  background: url("images/thumbsupicon.png") no-repeat 0 0;
+  margin-left: 5px;
+  font-size: 13px;
+  padding-left: 20px;
+
+}
+
+audio {
+  display: none;
+}
+
+#init {
+        position: absolute;
+        margin-right: 0px;
+        margin-left: 0px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        z-index: 1000;
+    }
+
+

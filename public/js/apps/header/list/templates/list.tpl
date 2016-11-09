@@ -2,7 +2,7 @@
 
 
             <!-- Logo -->
-        <a href="/dash" class="logo"><img src="../img/cjlogo.png" alt="Clickjacker Home" /></a>
+        <a href="/dash" class="logo"><img style="width: 200px" src="../img/cjlogo.png" alt="Clickjacker Home" /></a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top" <% if(logged_in == false){ %>style="background-color: #222"<% } %> role="navigation">
           

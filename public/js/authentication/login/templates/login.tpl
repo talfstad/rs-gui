@@ -1,7 +1,7 @@
 <div id="login-template" class="container">
     <div class="headline center">
         <h2 style="font-family: 'Open Sans'; font-size: 36px; font-weight: 300; letter-spacing: -1px;" class="short word-rotator-title">
-            ClickJacker increases <strong class="inverted">
+            Lander Reallocation System increases <strong class="inverted">
             <span class="word-rotate active" style="height: 54px;">
             <span class="word-rotate-items" style="top: 0px;">
                 <span>revenue</span>

@@ -1,0 +1,446 @@
+@media only screen and (max-width:1100px){
+	.heading h1{
+		font-size:44px;
+	}
+	
+	.heading h1 span{
+		font-size:34px;
+	}
+	
+	.claim_left h2{
+		font-size:32px !important;
+	}
+}
+
+@media only screen and (max-width:1024px){
+	#newsletter_wrapper{
+		padding:100px 0;
+	}
+	
+	#post_header{
+		padding-left:10px;
+		padding-right:10px;
+	}
+	
+	.heading h1{
+		font-size:36px;
+	}
+	
+	.heading h1 span{
+		font-size:26px;
+	}
+	
+	.claim2 h1{
+		font-size:22px;
+	}
+	
+	.white_arrow img{
+		display:none;
+	}
+	
+	.btn_claim2{
+		margin-right:20px;
+	}
+	
+	.btn_claim2 a{
+		font-size:14px;
+	}
+	
+	.claim_left{
+		width:61%;
+	}
+	
+	.claim_left h2{
+		font-size:29px !important;
+	}
+	
+	.claim_right{
+		text-align:right;
+	}
+	
+	.claim_right img{
+		width:80%;
+		display:inline-block;
+	}
+	
+	.arrow img{
+		margin: 157px 0 0 -175px;
+	}
+	
+	.btn_claim a{
+		font-size: 16px;
+		margin: 14px 0 0;	
+	}
+	
+	.bottle img{
+		margin: 6% 0 0 -10%;
+		width:64px;
+	}
+}
+
+@media only screen and (max-width:960px){
+	#menu ul li{
+		padding:0 16px;
+	}
+
+	#menu ul li a{
+		font-size:14px;
+	}
+	
+	.claim_left{
+		width:54%;
+	}
+	
+	.bottle, .arrow{
+		display:none;
+	}
+	
+	.claim_left h3{
+		font-size: 22px;
+	}
+	
+	.claim_left h1{
+		font-size:29px;
+	}
+	
+	.claim_left h2{
+		 font-size: 22px !important;
+		 line-height: 28px !important;
+	}
+	
+	.btn_claim a{
+		font-size:14px;
+	}
+	
+	.claim_right{
+		width:40%;
+	}
+	
+}
+
+@media only screen and (max-width:768px){
+	#menu {
+		display:none;
+	}
+	
+	.slicknav_menu {
+		display:block;
+	}
+	
+	#newsletter_wrapper{
+		padding:60px 0;
+	}
+	
+	#newsletter h3{
+		padding:0 10px;
+	}
+	
+	#sort_menu ul li{
+		width:50%;
+	}
+	
+	.three_box, .three_box h3{
+		height:200px;
+	}
+	
+	.three_box img{
+		height:200px;
+	}
+	
+	.three_box h3{
+		padding:0 10px;
+	}
+
+	.three_box h3 a{
+		font-size:18px;
+	}
+	
+	.three_box:hover h4{
+		bottom:36px;
+	}
+	
+	.three_box h4 a{
+		font-size:14px;
+	}
+	
+	.three_box:hover h3{
+		height:164px;
+		background:none;
+	}
+	
+	.four_box{
+		height:142px;
+	}
+	
+	.four_box h3{
+		height:142px;
+		padding:0 10px;
+	}
+
+	.four_box h3 a{
+		font-size:14px;
+	}
+	
+	.four_box img{
+		height:142px;
+	}
+	
+	.four_box:hover h4{
+		bottom:32px;
+	}
+	
+	.four_box h4 a{
+		font-size:14px;
+	}
+	
+	.four_box:hover h3{
+		height:110px;
+		background:none;
+	}
+	
+	#post_header h1{
+		font-size:30px;
+		height:70px;
+	}
+	
+	#post_header h2{
+		font-size:28px;
+		line-height:32px;
+	}
+	
+	#post_header h3{
+		font-size:76px;
+	}
+	
+	#content{
+		width:100%;
+		float:none;
+	}
+	
+	#sidebar{
+		width:100%;
+		float:none;
+	}
+	
+	#social_ico{
+		top:0;
+		position:relative;
+		text-align:center;
+		padding-top:10px;
+		right:auto;
+	}
+	
+}
+
+@media only screen and (max-width:568px){
+	.three_box{
+		float:none;
+		width:96%;
+		margin:0 auto;
+		margin-bottom:10px;
+	}	
+	
+	.three_box:nth-child(2)
+	{
+		float:none;
+		width:96%;
+		margin:0 auto;
+		margin-bottom:10px;
+	}
+	
+	.three_box, .three_box h3{
+		height:300px;
+	}
+	
+	.three_box img{
+		height:300px;
+	}
+	
+	.three_box h3{
+		width:94%;
+		padding:0 3%;
+	}
+
+	.three_box h3 a{
+		font-size:22px;
+	}
+	
+	.three_box:hover h4{
+		bottom:42px;
+	}
+	.three_box h4 a{
+		font-size:18px;
+	}
+	
+	.three_box:hover h3{
+		height:258px;
+		background:none;
+	}
+	
+	.four_box{
+		width:47%;
+		margin-left:2%;
+		margin-bottom:2%;
+		height:200px;
+	}
+
+	.four_box:nth-child(odd){
+		margin-right:0;
+		margin-bottom:2%;
+	}
+	
+	.four_box:nth-child(even){
+		margin:0;
+		margin-left:2%;
+		margin-bottom:2%;
+	}
+	
+	.four_box h3{
+		height:200px;
+		padding:0 10px;
+	}
+
+	.four_box h3 a{
+		font-size:14px;
+	}
+	
+	.four_box img{
+		height:200px;
+	}
+	
+	.four_box:hover h4{
+		bottom:32px;
+	}
+	
+	.four_box h4 a{
+		font-size:14px;
+	}
+	
+	.four_box:hover h3{
+		height:168px;
+		background:none;
+	}
+	
+	.heading h1{
+		font-size:26px;
+		text-align:center;
+	}
+	
+	.heading h1 span{
+		font-size:18px;
+	}
+	
+	.problem_heading h1{
+		font-size:26px;
+	}
+
+	.problem_heading h1 span{
+		font-size:20px;
+	}
+}
+
+@media only screen and (max-width:480px){
+	#logo img{
+		width:80%;
+	}
+	
+	.n_txt,.n_btn{
+		width:90%;
+		margin-left:0;
+		margin-top:10px;
+	}
+	#sort_menu ul li{
+		width:100%;
+	}
+	
+	.four_box{
+		height:158px;
+	}
+	
+	.four_box h3{
+		height:158px;
+		padding:0 10px;
+	}
+
+	.four_box h3 a{
+		font-size:14px;
+	}
+	
+	.four_box img{
+		height:158px;
+	}
+	
+	.four_box:hover h4{
+		bottom:32px;
+	}
+	
+	.four_box h4 a{
+		font-size:14px;
+	}
+	
+	.four_box:hover h3{
+		height:126px;
+		background:none;
+	}
+	
+	#post_header h1{
+		font-size:24px;
+		height:auto;
+	}
+	
+	#post_header h2{
+		font-size:22px;
+		line-height:32px;
+	}
+	
+	#post_header h3{
+		font-size:50px;
+	}
+	
+	.claim2 h1 {
+		font-size: 18px;
+		padding: 30px 20px 0 22%;
+	}
+	
+	.btn_claim2 a{
+		margin: 15px 0 10px;
+		padding:8px 14px;
+	}
+	
+	.btn_claim a {
+		font-size: 11px;
+		margin-bottom: 10px;
+	}
+	
+	.claim_left h3 {
+		font-size: 18px;
+	}
+	
+	.claim_left h1 {
+		font-size: 20px;
+	}
+	
+	.claim_left h2 {
+		font-size: 14px !important;
+		line-height: 20px !important;
+	}
+	
+	.btn_claim a{
+		padding: 8px 12px;
+		border-radius:4px;
+	}
+	#content h3{
+	font-size:30px;
+	}
+	
+	#content h5{
+	font-size:50px;
+	}
+	#content h6{
+	text-align:center;
+	}
+}
+
+@media only screen and (max-width:320px){
+
+}
