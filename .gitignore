@@ -7,3 +7,4 @@ public/js/lib
 .tmp
 logs
 *.log
+.DS_Store
