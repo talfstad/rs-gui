@@ -11,11 +11,13 @@ module.exports = {
   //DB Connection information
   dbConnectionInfo: {
     //host : '54.149.38.119',
-    host : 'localhost',
+    // host : 'localhost',
+    host: 'landerrs.cynwtdt18kyi.us-west-2.rds.amazonaws.com',
     user : 'root',
+    password: 'Wewillrockyou1986!',
     //password : 'derekisfat',
-    password : 'wewillwinintheend123!@#',
-    database : 'domains_dev',
+    // password : 'wewillwinintheend123!@#',
+    database : 'prod',
     multipleStatements: true
   },
 
