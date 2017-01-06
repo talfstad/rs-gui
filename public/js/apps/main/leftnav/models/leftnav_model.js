@@ -11,7 +11,7 @@ define(["app"], function(RipManager){
       model: Model.leftNavLink
     });
 
-    var initializeLinks = function(){
+    var initializeLinks = function() {
       var links = [
         { name: "Dashboard", url: "dash", icon: "fa fa-dashboard", children: false, navigationTrigger: "dash:list" },
 
@@ -27,17 +27,17 @@ define(["app"], function(RipManager){
             offers_new: { name: "New", url: "offers/new", icon: "fa fa-cart-plus", navigationTrigger: "offers:new" }
           }
         },
-        {
-          name: "Landers", 
-          url: "landers", 
-          icon: "fa fa-folder-open-o", 
-          navigationTrigger: "landers:list",
-          children: {
-            // offers_edit: { name: "Edit", url: "offers/edit", icon: "fa fa-edit", navigationTrigger: "offers:list" },
-            landers_new: { name: "Upload", url: "landers/upload", icon: "fa fa-upload", navigationTrigger: "landers:upload" }
-          }
-        },
-        { name: "Earnings", url: "earnings", icon: "fa fa-diamond", children: false, navigationTrigger: "earnings:list" }
+        // {
+        //   name: "Landers", 
+        //   url: "landers", 
+        //   icon: "fa fa-folder-open-o", 
+        //   navigationTrigger: "landers:list",
+        //   children: {
+        //     // offers_edit: { name: "Edit", url: "offers/edit", icon: "fa fa-edit", navigationTrigger: "offers:list" },
+        //     landers_new: { name: "Upload", url: "landers/upload", icon: "fa fa-upload", navigationTrigger: "landers:upload" }
+        //   }
+        // },
+        // { name: "Earnings", url: "earnings", icon: "fa fa-diamond", children: false, navigationTrigger: "earnings:list" }
         
       ];
 
